@@ -1,0 +1,472 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         goldTime = "0";
+         desc = "A level without checkpoints...";
+         UltimateTime = "0";
+         artist = "Tykiron";
+         type = "Custom";
+         startHelpText = "HF (Have Fun)";
+         name = "Hardway";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Intermediate/Intermediate_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "14.804 -5.90193 17.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-50.232 155.491 4.30225";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "EndPad";
+   };
+   new Item() {
+      position = "8.14359 -5.35694 -0.619635";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-1.77317 -2.91073 8.80957";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/windmill.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "12.9583 -7.87887 -1.54947";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-1.40624 -5.25533 13.7833";
+      rotation = "1 0 0 0";
+      scale = "5 10 5";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Trigger() {
+      position = "-95.3532 185.968 -5.26498";
+      rotation = "1 0 0 0";
+      scale = "200 200 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "11.1472 0.267571 -0.29775";
+      rotation = "1 0 0 0";
+      scale = "1 10 30";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t take any shortcuts!";
+   };
+   new Trigger() {
+      position = "-80.4048 0.339489 -0.918859";
+      rotation = "1 0 0 0";
+      scale = "1 10 5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "left? right?";
+   };
+   new InteriorInstance() {
+      position = "32.2727 -10.8514 -1.06886";
+      rotation = "1 0 0 0";
+      scale = "20 3 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-81.6575 1.13983 -0.839241";
+      rotation = "1 0 0 0";
+      scale = "1 10 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-81.8992 -210.9 -1.74312";
+      rotation = "1 0 0 0";
+      scale = "1 50 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "11.3638 0.873227 -4.0338";
+      rotation = "1 0 0 0";
+      scale = "1 10 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "31.3149 55.5348 5.26258";
+      rotation = "1 0 0 0";
+      scale = "20 2 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-85.9753 38.6745 -0.361937";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new Item() {
+      position = "-58.9871 60.0091 6.11258";
+      rotation = "1 0 0 0";
+      scale = "1 10 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-5.97547 46.8709 14.61";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.41025 70.8371 22.5876";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.43329 80.7208 0.254423";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-11.0413 73.5763 23.2376";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-11.8372 55.9456 5.69422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-10.4197 48.4138 14.7309";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-8.40469 50.3231 15.2944";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-85.759 -14.6134 -0.659171";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-14.2688 65.1145 4.40445";
+      rotation = "1 0 0 0";
+      scale = "10 1 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-11.5155 84.6823 0.17535";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-9.16912 83.6818 0.463342";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "Nuke";
+         resetTime = "Default";
+   };
+   new InteriorInstance() {
+      position = "122.764 -10.3191 6.30337";
+      rotation = "1 0 0 0";
+      scale = "10 10 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "62.6603 23.4982 6.45337";
+      rotation = "1 0 0 0";
+      scale = "40 1 5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "one way is the right way";
+   };
+   new InteriorInstance() {
+      position = "69.0071 29.6725 6.44679";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "104.756 29.5127 6.42837";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "79.9032 29.5569 6.42837";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "92.5382 29.49 6.42837";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(Back) {
+      position = "99.6098 32.4112 6.34091";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "right";
+   };
+   new Trigger() {
+      position = "62.5552 34.6107 6.05337";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "73.3788 34.1889 6.05337";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "86.3598 34.5746 6.05337";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "121.481 65.2128 8.5805";
+      rotation = "1 0 0 0";
+      scale = "10 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(right) {
+      position = "100.046 67.899 8.9246";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "back";
+   };
+   new Trigger() {
+      position = "-13.8013 75.6976 24.4119";
+      rotation = "1 0 0 0";
+      scale = "10 1 50";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "59.3225 65.032 8.64249";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wooden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "58.3453 94.351 8.3305";
+      rotation = "1 0 0 0";
+      scale = "1 50 300";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-67.6634 23.0549 -8.84";
+      rotation = "1 0 0 0";
+      scale = "70 1 100";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-7.32069 51.5342 14.4326";
+      rotation = "1 0 0 0";
+      scale = "1 5 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-45.305 158.348 5.5526";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "55.165 67.7297 9.61232";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "80.3738 81.8854 3.24335";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "96.3181 85.5332 9.94335";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "76.6109 86.0825 -2.17381";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-96.9937 64.8847 5.16221";
+      rotation = "1 0 0 0";
+      scale = "80 1 50";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "67.8948 96.5093 9.24335";
+      rotation = "1 0 0 0";
+      scale = "1 30 10";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "fly to the finish! (follow the gems)";
+   };
+   new Item() {
+      position = "82.2962 85.7078 -2.86221";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "67.6218 95.3171 19.0434";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Trigger() {
+      position = "-11.207 50.8802 15.0126";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "stand still on the platform with the shockabsorber->don\'t jump";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,686 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "marbleman©";
+         goldTime = "60000";
+         time = "0";
+         type = "Custom";
+         desc = "Take on half-pipes the devil\'s way!";
+         startHelpText = "Go for it!";
+         name = "Devil\'s Half-Pipe";
+         level = "1123";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         time = "0";
+         powerUp = "0";
+         pad = "3366";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "3.5 0 3";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "90";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-2 0 3";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "500";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-2 0 3";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "3.5 0 3";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/addon/acrobat1.dif";
+         interiorIndex = "1";
+         basePosition = "0 0 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new StaticShape() {
+      position = "-4.40836 -2.23331 19.3766";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignPlainDown";
+   };
+   new StaticShape(StartPoint) {
+      position = "-4.2 14.2 17.6";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "-4.07826 14.0434 17.2773";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-4.21882 3.07659 7.29276";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/parts/tubes/tube_turn.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.2583 1.49911 -0.0611403";
+      rotation = "1 0 0 0";
+      scale = "3 3 1";
+      interiorFile = "~/data/interiors/boostbox.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-4.19473 -0.09312 3.16696";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-4.07135 19.0185 -202.913";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-4.21847 21.3727 -183.265";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.20755 21.3669 -201.956";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.21746 21.349 -200.538";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.20589 21.3303 -199.12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.20236 21.3184 -197.701";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.18684 21.2888 -195.883";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-156.948 -0.0983441 0.951965";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-269.037 13.0366 6.90157";
+      rotation = "-1 0 0 30";
+      scale = "0.05 3 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-317.044 46.9166 16.3996";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-290.6 -0.0140536 0.901963";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "-265.897 21.6368 13.1855";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-323.563 53.2002 25.8175";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "oilslick";
+   };
+   new InteriorInstance() {
+      position = "-460.88 -2.38632 -12.5619";
+      rotation = "1 0 0 0";
+      scale = "1 0.1 2";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-460.961 2.4571 -5.91806";
+      rotation = "1 0 0 0";
+      scale = "1 0.1 1";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-460.923 0.0475469 -9.21806";
+      rotation = "1 0 0 0";
+      scale = "1 0.1 1.5";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-433.096 0.0373046 -0.286908";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-462.83 -23.3613 -11.392";
+      rotation = "1 0 0 0";
+      scale = "0.02 0.4 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-481.242 -13.2001 -6.52984";
+      rotation = "-1 0 0 30";
+      scale = "0.01 3 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-480.586 -23.3764 -11.8662";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.2 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-481.223 -24.9282 -11.9162";
+      rotation = "1 0 0 0";
+      scale = "0.01 0.2 1.9";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-462.264 5.73265 4.41535";
+      rotation = "-1 0 0 30";
+      scale = "0.01 8 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-465.908 -23.3712 -11.6329";
+      rotation = "1 0 0 0";
+      scale = "0.01 0.2 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-370.033 0.351972 0.838096";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/freefall3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-433.053 -0.863015 0.838093";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/freefall3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-440.934 0.226364 0.838094";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/freefall3.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-404.141 144.79 24.0463";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-429.84 14.2791 10.2994";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/advanced/half-pipe2.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-429.725 33.0375 29.1994";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new InteriorInstance() {
+      position = "-402.634 29.7755 19.7405";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-400.52 41.4355 19.7689";
+      rotation = "1 0 0 0";
+      scale = "0.1 4 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-400.537 51.6795 20.5257";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-396.659 49.2919 25.9174";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-396.789 71.5901 19.6924";
+      rotation = "0 0 1 90";
+      scale = "1 0.2 1";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-399.04 70.7522 13.4963";
+      rotation = "0 0 1 90";
+      scale = "1 1.5 1";
+      interiorFile = "~/data/interiors/addon/arch_red.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-397.446 113.588 6.2552";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/arch_red.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-396.795 114.426 18.4513";
+      rotation = "0 0 1 90";
+      scale = "1 0.2 2";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-396.718 90.9255 26.1188";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-396.834 145.826 27.4463";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-396.832 145.832 39.5463";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/wind_tunnel.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-397.322 144.993 21.7258";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-401.668 144.966 22.448";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape(EndPoint) {
+      position = "-193.47 110.473 17.5558";
+      rotation = "-1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "-404.956 144.868 42.4118";
+      rotation = "0 1 0 225";
+      scale = "5 5 5";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new InteriorInstance() {
+      position = "-395.961 158.547 21.0174";
+      rotation = "1 0 0 0";
+      scale = "7.5 0.1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-380.507 161.099 20.9297";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-379.654 160.258 21.6865";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-360.341 146.871 33.5406";
+      rotation = "1 0 0 0";
+      scale = "7.5 0.1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-344.894 144.536 33.5386";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-341.519 130.907 32.3886";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-341.524 128.695 34.8386";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-320.17 130.984 28.4386";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-343.201 144.722 34.1136";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-343.168 143.414 34.1136";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-317.889 130.999 30.6886";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-343.433 131.692 32.9636";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-339.872 131.587 32.9636";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-380.331 141.805 34.5463";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-380.313 142.271 33.4069";
+      rotation = "-1 0 0 15";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-342.169 94.7307 18.7105";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/advanced/half-pipe2.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-320.497 105.938 16.6498";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-323.492 94.4986 28.6105";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-321.153 95.4249 35.9105";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-326.758 95.4844 37.2284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-325.134 66.9597 28.3875";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "oilslick";
+   };
+   new StaticShape() {
+      position = "-324.645 62.5455 27.5975";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "oilslick";
+   };
+   new StaticShape() {
+      position = "-324.158 58.0912 26.8075";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "oilslick";
+   };
+   new InteriorInstance() {
+      position = "-268.955 50.4018 28.8901";
+      rotation = "-1 0 0 90";
+      scale = "0.05 3 1";
+      interiorFile = "~/data/interiors/beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-321.106 46.9327 17.4746";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-193.156 46.9919 18.0709";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-193.308 108.785 17.8024";
+      rotation = "-1 0 0 90";
+      scale = "2 2 1";
+      dataBlock = "TrapDoor";
+         resetTime = "Default";
+         open = "0";
+         timeout = "200";
+   };
+};
+//--- OBJECT WRITE END ---

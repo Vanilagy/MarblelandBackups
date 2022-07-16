@@ -1,0 +1,384 @@
+datablock ItemData (LongerGyro : HelicopterItem) {
+longer = true; //Don't modify
+time = 35000; //Modify
+pickUpName = "a Long Helicopter"; //You can even edit this too :)
+};
+
+function Marble::setPowerUp(%this, %item, %reset) {
+//Original code
+PlayGui.setPowerUp(%item.shapeFile);
+%this.powerUpData = %item;
+%this.setPowerUpId(%item.powerUpId,%reset);
+//Modifications
+
+//If the datablock tells us it's longer
+if (%item.longer) {
+//If we have no value stored, store one
+if (%this.getDatablock().origPUT[%item.powerUpId] $= "")
+%this.getDatablock().origPUT[%item.powerUpId] = %this.getDatablock().powerUpTime[%item.powerUpId];
+//Modify powerUpTime[]
+%this.getDatablock().powerUpTime[%item.powerUpId] = %item.time;
+} else {
+//Reset it
+//If we need to reset
+if (%this.getDatablock().origPUT[%item.powerUpId] !$= "") {
+//Replace the original value
+%this.getDatablock().powerUpTime[%item.powerUpId] = %this.getDatablock().origPUT[%item.powerUpId];
+//Clear the stored value
+%this.getDatablock().origPUT[%item.powerUpId] = "";
+}
+}
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         startHelpText = "Race against the gyrocopter\'s time limit and you will make it.";
+         type = "Beginner";
+         name = "Time Flier";
+         time = "0";
+         artist = "James Colsey";
+         goldTime = "70000";
+         desc = "If you like gyrocopters, what would happen if they are limited to 35 seconds? Pass all the challenges in this airbourne course!";
+         level = "53";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "1000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume2 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume3 = "-1 -1.73483e+009 -1.73483e+009";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1734829824.000000";
+   };
+   new Sun() {
+      direction = "0.280868 0.579493 -0.76505";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.400000 0.400000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "145.602 -4.52789 -30.2975";
+      rotation = "1 0 0 45";
+      scale = "0.796979 4 1";
+      interiorFile = "~/data/interiors/Beginner/backagain.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 139.346 -155.314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "145.623 -646.625 82.6879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "35000";
+   };
+   new Item() {
+      position = "145.589 -626.678 82.2357";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "145.623 -646.626 82.3588";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LongerGyro";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "145.603 -626.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 -630.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 -634.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 -646.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 -642.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 -638.654 81.686";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 123.346 -155.314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 127.346 -155.314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 131.346 -155.314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "145.603 135.346 -155.314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/squareyellow.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "145.596 139.357 -154.813";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Item() {
+      position = "145.607 123.355 -155.052";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LongerGyro";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "4290";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "165.143 -643.659 109.191";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/fan_lift.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "164.543 -643.659 82.191";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/fan_lift.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "165.143 -643.659 136.191";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/fan_lift.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "165.143 -643.659 163.191";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/fan_lift.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "163.671 -645.636 189.939";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LongerGyro";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "151.056 -645.716 222.475";
+      rotation = "0 -1 0 45";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "167.744 -645.716 210.03";
+      rotation = "0 1 0 45";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "153.46 -645.716 199.706";
+      rotation = "0 -1 0 45";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "167.756 -645.704 191.787";
+      rotation = "0 1 0 45";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "170.431 -645.716 238.456";
+      rotation = "0 1 0 45";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "159.667 -645.639 190.24";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-239.165 -645.48 123.728";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-70.5556 -645.623 237.414";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Beginner/training_time.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "56.9622 -643.526 338.409";
+      rotation = "0 0 1 180";
+      scale = "1 0.404914 1";
+      interiorFile = "~/data/interiors/addon/dive3.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "51.4091 -645.573 238.334";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-76.5855 -645.58 238.031";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LongerGyro";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-971.598 -634.71 86.9015";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/advanced/escher.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "-951.774 -630.7 86.899";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Trigger(task3) {
+      position = "-74.6407 -642.154 238.254";
+      rotation = "1 0 0 0";
+      scale = "1 6.94305 6.70499";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t use the gyrocopter until you reached the gem.";
+   };
+   new Trigger(task1) {
+      position = "143.624 126.329 -154.827";
+      rotation = "1 0 0 0";
+      scale = "3.95053 1 5.64806";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Fly high to the next platform.";
+   };
+   new Trigger(task2) {
+      position = "145.114 -646.129 82.1873";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "When time expires, it will be too late. Go quickly!";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

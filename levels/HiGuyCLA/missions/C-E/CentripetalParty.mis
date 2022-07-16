@@ -1,0 +1,125 @@
+
+datablock TriggerData(FinishTrigger) {
+	tickPeriodMS = "10";
+};
+
+function FinishTrigger::onEnterTrigger(%this, %trigger, %user) {
+	endGameSetup();
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Custom";
+         goldTime = "60000";
+         ultimateTime = "45000";
+         time = "0";
+         startHelpText = "Become the centrifugal force.";
+         name = "Centripetal Party";
+         artist = "HiGuy";
+         level = "1";
+         desc = "Physicists may argue that this doesn't count as centripetal force since the force of the platform is actually tangent to the circle. In response, I say \"Wheeeeeeeee!\"";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      materialList = "~/data/skies/Intermediate/Intermediate_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.573201 0.275357 -0.771764";
+      color = "1.080000 1.030000 0.900000 1.000000";
+      ambient = "0.400000 0.400000 0.500000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/CentripetalParty.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path(CirclePath) {
+      };
+      new PathedInterior(MustChange) {
+         position = "8 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/CentripetalParty.dif";
+         interiorIndex = "0";
+         basePosition = "8 0 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            InitialTargetPosition = "-1";
+      };
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Trigger(Bounds) {
+      position = "-50 -50 -6";
+      rotation = "1 0 0 0";
+      scale = "100 100 50";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-50 -50 16.7";
+      rotation = "1 0 0 0";
+      scale = "100 100 8";
+      dataBlock = "FinishTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---
+
+//Math section, anyone up for some basic trigonometry?
+$count = 63;
+$rad = 8;
+$period = 4000;
+$ms = $period / $count;
+for ($i = 0; $i < $count + 1; $i ++) {
+	$cos = mCos($tau * $i / $count) * $rad;
+	$sin = mSin($tau * $i / $count) * $rad;
+	CirclePath.add(new Marker() {
+		position = $cos SPC $sin SPC 0;
+		rotation = "1 0 0 0";
+		scale = "1 1 1";
+		msToNext = $ms;
+		smoothingType = "Spline";
+		seqNum = $i;
+	});
+}

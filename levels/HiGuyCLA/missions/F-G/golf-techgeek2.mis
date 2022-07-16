@@ -1,0 +1,290 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Marble-Mini-Golf";
+         desc = "Hole 15 :: by Tech Geek";
+         startHelpText = "Be sure to activate the shock absorber after you get hit!";
+         level = "9915";
+         goldTime = "33000";
+         artist = "Tech Geek";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+         position = "0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "0 0 -1.8";
+         rotation = "0 0 1 90";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+            locked = "true";
+      };
+      new StaticShape(EndPoint) {
+         position = "-5.05887 177 -93.3538";
+         rotation = "0 1 0 17.1888";
+         scale = "0.5 0.5 0.5";
+         dataBlock = "EndPad";
+            locked = "false";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 1";
+      rotation = "1 0 0 0";
+      scale = "0.005 0.005 2";
+      interiorFile = "~/data/interiors/advanced/platform_circle.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new InteriorInstance() {
+      position = "-3 3 0";
+      rotation = "1 0 0 0";
+      scale = "1 0.9 3";
+      interiorFile = "~/data/interiors/advanced/trapdoor.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Linear";
+               locked = "true";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "2200";
+            smoothingType = "Spline";
+               locked = "true";
+         };
+         new Marker() {
+            position = "0 -7 4";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "300";
+            smoothingType = "Spline";
+               locked = "true";
+         };
+         new Marker() {
+            position = "0 -1 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "300";
+            smoothingType = "Spline";
+               locked = "true";
+         };
+         new Marker() {
+            position = "0 6 5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1000000";
+            smoothingType = "Spline";
+               locked = "true";
+         };
+         new Marker() {
+            position = "0 7 4";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1000";
+            smoothingType = "Spline";
+               locked = "true";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-3 -33 -7.5";
+         rotation = "1 0 0 9.99997";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/addon/pinball0.dif";
+         interiorIndex = "0";
+         basePosition = "-3 -33 -7.5";
+         baseRotation = "1 0 0 9.99997";
+         baseScale = "1 1 1";
+            initialTargetPosition = "-1";
+            locked = "true";
+      };
+   };
+   new Trigger(start) {
+      position = "0 0 1.5";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         locked = "true";
+   };
+   new Trigger(Bounds) {
+      position = "-55 186.6 -113.2";
+      rotation = "1 0 0 0";
+      scale = "100 200 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "-0.959721 56.0879 -18.7119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/techshole2part1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.80999 65.5567 -31.1335";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/acrobat3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.499201 38.3576 2.7474";
+      rotation = "1 0 0 0";
+      scale = "1 1 50";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-0.0161256 0.00668991 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-4.78449 156.641 -85.7051";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/techshole2part2final.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "0.103876 173.298 -85.4348";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-0.0500202 17.5256 14.9222";
+      rotation = "0 0 -1 90";
+      scale = "1 0.3 1";
+      interiorFile = "~/data/interiors/addon/dive2.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "0.103876 169.498 -85.4348";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "0.103876 171.498 -85.4348";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "3.36136 53.5713 -18.2454";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.19318 55.0589 -18.3042";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.39716 56.276 -18.0426";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.08736 57.9113 -18.2811";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.02591 160.166 -83.444";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

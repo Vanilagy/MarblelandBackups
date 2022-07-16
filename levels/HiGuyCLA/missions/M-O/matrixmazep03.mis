@@ -1,0 +1,259 @@
+$skybox_url = getrandom(4);
+if ( $skybox_url == 0 )
+{
+    $skybox_url = "~/data/skies/intermediate/intermediate_Sky.dml";
+    $sun_1 = "0.531491 -0.606518 -0.591314";
+    $sun_2 = "1.000000 0.900000 0.200000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.240000 1.000000";
+}
+else if ( $skybox_url == 1 )
+{
+    $skybox_url = "~/data/skies/beginner/beginner_Sky.dml";
+    $sun_1 = "-0.444514 0.746881 -0.494547";
+    $sun_2 = "1.000000 1.000000 1.000000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.300000 1.000000";
+}
+else if ( $skybox_url == 2 )
+{
+    $skybox_url = "~/data/skies/expert/expert_Sky.dml";
+    $sun_1 = "0.444514 -0.746881 -0.494547";
+    $sun_2 = "0.600000 0.600000 0.600000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.450000 1.000000";
+}
+else if ( $skybox_url == 3 )
+{
+    $skybox_url = "~/data/skies/advanced/advanced_Sky.dml";
+    $sun_1 = "-0.668065 -0.506593 -0.545026";
+    $sun_2 = "1.600000 1.600000 1.600000 1.000000";
+    $sun_3 = "0.400000 0.400000 0.400000 1.000000";
+}
+else
+{
+    $skybox_url = "~/data/skies/bonus/bonus_Sky.dml";
+    $sun_1 = "-0.00945897 -0.68078 -0.732427";
+    $sun_2 = "0.600000 0.600000 0.250000 1.000000";
+    $sun_3 = "0.400000 0.400000 0.300000 1.000000";
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "CyberFox";
+         goldTime = "50000";
+         desc = "3rd lvl of the MMP series.";
+         type = "intermediate";
+         name = "Matrix Maze P03";
+         UltimateTime = "40000";
+         level = "2";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = $skybox_url;
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = $sun_1;
+      color = $sun_2;
+      ambient = $sun_3;
+   };
+   new StaticShape(EndPoint) {
+      position = "0 0 0.85";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 1";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/matrixmazep03.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-0.0100706 -13.0565 11.6927";
+      rotation = "-1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.9146 -15.9424 3.07454";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-13.67 5.81641 3.50884";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4.01041 2.03025 4.18217";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-6.14378 -8.10535 5.09898";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22.5014 7.7073 11.3715";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-0.0416316 4.32795 11.073";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-6.01118 12.039 7.09562";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17.5171 -12.1149 6.17593";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-0.877844 13.3241 7.05767";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "0 0 12.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0.468333 -0.224805 24.3168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.47476";
+      dataBlock = "EasterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.98553 -2.12016 4.46375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.93595 2.04216 4.31723";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.95456 -2.02701 4.31397";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Metropolis.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-25.4533 19.7627 -0.166308";
+      rotation = "1 0 0 0";
+      scale = "51.1816 40.0717 62.4169";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---

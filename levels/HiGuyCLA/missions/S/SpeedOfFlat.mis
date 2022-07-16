@@ -1,0 +1,134 @@
+$TargetSpeed = 40;
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Speed of Flat";
+         goldTime = "90000";
+         ultimateTime = "70000";
+         time = "250000";
+         type = "Custom";
+         startHelpText = "The finish is moving away at 40 m/s. Your speed is shown in the gem count. Good luck!";
+         level = "1";
+         desc = "Can you master the technique to rolling fast without jumping?";
+         jumpImpulse = 0;
+         sof = "1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      materialList = "~/data/skies/Intermediate/Intermediate_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new SimGroup(PathNodeGroup) {
+   	new StaticShape(FinishPoint0) {
+			position = "0 5 1";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "PathNode";
+				timeToNext = ((10000 / $TargetSpeed) * 1000);
+				useRotation = "0";
+				RotationMultiplier = "1";
+				usePosition = "1";
+				nextNode = "FinishPoint1";
+				placed = "1";
+				useScale = "0";
+				reverseRotation = "0";
+		};
+   	new StaticShape(FinishPoint1) {
+			position = "0 10005 1";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "PathNode";
+				timeToNext = "5000";
+				useRotation = "0";
+				RotationMultiplier = "1";
+				usePosition = "1";
+				nextNode = "FinishPoint0";
+				placed = "1";
+				useScale = "0";
+				reverseRotation = "0";
+		};
+   };
+   new InteriorInstance(InfRoad) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/SpeedOfFlat.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "0 5 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+      	path = "FinishPoint0";
+   };
+   new Trigger(Bounds) {
+      position = "-19.5 -21.9685 -6";
+      rotation = "1 0 0 0";
+      scale = "39 10536.97 57";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---
+
+$InfRoadNote = false;
+
+function infRoadUpdate() {
+	if (!MissionInfo.sof)
+		return;
+	%vel = mRound(getWord($MP::MyMarble.getVelocity(), 1));
+
+	if (!$InfRoadNote && %vel >= $TargetSpeed) {
+		$InfRoadNote = true;
+		addHelpLine("You're no longer losing ground, now just catch up to the finish before time runs out!");
+	}
+
+	PlayGui.setGemCount(%vel, (%vel >= $TargetSpeed));
+	PlayGui.setMaxGems($TargetSpeed);
+
+	schedule(10, 0, infRoadUpdate);
+}
+
+infRoadUpdate();

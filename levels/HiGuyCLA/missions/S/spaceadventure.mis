@@ -1,0 +1,1394 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         goldTime = "150000";
+         level = "223";
+         startHelpText = "3...2...1...BLAST OFF!!";
+         name = "Space Adventure";
+         artist = "Andrew Sears";
+         time = "240000";
+         desc = "Retrieve the gems from the planet before time runs out, but avoid the space hazards!";
+         type = "custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569861149077900047473967104.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160049016675429178998259712.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.560395 0.341545 -0.754522";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         scale = "1 1 1";
+         position = "0 0 0";
+         locked = "true";
+         rotation = "1 0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+   };
+   new Trigger(Bounds) {
+      position = "-80.3005 80.3237 409.341";
+      rotation = "1 0 0 0";
+      scale = "200 200 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "39.05 113.899 505.832";
+      rotation = "1 0 0 0";
+      scale = "3 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2453";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "189.85 -13.5978 505.717";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-126.099 -13.9007 505.546";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37.09 -140.659 506.19";
+      rotation = "1 0 0 0";
+      scale = "3 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new InteriorInstance() {
+      position = "39.5875 -13.9928 633.432";
+      rotation = "1 0 0 0";
+      scale = "3 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37.2638 -13.7431 378.341";
+      rotation = "1 0 0 0";
+      scale = "3 2 2";
+      interiorFile = "~/data/interiors/spaceroom.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2641";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.1357 33.499 454.791";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/intermediate/aroundtheworld.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "-30.0531 29.5111 529.691";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Trigger(fail) {
+      position = "-79.7844 58.5327 444.241";
+      rotation = "1 0 0 0";
+      scale = "200 150 5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "You have failed your mission!";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2165";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.4964 -5.29 537.816";
+      rotation = "1 0 0 0";
+      scale = "1 4 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.4885 7.124 536.622";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-30.1643 26.9969 529.973";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(rollfast) {
+      position = "-31.9571 0.61963 539.897";
+      rotation = "1 0 0 0";
+      scale = "3 6 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t roll too fast now!";
+   };
+   new Trigger(platform) {
+      position = "-31.551 27.8816 532.217";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Land on the purple platform!";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2165";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new StaticShape() {
+      position = "-29.7472 -13.0377 541.121";
+      rotation = "0 0 1 135";
+      scale = "1 1 1";
+      dataBlock = "SignPlainDown";
+   };
+   new InteriorInstance() {
+      position = "-32.4964 -12.8261 535.122";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-35.9736 -14.3806 531.322";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.3643 -18.1806 529.264";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-38.3616 -17.9598 532.119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-43.2022 -18.0308 515.016";
+      rotation = "1 0 0 0";
+      scale = "3 1 0.5";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-51.6289 -26.7348 516.408";
+      rotation = "0 0 1 90";
+      scale = "5 1 0.25";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.9577 -34.2077 518.616";
+      rotation = "1 0 0 0";
+      scale = "6 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-50.7077 -33.9859 517.163";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2907";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.4 -51.2183 510.809";
+      rotation = "1 0 0 55";
+      scale = "0.11 0.11 0.55";
+      interiorFile = "~/data/interiors/addon/freefall0.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(wormhole) {
+      position = "-30.3477 -32.0718 520.663";
+      rotation = "1 0 0 0";
+      scale = "2 4 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Look, a wormhole! This will help us complete our mission more quickly!";
+   };
+   new InteriorInstance() {
+      position = "-27.3037 -68.2189 495.016";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-27.6376 -70.0327 498.249";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new InteriorInstance() {
+      position = "-27.3653 -70.0927 497.887";
+      rotation = "1 0 0 0";
+      scale = "1 0.03 0.5";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.3833 -62.9395 495.332";
+      rotation = "0 0 -1 90";
+      scale = "0.45 0.45 0.45";
+      interiorFile = "~/data/interiors/beginner/training1.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(Normal) {
+      position = "-30.7587 -66.4387 495.408";
+      rotation = "1 0 0 0";
+      scale = "1 4 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Normal gravity in space? What\'s going on??";
+   };
+   new InteriorInstance() {
+      position = "-27.0001 -55.1098 481.098";
+      rotation = "1 0 0 0";
+      scale = "0.45 0.45 0.45";
+      interiorFile = "~/data/interiors/beginner/training1.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-33.2089 -56.211 496.731";
+      rotation = "0 0 1 87";
+      scale = "1 1 1";
+      dataBlock = "SignPlainDown";
+   };
+   new Item() {
+      position = "-32.4095 -57.7346 495.708";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21.3596 -57.5106 481.456";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-24.2793 -50.3348 488.801";
+      rotation = "1 0 0 0";
+      scale = "1 4 0.75";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.5797 -38.2928 490.88";
+      rotation = "1 0 0 0";
+      scale = "7 2 0.35";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(asteroid) {
+      position = "-13.7527 -34.5097 491.524";
+      rotation = "1 0 0 0";
+      scale = "1 8 1.5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Warning! Asteroid field ahead!";
+   };
+   new InteriorInstance() {
+      position = "3.18618 -38.2927 489.605";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "5.84587 -40.0928 493.341";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.2459 -46.0928 495.941";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "15.1539 -37.8927 493.074";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0.471387 -30.8138 492.206";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "6.97006 -45.8927 492.539";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.2781 -35.8927 489.072";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.2897 -39.6927 497.505";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "8.7376 -43.2927 498.656";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "12.1756 -40.6927 495.118";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.25";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "8.41364 -30.0927 492.181";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "16.0516 -31.8927 496.643";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "18.7634 -29.1927 492.308";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.6553 -34.3927 486.863";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "2.358 -32.3927 496.812";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.25";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "16.6607 -35.5927 487.16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.4876 -47.9348 490.793";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.5377 -34.9348 494.907";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.521 -48.9348 487.669";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.25";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.5043 -42.9348 486.231";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "0.278917 -37.8149 491.53";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "28.5236 -38.4318 492.816";
+      rotation = "1 0 0 0";
+      scale = "5 0.75 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.05668 -41.7917 494.224";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.95393 -37.1247 495.556";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2173";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2173";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "35.884 -36.4141 482.516";
+      rotation = "1 0 0 0";
+      scale = "1 0.3 5";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "35.8661 -35.1641 492.495";
+      rotation = "-1 0 0 90";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "35.8112 -31.0102 472.116";
+      rotation = "1 0 0 0";
+      scale = "1 3 0.5";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "35.6656 -35.2339 473.975";
+      rotation = "1 0 0 180";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(gravity) {
+      position = "34.2711 -34.9141 491.508";
+      rotation = "1 0 0 0";
+      scale = "3 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "What happened???";
+   };
+   new InteriorInstance() {
+      position = "-30.4964 3.7668 536.882";
+      rotation = "1 0 0 0";
+      scale = "1 0.5 0.05";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-30.5193 3.31 537.235";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "2912";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "-25.2939 -34.3098 521.574";
+      rotation = "0 1 0 90";
+      scale = "0.25 0.75 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-26.1939 -36.7338 520.473";
+      rotation = "1 0 0 90";
+      scale = "0.05 0.5 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.5502 -31.6433 521.464";
+      rotation = "-1 0 0 90";
+      scale = "0.5 0.25 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.7428 -21.4927 529.804";
+      rotation = "1 0 0 90";
+      scale = "4 5 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "4244";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "-26.1238 -53.8336 493.545";
+      rotation = "0 1 0 90";
+      scale = "0.75 1 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-41.7961 -36.6339 521.058";
+      rotation = "1 0 0 90";
+      scale = "3 1 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-49.1444 -28.8077 518.809";
+      rotation = "0 1 0 90";
+      scale = "0.5 0.75 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "27.1943 -37.2468 494.191";
+      rotation = "1 0 0 90";
+      scale = "1.5 0.25 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-29.2283 -66.7017 496.224";
+      rotation = "1 0 0 90";
+      scale = "0.95 0.5 1";
+      interiorFile = "~/data/interiors/spaceplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "35.82 -23.1346 474.716";
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "35.7097 -25.7346 473.28";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "35.8181 -19.1744 482.716";
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "35.7042 -21.5744 479.061";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "35.8729 -15.2483 490.716";
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "35.9978 -17.7049 487.184";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "35.6795 -6.3348 494.505";
+      rotation = "1 0 0 0";
+      scale = "0.5 3.5 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "36.349 1.3726 469.255";
+      rotation = "1 0 0 180";
+      scale = "0.11 0.11 0.75";
+      interiorFile = "~/data/interiors/addon/freefall0.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "35.6416 1.67537 494.809";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TrapDoor";
+         open = "0";
+         resetTime = "Default";
+         timeout = "200";
+   };
+   new InteriorInstance() {
+      position = "35.674 7.5935 494.483";
+      rotation = "1 0 0 0";
+      scale = "0.5 2.5 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "35.949 13.2254 469.825";
+      rotation = "1 0 0 180";
+      scale = "0.11 0.11 0.75";
+      interiorFile = "~/data/interiors/addon/freefall0.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "35.6147 13.5847 494.809";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TrapDoor";
+         open = "0";
+         resetTime = "Default";
+         timeout = "200";
+   };
+   new InteriorInstance() {
+      position = "49.19 13.5641 494.548";
+      rotation = "1 0 0 0";
+      scale = "6 0.5 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "62.2534 13.5073 469.735";
+      rotation = "1 0 0 180";
+      scale = "0.11 0.11 0.75";
+      interiorFile = "~/data/interiors/addon/freefall0.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "66.7613 13.5073 494.624";
+      rotation = "1 0 0 0";
+      scale = "2 0.5 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "61.5914 13.5073 494.938";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TrapDoor";
+         open = "0";
+         resetTime = "Default";
+         timeout = "200";
+   };
+   new InteriorInstance() {
+      position = "75.7243 7.66899 494.681";
+      rotation = "0 0 1 45";
+      scale = "4 0.5 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "80.6832 -2.86824 494.716";
+      rotation = "1 0 0 0";
+      scale = "0.5 3 0.15";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "80.5498 -8.23578 495.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(hole1) {
+      position = "35.4769 2.24175 470.809";
+      rotation = "1 0 0 0";
+      scale = "1.75 1.75 1.75";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(hole2) {
+      position = "35.0343 14.1072 474.706";
+      rotation = "1 0 0 0";
+      scale = "1.75 1.75 1.75";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(hole3) {
+      position = "61.327 14.2649 475.822";
+      rotation = "1 0 0 0";
+      scale = "1.75 1.75 1.75";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(blackhole) {
+      position = "34.6418 -4.77363 494.524";
+      rotation = "1 0 0 0";
+      scale = "2 1 1.5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Warning: Don\'t fall into the black holes!";
+   };
+   new Trigger(copter) {
+      position = "79.6364 -6.93745 494.535";
+      rotation = "1 0 0 0";
+      scale = "2 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Use the Gyrocopter to fly to the top of the planet Marblius.";
+   };
+   new StaticShape() {
+      position = "-49.8627 -32.4908 518.171";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new StaticShape() {
+      position = "37.6968 -39.6125 494.264";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new InteriorInstance() {
+      position = "87.749 -48.6474 492.902";
+      rotation = "1 0 0 0";
+      scale = "7 7 7";
+      interiorFile = "~/data/interiors/rock.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(welcome) {
+      position = "71.4682 -29.438 494.402";
+      rotation = "1 0 0 0";
+      scale = "20 8 14";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Welcome to planet Marblius!";
+   };
+   new Item() {
+      position = "79.4462 -51.9568 506.902";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "95.5626 -49.4762 506.902";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "86.8626 -42.0764 506.944";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "102.876 -48.584 505.898";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "102.149 -42.7206 487.189";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "101.949 -53.6907 496.111";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "101.261 -64.1974 493.054";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "91.3415 -63.0474 486.638";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "80.7072 -62.8474 492.886";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "89.9944 -62.8474 501.55";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "72.974 -61.6856 492.951";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "73.349 -48.0657 484.672";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "73.349 -52.3956 498.021";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "74.9283 -48.4239 478.098";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "90.0419 -55.977 478.102";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "84.3577 -41.1541 478.102";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "88.0612 -47.7881 478.698";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Gems) {
+      position = "86.4805 -46.326 476.002";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Make sure you have all the gems before heading back to Earth!";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         pad = "3596";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "87.3479 -48.6674 457.516";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "87.4662 -35.4712 462.564";
+      rotation = "-1 0 0 25";
+      scale = "1 6 0.11";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "87.4774 -18.7591 465.716";
+      rotation = "1 0 0 0";
+      scale = "1 3 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "87.46 -3.01112 465.716";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "87.4045 10.9574 465.683";
+      rotation = "1 0 0 0";
+      scale = "1 2 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "62.5962 25.1727 467.116";
+      rotation = "1 0 0 0";
+      scale = "12 1 0.25";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "87.2061 -48.5744 458.106";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "87.488 24.9267 467.316";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "87.5401 27.6652 469.439";
+      rotation = "1 0 0 0";
+      scale = "1 0.15 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "86.4518 27.3652 468.771";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new Trigger(gaps) {
+      position = "85.8055 -17.2405 467.541";
+      rotation = "1 0 0 0";
+      scale = "3.5 2 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Be careful when crossing the gaps!!";
+   };
+   new StaticShape() {
+      position = "47.9148 19.6647 465.141";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "64.2663 31.0391 465.941";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new Item() {
+      position = "35.0083 25.2123 468.023";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(twister) {
+      position = "81.2976 27.2079 467.547";
+      rotation = "1 0 0 0";
+      scale = "1 4 1.5";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t let the space twisters pull you in!";
+   };
+   new InteriorInstance() {
+      position = "22.0944 24.8178 480.116";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "21.6295 24.9293 482.423";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "13.5372 9.58627 489.516";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "13.4801 9.64994 492.023";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-5.77316 -3.13477 505.796";
+      rotation = "1 0 0 0";
+      scale = "11 1.5 0.25";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-6.57635 -4.33733 506.374";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "2.91746 -1.72532 506.286";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-0.72457 -3.72704 506.327";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-16.9665 -4.72875 506.368";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-10.0085 -2.33047 506.409";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-21.6505 -4.53218 506.45";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-19.0925 -1.7339 506.492";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "7.0656 -4.73562 506.533";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "9.15608 -1.07482 506.409";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-4.94833 -1.47352 506.486";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-24.5802 -2.67395 506.327";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-13.6121 -3.27439 506.368";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new Trigger(mine) {
+      position = "9.6578 -0.56151 506.227";
+      rotation = "1 0 0 0";
+      scale = "5 5 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Oh no! Space mines!";
+   };
+   new InteriorInstance() {
+      position = "35.8992 25.076 467.316";
+      rotation = "1 0 0 0";
+      scale = "0.5 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.8966 10.64 509.121";
+      rotation = "1 0 0 80";
+      scale = "0.11 0.11 0.35";
+      interiorFile = "~/data/interiors/addon/freefall0.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-28.3232 27.3766 509.276";
+      rotation = "1 0 0 0";
+      scale = "1 3 0.5";
+      interiorFile = "~/data/interiors/spaceblock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-29.0356 29.887 510.735";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34.8388 29.3152 514.926";
+      rotation = "0 -1 0 45";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape(EndPoint) {
+      position = "-37.8232 29.5438 522.122";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Item() {
+      position = "-38.5982 29.5938 519.818";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(earthhole) {
+      position = "-28.8292 -0.35849 506.209";
+      rotation = "1 0 0 0";
+      scale = "2 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+      text = "This wormhole leads directly to Earth! Don't waste any time!";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Trigger(home) {
+      position = "-30.2776 27.0562 510.239";
+      rotation = "1 0 0 0";
+      scale = "4 1 1.25";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+      text = "You made it home! But are you too late??";
+   };
+};
+//--- OBJECT WRITE END ---

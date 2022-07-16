@@ -1,0 +1,3500 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Three-Fold Racetrack";
+         artist = "hPerks";
+         type = "custom";
+         level = "1";
+         desc = "Take three laps around this circuit to finish. It's a little different each time!";
+         startHelpText = "Nothing is permanent around here.";
+         goldTime = "50000";
+         UltimateTime = "30000";
+         music = "Future Funk.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0";
+      cloudSpeed2 = "0";
+      cloudSpeed3 = "0";
+      visibleDistance = "10500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0 0 0 0";
+      fogDistance = "300";
+      fogColor = "0 0 0 0";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Expert/Expert_Sky.dml";
+      windVelocity = "0 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "0 0 0 0";
+      fogVolumeColor2 = "0 0 0 0";
+      fogVolumeColor3 = "0 0 0 0";
+   };
+   new Sun() {
+      direction = "0.5 0.5 -0.5";
+      color = "1.4 1.2 0.4 1";
+      ambient = "0.3 0.3 0.4 1";
+   };
+   new SimGroup() {
+      new StaticShape(disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new StaticShape(StartPoint) {
+      position = "0 -4 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new SimGroup() {
+      new StaticShape(StartPoint_disappear) {
+         position = "0 -4 -0.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(EndPoint) {
+      position = "0 0 -10000";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new SimGroup() {
+      new StaticShape(EndPoint_appear) {
+         position = "6 -12 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useRotation = "0";
+      };
+   };
+   new StaticShape(FinishSign) {
+      position = "0 0 -10000";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new SimGroup() {
+      new StaticShape(FinishSign_appear) {
+         position = "6 -12 6";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useRotation = "0";
+      };
+   };
+   new Item(EasterEgg) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.2";
+      dataBlock = "EasterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(EasterEgg_appear) {
+         position = "6 -12 -1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(IBT) {
+      position = "-50 96 -10";
+      rotation = "1 0 0 0";
+      scale = "160 156 100";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+   };
+
+   new InteriorInstance() {
+      position = "-100 -100 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C1_L1a_Trigger_MP1_disappear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "0";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C1_L1a_Trigger_MP2_disappear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "1";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C1_L2a_Trigger_MP3_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "2";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C1_Trigger_MP_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C1_L2a_Trigger_MP4_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "3";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 6 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C1_L3_Trigger_MP6_forward) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1501";
+      };
+      new Trigger(C1_L3_Trigger_MP6_back) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new Trigger(C1_L3_Trigger_MP6_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "9999";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "7";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new SimGroup() {
+
+      new StaticShape(C1_L3_Trigger_MP_appear) {
+         position = "-100 100 -50";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C1_L3_Trigger_MP_abouttodisappear";
+            timeToNext = "1500";
+      };
+      new StaticShape(C1_L3_Trigger_MP_abouttodisappear) {
+         position = "-100 100 -50";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C1_L3_Trigger_MP_disappear";
+            timeToNext = "1";
+      };
+      new StaticShape(C1_L3_Trigger_MP_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C1_L3_Trigger_MP_abouttoappear";
+            timeToNext = "1500";
+      };
+      new StaticShape(C1_L3_Trigger_MP_abouttoappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C1_L3_Trigger_MP_appear";
+            timeToNext = "1";
+      };
+   };
+
+   new Trigger(C1_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Lap 2 - Uh oh, the ground is starting to collapse!";
+   };
+   new Trigger(C1_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Final lap! Ride this platform to cross the gap.";
+   };
+   new SimGroup() {
+      new StaticShape(C1_Help_appear) {
+         position = "-3 3 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Item(C1_L1_TimeTravel) {
+      position = "-3 26 2.625";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item(C1_L2_TimeTravel) {
+      position = "3 26 2.625";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Trigger(C1_L1a) {
+      position = "-3 43 4.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L1a";
+         Path1 = "disappear";
+         object2 = "C1_L2b";
+         Path2 = "C1_L2b_appear";
+         object3 = "C1_L2b_ii";
+         Path3 = "C1_L2b_appear";
+         object4 = "StartPoint";
+         Path4 = "StartPoint_disappear";
+   };
+   new Trigger(C1_L1a_ii) {
+      position = "-3 43 4.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L1a_ii";
+         Path1 = "disappear";
+   };
+   new Item(C1_L1_Gem) {
+      position = "0 40 4.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C1_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L2b";
+         Path1 = "disappear";
+         object2 = "C1_L2a";
+         Path2 = "C1_L2a_appear";
+         object3 = "C1_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C1_L2_Gem";
+         Path4 = "C1_L2_Gem_appear";
+   };
+   new Trigger(C1_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C1_L2a_ii";
+         Path2 = "C1_L2a_appear";
+         object3 = "C1_L2_Help";
+         Path3 = "C1_Help_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L2b_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C1_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L2a";
+         Path1 = "disappear";
+         object2 = "C1_L3b";
+         Path2 = "C1_L3b_appear";
+         object3 = "C1_L3b_ii";
+         Path3 = "C1_L3b_appear";
+         object4 = "C1_L2a_Trigger_MP3_disappear";
+         Path4 = "C1_Trigger_MP_appear";
+   };
+   new Trigger(C1_L2a_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L2a_ii";
+         Path1 = "disappear";
+         object2 = "C1_L2a_Trigger_MP4_disappear";
+         Path2 = "C1_Trigger_MP_appear";
+         object3 = "C1_L3b_iii";
+         Path3 = "C1_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L2a_appear) {
+         position = "-3 43 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C1_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L2_Gem_appear) {
+         position = "0 40 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useRotation = "0";
+      };
+   };
+   new Trigger(C1_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L3b";
+         Path1 = "disappear";
+         object2 = "C1_L2_Gem";
+         Path2 = "disappear";
+         object3 = "C1_L3_Gem";
+         Path3 = "C1_L3_Gem_appear";
+         object4 = "C1_L3_Trigger_MP6_forward";
+         Path4 = "C1_L3_Trigger_MP_appear";
+   };
+   new Trigger(C1_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C1_L3_Trigger_MP6_back";
+         Path2 = "C1_L3_Trigger_MP_disappear";
+         object3 = "C1_L2_Help";
+         Path3 = "disappear";
+         object4 = "C1_L3_Help";
+         Path4 = "C1_Help_appear";
+   };
+   new Trigger(C1_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C1_L3a";
+         Path2 = "C1_L3a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L3b_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C1_L3_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L3_Gem_appear) {
+         position = "0 40 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C1_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L3a";
+         Path1 = "disappear";
+         object2 = "C1_L4b";
+         Path2 = "C1_L4b_appear";
+         object3 = "C1_L4b_ii";
+         Path3 = "C1_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L3a_appear) {
+         position = "-3 43 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C1_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L4b";
+         Path1 = "disappear";
+         object2 = "C1_L3_Help";
+         Path2 = "disappear";
+         object3 = "C1_L3_Trigger_MP6_forward";
+         Path3 = "disappear";
+         object4 = "C1_L3_Trigger_MP6_back";
+         Path4 = "disappear";
+   };
+   new Trigger(C1_L4b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C1_L4b_ii";
+         Path1 = "disappear";
+         object2 = "C1_L3_Trigger_MP6_disappear";
+         Path2 = "C1_L3_Trigger_MP_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C1_L4b_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Trigger(C2_L1_Help) {
+      position = "-3 49 4.25";
+      rotation = "1 0 0 0";
+      scale = "18 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Use the super jump to get past the wall.";
+   };
+   new Trigger(C2_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "18 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "You don't get a super jump this time!";
+   };
+   new Trigger(C2_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "18 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "How does a super speed help here?";
+   };
+   new SimGroup() {
+      new StaticShape(C2_Help_appear) {
+         position = "-3 49 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Item(C2_L1_SuperJump) {
+      position = "6 46 4.437";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item(C2_L2_ShockAbsorber) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L2_ShockAbsorber_appear) {
+         position = "6 46 4.35";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new Item(C2_L3_SuperSpeed) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L3_SuperSpeed_appear) {
+         position = "6 46 4.437";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new Item(C2_L4_SuperBounce) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L4_SuperBounce_appear) {
+         position = "6 46 4.55";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+
+   new Trigger(C2_L1a) {
+      position = "21 49 8.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L1a";
+         Path1 = "disappear";
+         object2 = "C2_L2b";
+         Path2 = "C2_L2b_appear";
+         object3 = "C2_L2b_ii";
+         Path3 = "C2_L2b_appear";
+         object4 = "C2_L2b_iii";
+         Path4 = "C2_L2b_appear";
+   };
+   new Item(C2_L1_Gem) {
+      position = "24 46 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C2_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L2b";
+         Path1 = "disappear";
+         object2 = "C2_L2a";
+         Path2 = "C2_L2a_appear";
+         object3 = "C2_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C2_L2_Gem";
+         Path4 = "C2_L2_Gem_appear";
+   };
+   new Trigger(C2_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C2_L1_SuperJump";
+         Path2 = "disappear";
+         object3 = "C2_L2_ShockAbsorber";
+         Path3 = "C2_L2_ShockAbsorber_appear";
+         object4 = "C2_L1_Help";
+         Path4 = "disappear";
+   };
+   new Trigger(C2_L2b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L2b_iii";
+         Path1 = "disappear";
+         object2 = "C2_L2_Help";
+         Path2 = "C2_Help_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L2b_appear) {
+         position = "57 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C2_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L2a";
+         Path1 = "disappear";
+         object2 = "C2_L3b";
+         Path2 = "C2_L3b_appear";
+         object3 = "C2_L3b_ii";
+         Path3 = "C2_L3b_appear";
+         object4 = "C2_L3b_iii";
+         Path4 = "C2_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L2a_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C2_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L2_Gem_appear) {
+         position = "24 46 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C2_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L3b";
+         Path1 = "disappear";
+         object2 = "C2_L2_Gem";
+         Path2 = "disappear";
+         object3 = "C2_L3_Gem";
+         Path3 = "C2_L3_Gem_appear";
+         object4 = "C2_L2_ShockAbsorber";
+         Path4 = "disappear";
+   };
+   new Trigger(C2_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C2_L3_SuperSpeed";
+         Path2 = "C2_L3_SuperSpeed_appear";
+         object3 = "C2_L2_Help";
+         Path3 = "disappear";
+         object4 = "C2_L3_Help";
+         Path4 = "C2_Help_appear";
+   };
+   new Trigger(C2_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C2_L3a";
+         Path2 = "C2_L3a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L3b_appear) {
+         position = "57 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C2_L3_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L3_Gem_appear) {
+         position = "24 46 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C2_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L3a";
+         Path1 = "disappear";
+         object2 = "C2_L4b";
+         Path2 = "C2_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L3a_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C2_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C2_L4b";
+         Path1 = "disappear";
+         object2 = "C2_L3_Help";
+         Path2 = "disappear";
+         object3 = "C2_L3_SuperSpeed";
+         Path3 = "disappear";
+         object4 = "C2_L4_SuperBounce";
+         Path4 = "C2_L4_SuperBounce_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C2_L4b_appear) {
+         position = "57 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C3_L1a_Trigger_MP1_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new Trigger(C3_L2a_Trigger_MP1_appear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "0";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "8";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C3_Trigger_MP_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C3_L2a_Trigger_MP2_appear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "10";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C3_L2a_Trigger_MP3_appear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "11";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new Trigger(C3_L1_Help) {
+      position = "21 49 8.25";
+      rotation = "1 0 0 0";
+      scale = "12 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Watch out for the hazards!";
+   };
+   new Trigger(C3_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "12 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Don't spend too much time on the giant trapdoor!";
+   };
+   new Trigger(C3_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "12 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Stay centered to avoid getting blown off!";
+   };
+   new SimGroup() {
+      new StaticShape(C3_Help_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new StaticShape(C3_L1_Bumper1) {
+      position = "28 38 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L1_Bumper1_appear) {
+         position = "28 38 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(C3_L1_Bumper2) {
+      position = "32 38 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L1_Bumper2_appear) {
+         position = "32 38 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(C3_L1_Bumper3) {
+      position = "30 36 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L1_Bumper3_appear) {
+         position = "30 36 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(C3_L1_Bumper4) {
+      position = "28 34 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L1_Bumper4_appear) {
+         position = "28 34 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(C3_L1_Bumper5) {
+      position = "32 34 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L1_Bumper5_appear) {
+         position = "32 34 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+
+   new Item(C3_L1_TimeTravel) {
+      position = "30 36 12.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new StaticShape(C3_L2_Trapdoor) {
+      position = "0 0 -10000";
+      rotation = "0 0 -1 90";
+      scale = "3 3 3";
+      dataBlock = "TrapDoor";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L2_Trapdoor_appear) {
+         position = "30 36 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+
+   new Item(C3_L2_TimeTravel) {
+      position = "30 36 6.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new StaticShape(C3_L3_DuctFan1) {
+      position = "0 0 -10000";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L3_DuctFan1_appear) {
+         position = "36 39 9.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new StaticShape(C3_L3_DuctFan2) {
+      position = "0 0 -10000";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L3_DuctFan2_appear) {
+         position = "24 33 9.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+
+   new Trigger(C3_L1a) {
+      position = "33 29 8.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L1a";
+         Path1 = "disappear";
+         object2 = "C3_L2b";
+         Path2 = "C3_L2b_appear";
+         object3 = "C3_L2b_ii";
+         Path3 = "C3_L2b_appear";
+         object4 = "C3_L2b_iii";
+         Path4 = "C3_L2b_appear";
+   };
+   new Trigger(C3_L1a_ii) {
+      position = "33 29 8.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L1a_ii";
+         Path1 = "disappear";
+         object2 = "C3_L2b_iv";
+         Path2 = "C3_L2b_appear";
+         object3 = "C3_L1a_Trigger_MP1_disappear";
+         Path3 = "C3_Trigger_MP_appear";
+         object4 = "C3_L2b_v";
+         Path4 = "C3_L2b_appear";
+   };
+   new Item(C3_L1_Gem) {
+      position = "36 26 8.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C3_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2b";
+         Path1 = "disappear";
+         object2 = "C3_L2a";
+         Path2 = "C3_L2a_appear";
+         object3 = "C3_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C3_L2_Gem";
+         Path4 = "C3_L2_Gem_appear";
+   };
+   new Trigger(C3_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C3_L1_Bumper1";
+         Path2 = "disappear";
+         object3 = "C3_L1_Bumper2";
+         Path3 = "disappear";
+         object4 = "C3_L1_Bumper3";
+         Path4 = "disappear";
+   };
+   new Trigger(C3_L2b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2b_iii";
+         Path1 = "disappear";
+         object2 = "C3_L1_Bumper4";
+         Path2 = "disappear";
+         object3 = "C3_L1_Bumper5";
+         Path3 = "disappear";
+         object4 = "C3_L2_Trapdoor";
+         Path4 = "C3_L2_Trapdoor_appear";
+   };
+   new Trigger(C3_L2b_iv) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2b_iv";
+         Path1 = "disappear";
+         object2 = "C3_L2a_ii";
+         Path2 = "C3_L2a_appear";
+         object3 = "C3_L1_Help";
+         Path3 = "disappear";
+         object4 = "C3_L2_Help";
+         Path4 = "C3_Help_appear";
+   };
+   new Trigger(C3_L2b_v) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2b_v";
+         Path1 = "disappear";
+         object2 = "C3_L2a_iii";
+         Path2 = "C3_L2a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L2b_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C3_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2a";
+         Path1 = "disappear";
+         object2 = "C3_L3b";
+         Path2 = "C3_L3b_appear";
+         object3 = "C3_L1a_Trigger_MP1_disappear";
+         Path3 = "disappear";
+         object4 = "C3_L2a_Trigger_MP1_appear";
+         Path4 = "C3_Trigger_MP_appear";
+   };
+   new Trigger(C3_L2a_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2a_ii";
+         Path1 = "disappear";
+         object2 = "C3_L3b_ii";
+         Path2 = "C3_L3b_appear";
+         object3 = "C3_L2a_Trigger_MP2_appear";
+         Path3 = "C3_Trigger_MP_appear";
+         object4 = "C3_L2a_Trigger_MP3_appear";
+         Path4 = "C3_Trigger_MP_appear";
+   };
+   new Trigger(C3_L2a_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L2a_iii";
+         Path1 = "disappear";
+         object2 = "C3_L3b_iii";
+         Path2 = "C3_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L2a_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C3_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L2_Gem_appear) {
+         position = "36 26 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C3_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L3b";
+         Path1 = "disappear";
+         object2 = "C3_L2_Gem";
+         Path2 = "disappear";
+         object3 = "C3_L3_Gem";
+         Path3 = "C3_L3_Gem_appear";
+         object4 = "C3_L2_Trapdoor";
+         Path4 = "disappear";
+   };
+   new Trigger(C3_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C3_L3_DuctFan1";
+         Path2 = "C3_L3_DuctFan1_appear";
+         object3 = "C3_L3_DuctFan2";
+         Path3 = "C3_L3_DuctFan2_appear";
+         object4 = "C3_L3a";
+         Path4 = "C3_L3a_appear";
+   };
+   new Trigger(C3_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C3_L2_Help";
+         Path2 = "disappear";
+         object3 = "C3_L3_Help";
+         Path3 = "C3_Help_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L3b_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C3_L3_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L3_Gem_appear) {
+         position = "36 26 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C3_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L3a";
+         Path1 = "disappear";
+         object2 = "C3_L4b";
+         Path2 = "C3_L4b_appear";
+         object3 = "C3_L4b_ii";
+         Path3 = "C3_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L3a_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C3_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L4b";
+         Path1 = "disappear";
+         object2 = "C3_L3_Help";
+         Path2 = "disappear";
+         object3 = "C3_L1_Bumper1";
+         Path3 = "C3_L1_Bumper1_appear";
+         object4 = "C3_L1_Bumper2";
+         Path4 = "C3_L1_Bumper2_appear";
+   };
+   new Trigger(C3_L4b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C3_L4b_ii";
+         Path1 = "disappear";
+         object2 = "C3_L1_Bumper3";
+         Path2 = "C3_L1_Bumper3_appear";
+         object3 = "C3_L1_Bumper4";
+         Path3 = "C3_L1_Bumper4_appear";
+         object4 = "C3_L1_Bumper5";
+         Path4 = "C3_L1_Bumper5_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C3_L4b_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 -12 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C4_L3_Trigger_MP1_forward) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2001";
+      };
+      new Trigger(C4_L3_Trigger_MP1_back) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "4";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 12 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C4_L3_Trigger_MP2_forward) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2001";
+      };
+      new Trigger(C4_L3_Trigger_MP2_back) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "5";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 -12 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C4_L3_Trigger_MP3_forward) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2001";
+      };
+      new Trigger(C4_L3_Trigger_MP3_back) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "200 200 200";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "6";
+         basePosition = "-100 -100 -10000";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+   new SimGroup() {
+
+      new StaticShape(C4_L3_Trigger_MP_appear) {
+         position = "-100 100 -50";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C4_L3_Trigger_MP_abouttodisappear";
+            timeToNext = "2000";
+      };
+      new StaticShape(C4_L3_Trigger_MP_abouttodisappear) {
+         position = "-100 100 -50";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C4_L3_Trigger_MP_disappear";
+            timeToNext = "1";
+      };
+      new StaticShape(C4_L3_Trigger_MP_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C4_L3_Trigger_MP_abouttoappear";
+            timeToNext = "2000";
+      };
+      new StaticShape(C4_L3_Trigger_MP_abouttoappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            nextNode = "C4_L3_Trigger_MP_appear";
+            timeToNext = "1";
+      };
+   };
+
+   new Trigger(C4_L1_Help) {
+      position = "27 29 8.25";
+      rotation = "1 0 0 0";
+      scale = "12 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Some simple stairs...";
+   };
+   new Trigger(C4_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "12 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Look out for the nukes on this staircase.";
+   };
+   new Trigger(C4_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "12 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Timing is crucial to avoid the bumpers.";
+   };
+   new SimGroup() {
+      new StaticShape(C4_Help_appear) {
+         position = "27 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new StaticShape(C4_L2_Mine1) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine1_appear) {
+         position = "40 28 9.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine2) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine2_appear) {
+         position = "42 24 9.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine3) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine3_appear) {
+         position = "44 26 10.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine4) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine4_appear) {
+         position = "46 28 10.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine5) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine5_appear) {
+         position = "48 26 11.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine6) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine6_appear) {
+         position = "50 24 11.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new StaticShape(C4_L2_Mine7) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "Nuke";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Mine7_appear) {
+         position = "50 28 11.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Trigger(C4_L1a) {
+      position = "51 29 12.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L1a";
+         Path1 = "disappear";
+         object2 = "C4_L2b";
+         Path2 = "C4_L2b_appear";
+         object3 = "C4_L2b_ii";
+         Path3 = "C4_L2b_appear";
+         object4 = "C4_L2b_iii";
+         Path4 = "C4_L2b_appear";
+   };
+   new Trigger(C4_L1a_ii) {
+      position = "51 29 12.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L1a_ii";
+         Path1 = "disappear";
+         object2 = "C4_L2b_iv";
+         Path2 = "C4_L2b_appear";
+         object3 = "C4_L2b_v";
+         Path3 = "C4_L2b_appear";
+   };
+   new Item(C4_L1_Gem) {
+      position = "54 26 12.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C4_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2b";
+         Path1 = "disappear";
+         object2 = "C4_L2a";
+         Path2 = "C4_L2a_appear";
+         object3 = "C4_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C4_L2_Gem";
+         Path4 = "C4_L2_Gem_appear";
+   };
+   new Trigger(C4_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine1";
+         Path2 = "C4_L2_Mine1_appear";
+         object3 = "C4_L2_Mine2";
+         Path3 = "C4_L2_Mine2_appear";
+         object4 = "C4_L2_Mine3";
+         Path4 = "C4_L2_Mine3_appear";
+   };
+   new Trigger(C4_L2b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2b_iii";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine4";
+         Path2 = "C4_L2_Mine4_appear";
+         object3 = "C4_L2_Mine5";
+         Path3 = "C4_L2_Mine5_appear";
+         object4 = "C4_L2_Mine6";
+         Path4 = "C4_L2_Mine6_appear";
+   };
+   new Trigger(C4_L2b_iv) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2b_iv";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine7";
+         Path2 = "C4_L2_Mine7_appear";
+         object3 = "C4_L2a_ii";
+         Path3 = "C4_L2a_appear";
+         object4 = "C4_L1_Help";
+         Path4 = "disappear";
+   };
+   new Trigger(C4_L2b_v) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2b_v";
+         Path1 = "disappear";
+         object2 = "C4_L2_Help";
+         Path2 = "C4_Help_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2b_appear) {
+         position = "-3 43 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C4_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2a";
+         Path1 = "disappear";
+         object2 = "C4_L3b";
+         Path2 = "C4_L3b_appear";
+         object3 = "C4_L3b_ii";
+         Path3 = "C4_L3b_appear";
+         object4 = "C4_L3b_iii";
+         Path4 = "C4_L3b_appear";
+   };
+   new Trigger(C4_L2a_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L2a_ii";
+         Path1 = "disappear";
+         object2 = "C4_L3b_iv";
+         Path2 = "C4_L3b_appear";
+         object3 = "C4_L3b_v";
+         Path3 = "C4_L3b_appear";
+         object4 = "C4_L3b_vi";
+         Path4 = "C4_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2a_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C4_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L2_Gem_appear) {
+         position = "54 26 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C4_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b";
+         Path1 = "disappear";
+         object2 = "C4_L2_Gem";
+         Path2 = "disappear";
+         object3 = "C4_L3_Gem";
+         Path3 = "C4_L3_Gem_appear";
+         object4 = "C4_L3_Trigger_MP1_forward";
+         Path4 = "C4_L3_Trigger_MP_appear";
+   };
+   new Trigger(C4_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C4_L3_Trigger_MP1_back";
+         Path2 = "C4_L3_Trigger_MP_disappear";
+         object3 = "C4_L3_Trigger_MP2_forward";
+         Path3 = "C4_L3_Trigger_MP_appear";
+         object4 = "C4_L3_Trigger_MP2_back";
+         Path4 = "C4_L3_Trigger_MP_disappear";
+   };
+   new Trigger(C4_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C4_L3_Trigger_MP3_forward";
+         Path2 = "C4_L3_Trigger_MP_appear";
+         object3 = "C4_L3_Trigger_MP3_back";
+         Path3 = "C4_L3_Trigger_MP_disappear";
+         object4 = "C4_L2_Mine1";
+         Path4 = "disappear";
+   };
+   new Trigger(C4_L3b_iv) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b_iv";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine2";
+         Path2 = "disappear";
+         object3 = "C4_L2_Mine3";
+         Path3 = "disappear";
+         object4 = "C4_L2_Mine4";
+         Path4 = "disappear";
+   };
+   new Trigger(C4_L3b_v) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b_v";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine5";
+         Path2 = "disappear";
+         object3 = "C4_L2_Mine6";
+         Path3 = "disappear";
+         object4 = "C4_L2_Mine7";
+         Path4 = "disappear";
+   };
+   new Trigger(C4_L3b_vi) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3b_vi";
+         Path1 = "disappear";
+         object2 = "C4_L2_Help";
+         Path2 = "disappear";
+         object3 = "C4_L3_Help";
+         Path3 = "C4_Help_appear";
+         object4 = "C4_L3a";
+         Path4 = "C4_L3a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L3b_appear) {
+         position = "-3 43 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C4_L3_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L3_Gem_appear) {
+         position = "54 26 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C4_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L3a";
+         Path1 = "disappear";
+         object2 = "C4_L4b";
+         Path2 = "C4_L4b_appear";
+         object3 = "C4_L4b_ii";
+         Path3 = "C4_L4b_appear";
+         object4 = "C4_L4b_iii";
+         Path4 = "C4_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L3a_appear) {
+         position = "51 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C4_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L4b";
+         Path1 = "disappear";
+         object2 = "C4_L3_Help";
+         Path2 = "disappear";
+         object3 = "C4_L2_Mine1";
+         Path3 = "C4_L2_Mine1_appear";
+         object4 = "C4_L2_Mine2";
+         Path4 = "C4_L2_Mine2_appear";
+   };
+   new Trigger(C4_L4b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L4b_ii";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine3";
+         Path2 = "C4_L2_Mine3_appear";
+         object3 = "C4_L2_Mine4";
+         Path3 = "C4_L2_Mine4_appear";
+         object4 = "C4_L2_Mine5";
+         Path4 = "C4_L2_Mine5_appear";
+   };
+   new Trigger(C4_L4b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C4_L4b_iii";
+         Path1 = "disappear";
+         object2 = "C4_L2_Mine6";
+         Path2 = "C4_L2_Mine6_appear";
+         object3 = "C4_L2_Mine7";
+         Path3 = "C4_L2_Mine7_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C4_L4b_appear) {
+         position = "-3 43 4.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Trigger(C5_L1_Help) {
+      position = "57 29 12.25";
+      rotation = "1 0 0 0";
+      scale = "6 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Jump across this gap!";
+   };
+   new Trigger(C5_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Fly over this gap, but watch your landing!";
+   };
+   new Trigger(C5_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Let the tornado fling you across!";
+   };
+   new SimGroup() {
+      new StaticShape(C5_Help_appear) {
+         position = "57 29 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Item(C5_L1_SuperJump) {
+      position = "60 20 12.437";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item(C3_L1_TimeTravel) {
+      position = "63 7 22";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item(C5_L2_Gyrocopter) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item(C5_L2_TimeTravel) {
+      position = "60 7 10.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new SimGroup() {
+      new StaticShape(C5_L2_Gyrocopter_appear) {
+         position = "60 20 12";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new StaticShape(C5_L3_Tornado) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L3_Tornado_appear) {
+         position = "60 17 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+   new Item(C5_L4_SuperBounce) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L4_SuperBounce_appear) {
+         position = "60 20 12.55";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+
+   new Trigger(C5_L1a) {
+      position = "57 -3 12.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L1a";
+         Path1 = "disappear";
+         object2 = "C5_L2b";
+         Path2 = "C5_L2b_appear";
+         object3 = "C5_L2b_ii";
+         Path3 = "C5_L2b_appear";
+         object4 = "C5_L2b_iii";
+         Path4 = "C5_L2b_appear";
+   };
+   new Item(C5_L1_Gem) {
+      position = "60 -6 12.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C5_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L2b";
+         Path1 = "disappear";
+         object2 = "C5_L2a";
+         Path2 = "C5_L2a_appear";
+         object3 = "C5_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C5_L2_Gem";
+         Path4 = "C5_L2_Gem_appear";
+   };
+   new Trigger(C5_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C5_L1_SuperJump";
+         Path2 = "disappear";
+         object3 = "C5_L2_Gyrocopter";
+         Path3 = "C5_L2_Gyrocopter_appear";
+         object4 = "C5_L1_Help";
+         Path4 = "disappear";
+   };
+   new Trigger(C5_L2b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L2b_iii";
+         Path1 = "disappear";
+         object2 = "C5_L2_Help";
+         Path2 = "C5_Help_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L2b_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C5_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L2a";
+         Path1 = "disappear";
+         object2 = "C5_L3b";
+         Path2 = "C5_L3b_appear";
+         object3 = "C5_L3b_ii";
+         Path3 = "C5_L3b_appear";
+         object4 = "C5_L3b_iii";
+         Path4 = "C5_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L2a_appear) {
+         position = "57 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C5_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L2_Gem_appear) {
+         position = "60 -6 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C5_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L3b";
+         Path1 = "disappear";
+         object2 = "C5_L2_Gem";
+         Path2 = "disappear";
+         object3 = "C5_L3_Gem";
+         Path3 = "C5_L3_Gem_appear";
+         object4 = "C5_L2_Gyrocopter";
+         Path4 = "disappear";
+   };
+   new Trigger(C5_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C5_L3_Tornado";
+         Path2 = "C5_L3_Tornado_appear";
+         object3 = "C5_L2_Help";
+         Path3 = "disappear";
+         object4 = "C5_L3_Help";
+         Path4 = "C5_Help_appear";
+   };
+   new Trigger(C5_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C5_L3a";
+         Path2 = "C5_L3a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L3b_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C5_L3_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L3_Gem_appear) {
+         position = "60 -6 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C5_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L3a";
+         Path1 = "disappear";
+         object2 = "C5_L4b";
+         Path2 = "C5_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L3a_appear) {
+         position = "57 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C5_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C5_L4b";
+         Path1 = "disappear";
+         object2 = "C5_L4_SuperBounce";
+         Path2 = "C5_L4_SuperBounce_appear";
+         object3 = "C5_L3_Tornado";
+         Path3 = "disappear";
+         object4 = "C5_L3_Help";
+         Path4 = "disappear";
+   };
+   new SimGroup() {
+      new StaticShape(C5_L4b_appear) {
+         position = "21 49 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 0 -10000";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "999999";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(C6_L1a_Trigger_MP1_disappear) {
+         position = "0 0 -10000";
+         rotation = "1 0 0 0";
+         scale = "6 6 2";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "2";
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefoldracetrack.dif";
+         interiorIndex = "9";
+         basePosition = "-100 -100 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C6_Trigger_MP_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Trigger(C6_L1_Help) {
+      position = "45 -9 12.25";
+      rotation = "1 0 0 0";
+      scale = "18 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Watch your speed on this down slope -- don't get carried away!";
+   };
+   new Trigger(C6_L2_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "18 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "This slope is slippery now -- be careful!";
+   };
+   new Trigger(C6_L3_Help) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "18 12 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "You'll need all the speed you can get here!";
+   };
+   new SimGroup() {
+      new StaticShape(C6_Help_appear) {
+         position = "45 -3 12.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+   new Item(C6_L3_GravMod1) {
+      position = "0 0 -10000";
+      rotation = "0 -1 0 125";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod1_appear) {
+         position = "42 -9.75 12.875";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C6_L4_GravMod1_rotate) {
+         position = "42 -9.75 12.875";
+         rotation = "0 -1 0 90";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C6_L3_GravMod2) {
+      position = "0 0 -10000";
+      rotation = "0 -1 0 125";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod2_appear) {
+         position = "42 -12 12.875";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C6_L4_GravMod2_rotate) {
+         position = "42 -12 12.875";
+         rotation = "0 -1 0 90";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C6_L3_GravMod3) {
+      position = "0 0 -10000";
+      rotation = "0 -1 0 125";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod3_appear) {
+         position = "42 -14.25 12.875";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new SimGroup() {
+      new StaticShape(C6_L4_GravMod3_rotate) {
+         position = "42 -14.25 12.875";
+         rotation = "0 -1 0 90";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C6_L3_GravMod4) {
+      position = "0 0 -10000";
+      rotation = "0 1 0 180";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod4_appear) {
+         position = "18 -9.75 1.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new Item(C6_L3_GravMod5) {
+      position = "0 0 -10000";
+      rotation = "0 1 0 180";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod5_appear) {
+         position = "18 -12 1.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new Item(C6_L3_GravMod6) {
+      position = "0 0 -10000";
+      rotation = "0 1 0 180";
+      scale = "1.25 1.25 1.25";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3_GravMod6_appear) {
+         position = "18 -14.25 1.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            useRotation = "0";
+      };
+   };
+   new Item(C6_L4_SuperSpeed) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSPeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L4_SuperSpeed_appear) {
+         position = "54 -12 12.4275";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+      };
+   };
+
+   new Trigger(C6_L1a) {
+      position = "3 -9 0";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L1a";
+         Path1 = "disappear";
+         object2 = "C6_L2b";
+         Path2 = "C6_L2b_appear";
+         object3 = "C6_L1a_Trigger_MP1_disappear";
+         Path3 = "C6_Trigger_MP_appear";
+         object4 = "C6_L2b_ii";
+         Path4 = "C6_L2b_appear";
+   };
+   new Item(C6_L1_Gem) {
+      position = "6 -12 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(C6_L2b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L2b";
+         Path1 = "disappear";
+         object2 = "C6_L2a";
+         Path2 = "C6_L2a_appear";
+         object3 = "C6_L1_Gem";
+         Path3 = "disappear";
+         object4 = "C6_L2_Gem";
+         Path4 = "C6_L2_Gem_appear";
+   };
+   new Trigger(C6_L2b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L2b_ii";
+         Path1 = "disappear";
+         object2 = "C6_L1_Help";
+         Path2 = "disappear";
+         object3 = "C6_L2_Help";
+         Path3 = "C6_Help_appear";
+         object4 = "C6_L2a_ii";
+         Path4 = "C6_L2a_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L2b_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C6_L2a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L2a";
+         Path1 = "disappear";
+         object2 = "C6_L3b";
+         Path2 = "C6_L3b_appear";
+         object3 = "C6_L3b_ii";
+         Path3 = "C6_L3b_appear";
+         object4 = "C6_L3b_iii";
+         Path4 = "C6_L3b_appear";
+   };
+   new Trigger(C6_L2a_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L2a_ii";
+         Path1 = "disappear";
+         object2 = "C6_L3b_iv";
+         Path2 = "C6_L3b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L2a_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Item(C6_L2_Gem) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L2_Gem_appear) {
+         position = "6 -12 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C6_L3b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L3b";
+         Path1 = "disappear";
+         object2 = "C6_L2_Gem";
+         Path2 = "disappear";
+         object3 = "EndPoint";
+         Path3 = "EndPoint_appear";
+         object4 = "C6_L3_GravMod1";
+         Path4 = "C6_L3_GravMod1_appear";
+   };
+   new Trigger(C6_L3b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L3b_ii";
+         Path1 = "disappear";
+         object2 = "C6_L3_GravMod2";
+         Path2 = "C6_L3_GravMod2_appear";
+         object3 = "C6_L3_GravMod3";
+         Path3 = "C6_L3_GravMod3_appear";
+         object4 = "C6_L3_GravMod4";
+         Path4 = "C6_L3_GravMod4_appear";
+   };
+   new Trigger(C6_L3b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L3b_iii";
+         Path1 = "disappear";
+         object2 = "C6_L3_GravMod5";
+         Path2 = "C6_L3_GravMod5_appear";
+         object3 = "C6_L3_GravMod6";
+         Path3 = "C6_L3_GravMod6_appear";
+         object4 = "C6_L2_Help";
+         Path4 = "disappear";
+   };
+   new Trigger(C6_L3b_iv) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L3b_iv";
+         Path1 = "disappear";
+         object2 = "C6_L3_Help";
+         Path2 = "C6_Help_appear";
+         object3 = "C6_L3a";
+         Path3 = "C6_L3a_appear";
+         object4 = "FinishSign";
+         Path4 = "FinishSign_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3b_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C6_L3a) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "12 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L3a";
+         Path1 = "disappear";
+         object2 = "C6_L4b";
+         Path2 = "C6_L4b_appear";
+         object3 = "C6_L4b_ii";
+         Path3 = "C6_L4b_appear";
+         object4 = "C6_L4b_iii";
+         Path4 = "C6_L4b_appear";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L3a_appear) {
+         position = "3 -9 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+   new Trigger(C6_L4b) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L4b";
+         Path1 = "disappear";
+         object2 = "EndPoint";
+         Path2 = "disappear";
+         object3 = "EasterEgg";
+         Path3 = "EasterEgg_appear";
+         object4 = "C6_L4_SuperSpeed";
+         Path4 = "C6_L4_SuperSpeed_appear";
+   };
+   new Trigger(C6_L4b_ii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L4b_ii";
+         Path1 = "disappear";
+         object2 = "C6_L3_GravMod1";
+         Path2 = "C6_L4_GravMod1_rotate";
+         object3 = "C6_L3_GravMod2";
+         Path3 = "C6_L4_GravMod2_rotate";
+         object4 = "C6_L3_GravMod3";
+         Path4 = "C6_L4_GravMod3_rotate";
+   };
+   new Trigger(C6_L4b_iii) {
+      position = "0 0 -10000";
+      rotation = "1 0 0 0";
+      scale = "6 6 2";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         object1 = "C6_L4b_iii";
+         Path1 = "disappear";
+         object2 = "C6_L3_Help";
+         Path2 = "disappear";
+         object3 = "FinishSign";
+         Path3 = "disappear";
+   };
+   new SimGroup() {
+      new StaticShape(C6_L4b_appear) {
+         position = "33 29 8.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+      };
+   };
+
+
+
+   new InteriorInstance() {
+      position = "9 -3 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9 17 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9 37 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21 37 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "23 19 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "51 17 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "51 -3 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "30 -3 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+
+   new InteriorInstance() {
+      position = "-7 -19 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9 -3 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9 17 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9 37 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7 53 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9 55 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21 55 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37 53 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "39 35 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "67 33 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "69 17 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "69 -3 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "67 -16 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "51 -21 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "30 -21 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9 -21 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefoldracetrack_pillar.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/RampItUp.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,484 @@
+$Life::SizeX = 20;
+$Life::SizeY = 20;
+
+$Life::PlatformSize = 4;
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Life";
+         desc = "Oh you bet it\'s a GoL clone.";
+         type = "Custom";
+         music = "Tim Trance.ogg";
+         artist = "HiGuy";
+         time = "210000";
+         game = "Custom";
+         gameMode = "Hunt";
+         radiusFromGem = "25";
+         maxGemsPerSpawn = "100";
+         level = "1";
+         score[0] = "10";
+         score[1] = "20";
+         platinumScore[0] = "45";
+         platinumScore[1] = "60";
+         ultimateScore[0] = "60";
+         ultimateScore[1] = "80";
+         overviewHeight = "10";
+         alarmStartTime = "25";
+         	gol = true;
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "platinum/data/skies/Cloudy/cloudy.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun(Sun) {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(SkySphere) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "10000 10000 10000";
+      dataBlock = "clear";
+   };
+   new SimGroup(LifeSpawns) {
+		new Trigger(LifeSpawn0) {
+			position = -$Life::PlatformSize SPC -$Life::PlatformSize SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SpawnTrigger";
+			polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+		};
+		new Trigger(LifeSpawn1) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC -$Life::PlatformSize SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SpawnTrigger";
+			polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+		};
+		new Trigger(LifeSpawn2) {
+			position = -$Life::PlatformSize SPC ($Life::SizeY * $Life::PlatformSize) SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SpawnTrigger";
+			polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+		};
+		new Trigger(LifeSpawn3) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC ($Life::SizeY * $Life::PlatformSize) SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SpawnTrigger";
+			polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+		};
+		new InteriorInstance(LifeSpawnPad0) {
+			position = -$Life::PlatformSize SPC -$Life::PlatformSize SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeRed.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(LifeSpawnPad1) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC -$Life::PlatformSize SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeRed.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(LifeSpawnPad2) {
+			position = -$Life::PlatformSize SPC ($Life::SizeY * $Life::PlatformSize) SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeRed.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(LifeSpawnPad3) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC ($Life::SizeY * $Life::PlatformSize) SPC "0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeRed.dif";
+			showTerrainInside = "0";
+		};
+		new Item(LifeSpawnItem0) {
+			position = -$Life::PlatformSize SPC -$Life::PlatformSize SPC "0.5";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SuperJumpItem";
+			static = "1";
+			rotate = "1";
+			collideable = "0";
+		};
+		new Item(LifeSpawnItem1) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC -$Life::PlatformSize SPC "0.5";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SuperJumpItem";
+			static = "1";
+			rotate = "1";
+			collideable = "0";
+		};
+		new Item(LifeSpawnItem2) {
+			position = -$Life::PlatformSize SPC ($Life::SizeY * $Life::PlatformSize) SPC "0.5";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SuperJumpItem";
+			static = "1";
+			rotate = "1";
+			collideable = "0";
+		};
+		new Item(LifeSpawnItem3) {
+			position = ($Life::SizeX * $Life::PlatformSize) SPC ($Life::SizeY * $Life::PlatformSize) SPC "0.5";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			dataBlock = "SuperJumpItem";
+			static = "1";
+			rotate = "1";
+			collideable = "0";
+		};
+	};
+	new SimGroup(Dummies) {
+		new InteriorInstance(Dummy0) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "0 0 0";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeOrange.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(Dummy1) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "0 0 0";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeYellow.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(Dummy2) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "0 0 0";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeGreen.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(Dummy3) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "0 0 0";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifeBlue.dif";
+			showTerrainInside = "0";
+		};
+		new InteriorInstance(Dummy4) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "0 0 0";
+			interiorFile = "~/data/multiplayer/interiors/custom/LifePurple.dif";
+			showTerrainInside = "0";
+		};
+   };
+   new Trigger(NopeTrigger) {
+      position = "-500 500 -10";
+      rotation = "1 0 0 0";
+      scale = "1000 1000 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Flanked.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---
+
+function lifeInit() {
+	if (!MissionInfo.gol)
+		return;
+
+	for (%i = 0; %i < 4; %i ++) {
+		%trigger = (LifeSpawn @ %i);
+		%trigger.schedule(100, setTransform, Vector2d(%trigger.getTransform()));
+		%platform = (LifeSpawnPad @ %i);
+		%platform.schedule(100, setTransform, Vector2d(%platform.getTransform()));
+		%item = (LifeSpawnItem @ %i);
+		%item.schedule(100, setTransform, Vector2d(%item.getTransform()));
+	}
+
+	deleteVariables("$Life::Cell*");
+
+	$Life::Running = true;
+
+	$Hunt::CurrentGemCount = 1000;
+	$Life::Iteration = 0;
+
+	for (%x = 0; %x < $Life::SizeX; %x ++) {
+		for (%y = 0; %y < $Life::SizeY; %y ++) {
+			%alive = getRandom() > 0.5;
+			$Life::Cell[%x, %y] = %alive;
+		}
+	}
+
+	lifeSpawnPlatforms();
+
+	$Life::Update = schedule(5000, 0, "lifeTick");
+}
+
+function lifeStop() {
+	cancel($Life::Update);
+
+	$Life::Running = false;
+
+	for (%i = 0; %i <= $Life::Iteration; %i ++) {
+		%oldGroup = (LifeGroup @ %i);
+		if (isObject(%oldGroup)) {
+			while (%oldGroup.getCount()) {
+				%obj = %oldGroup.getObject(0);
+				if (%obj.getClassName() $= "Item") {
+					$Hunt::CurrentGemCount --;
+				}
+				%obj.delete();
+			}
+
+			%oldGroup.delete();
+		}
+	}
+}
+
+function lifeTick() {
+	if (!MissionInfo.gol)
+		return;
+
+	if (!$Life::Running)
+		return;
+
+	$Life::Iteration ++;
+	deleteVariables("$Life::NewCell*");
+
+	for (%i = 0; %i < ClientGroup.getCount(); %i ++) {
+		%client = ClientGroup.getObject(%i);
+		%player = %client.player;
+		%pos = getWords(%player.getTransform(), 0, 2);
+		$Life::PlayerPosX[%i] = mRound(getWord(%pos, 0) / 4);
+		$Life::PlayerPosY[%i] = mRound(getWord(%pos, 1) / 4);
+		%client.applyImpulse("0 0 0", "0 0 7.5");
+	}
+
+	for (%x = 0; %x < $Life::SizeX; %x ++) {
+		for (%y = 0; %y < $Life::SizeY; %y ++) {
+			//Find neighbors
+			%neighbors = lifeNeighbors(%x, %y);
+
+			%cell = $Life::Cell[%x, %y];
+
+			if (%cell) {
+				if (%neighbors < 2)
+					$Life::NewCell[%x, %y] = 0;
+				else if (%neighbors > 3)
+					$Life::NewCell[%x, %y] = 0;
+				else
+					$Life::NewCell[%x, %y] = %cell + 1;
+			} else {
+				if (%neighbors == 3)
+					$Life::NewCell[%x, %y] = 1;
+			}
+			//Don't spawn in marbles!
+			for (%i = 0; %i < ClientGroup.getCount(); %i ++) {
+				if ($Life::PlayerPosX[%i] == %x && $Life::PlayerPosY[%i] == %y)
+					$Life::NewCell[%x, %y] = 0;
+			}
+		}
+	}
+
+	%gen = false;
+	for (%x = 0; %x < $Life::SizeX; %x ++) {
+		for (%y = 0; %y < $Life::SizeY; %y ++) {
+			$Life::Cell[%x, %y] = $Life::NewCell[%x, %y];
+			if ($Life::Cell[%x, %y] > 0 && $Life::Cell[%x, %y] < 6) {
+				%gen = true;
+			}
+		}
+	}
+
+	if (!%gen) {
+		if ($Life::Dead) {
+			endGameSetup();
+			lifeStop();
+			return;
+		}
+
+		$Life::Dead = true;
+	}
+
+	deleteVariables("$Life::NewCell*");
+
+	lifeSpawnPlatforms();
+
+	cancel($Life::Update);
+	$Life::Update = schedule(5000, 0, "lifeTick");
+}
+
+function lifeNeighbors(%x, %y) {
+	return (
+		!!$Life::Cell[%x + 1, %y + 1] + !!$Life::Cell[%x, %y + 1] + !!$Life::Cell[%x - 1, %y + 1] +
+		!!$Life::Cell[%x + 1, %y    ] +                             !!$Life::Cell[%x - 1, %y    ] +
+		!!$Life::Cell[%x + 1, %y - 1] + !!$Life::Cell[%x, %y - 1] + !!$Life::Cell[%x - 1, %y - 1]
+	);
+}
+
+function lifeSpawnPlatforms() {
+	if (!MissionInfo.gol)
+		return;
+
+	if (!$Life::Running)
+		return;
+
+	for (%i = 0; %i < 4; %i ++) {
+		%trigger = (LifeSpawn @ %i);
+		%trigger.schedule(100, setTransform, VectorAdd(%trigger.getTransform(), "0 0 0.5"));
+		%platform = (LifeSpawnPad @ %i);
+		%platform.schedule(100, setTransform, VectorAdd(%platform.getTransform(), "0 0 0.5"));
+		%item = (LifeSpawnItem @ %i);
+		%item.schedule(100, setTransform, VectorAdd(%item.getTransform(), "0 0 0.5"));
+	}
+
+	%path[1] = expandFilename("~/data/multiplayer/interiors/custom/LifeRed.dif");
+	%path[2] = expandFilename("~/data/multiplayer/interiors/custom/LifeOrange.dif");
+	%path[3] = expandFilename("~/data/multiplayer/interiors/custom/LifeYellow.dif");
+	%path[4] = expandFilename("~/data/multiplayer/interiors/custom/LifeGreen.dif");
+	%path[5] = expandFilename("~/data/multiplayer/interiors/custom/LifeBlue.dif");
+	%path[6] = expandFilename("~/data/multiplayer/interiors/custom/LifePurple.dif");
+
+	%platformSize = 4;
+
+	%oldGroup = (LifeGroup @ ($Life::Iteration - 4));
+	if (isObject(%oldGroup)) {
+		while (%oldGroup.getCount()) {
+			%obj = %oldGroup.getObject(0);
+			%obj.delete();
+		}
+
+		%oldGroup.delete();
+	}
+
+	%oldGroup = (LifeGroup @ ($Life::Iteration - 1));
+	if (isObject(%oldGroup)) {
+		for (%i = 0; %i < %oldGroup.getCount(); %i ++) {
+			%obj = %oldGroup.getObject(%i);
+			if (%obj.getClassName() $= "Item") {
+				%obj.delete();
+				%i --;
+			}
+		}
+	}
+
+	%newGroup = LifeGroup @ $Life::Iteration;
+	MissionCleanup.add(new SimGroup(%newGroup));
+
+	for (%x = 0; %x < $Life::SizeX; %x ++) {
+		for (%y = 0; %y < $Life::SizeY; %y ++) {
+			%cell = $Life::Cell[%x, %y];
+			if (%cell) {
+				%newGroup.add(new InteriorInstance() {
+					position = (%x * %platformSize) SPC (%y * %platformSize) SPC ($Life::Iteration * 0.5);
+					rotation = "1 0 0 0";
+					scale = "1 1 1";
+					interiorFile = %path[min(%cell, 6)];
+					showTerrainInside = "0";
+				});
+
+				%gem = "";
+				%chance = 0;
+				switch (%cell) {
+				case 1:
+					%gem = "Red";
+					%chance = 0.2;
+				case 2:
+					%gem = "Red";
+					%chance = 0.2;
+				case 3:
+					%gem = "Yellow";
+					%chance = 0.1;
+				case 4:
+					%gem = "Yellow";
+					%chance = 0.3;
+				case 5:
+					%gem = "Blue";
+					%chance = 0.1;
+				default:
+					%gem = "Red";
+					%chance = 0.1;
+				}
+				if (getRandom() < %chance) {
+					//Spawn a gem!
+					%newGroup.add(%item = new Item() {
+						position = (%x * %platformSize) SPC (%y * %platformSize) SPC (($Life::Iteration + 0.5) * 0.5);
+						rotation = "1 0 0 0";
+						scale = "1 1 1";
+						dataBlock = "GemItem" @ %gem;
+						static = "1";
+						rotate = "1";
+						collideable = "0";
+					});
+
+					%item.setRadarTarget();
+				}
+			}
+		}
+	}
+}
+
+package Life {
+	function restartLevel(%a) {
+		if (MissionInfo.gol) {
+			lifeStop();
+		}
+
+		Parent::restartLevel(%a);
+		cancel($Life::Start);
+
+		if (MissionInfo.gol) {
+			$Life::Start = schedule(1000, 0, lifeInit);
+		}
+	}
+
+	function endGameSetup() {
+		$Life::Running = false;
+		Parent::endGameSetup();
+	}
+
+	function onServerDestroyed() {
+		if (MissionInfo.gol) {
+			lifeStop();
+		}
+		Parent::onServerDestroyed();
+	}
+};
+
+activatePackage(Life);

@@ -1,0 +1,291 @@
+function setMarbleAttributes(%attribute, %value)
+{
+eval("MarbleOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEleven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwelve." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFourteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFifteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSixteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSeventeen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEighteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleNineteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwenty." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentySix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentySeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirty." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtySix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtySeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleForty." @ %attribute @ "=" @ %value @ ";");
+eval("defaultMarble." @ %attribute @ "=" @ %value @ ";");
+eval("ThreeDMarble." @ %attribute @ "=" @ %value @ ";");
+eval("MidPMarble." @ %attribute @ "=" @ %value @ ";");
+eval("ggMarble." @ %attribute @ "=" @ %value @ ";");
+eval("sm1Marble." @ %attribute @ "=" @ %value @ ";");
+eval("sm2Marble." @ %attribute @ "=" @ %value @ ";");
+eval("sm3Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm1Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm2Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm3Marble." @ %attribute @ "=" @ %value @ ";");
+eval("CustomMarble." @ %attribute @ "=" @ %value @ ";");
+}
+
+function panUp( %val )
+{
+setMarbleAttributes("gravity", -2);
+}
+function panDown( %val )
+{
+setMarbleAttributes("gravity", 5);
+}
+function State::start()
+{
+setMarbleAttributes("gravity", 20);
+$Pref::Server::TimeLimit = 20;
+PlayGui.resetTimer();
+PlayGui.setMessage("");
+PlayGui.setGemCount(0);
+PlayGui.setMaxGems($Game::GemCount);
+$Game::StateSchedule = schedule( 500, 0, "setGameState", "Ready");
+if(MissionInfo.startHelpText !$= "")
+{
+addHelpLine(MissionInfo.startHelpText, true);
+}
+}
+function State::go()
+{
+$Pref::Server::TimeLimit = 21;
+serverPlay2d(GetRollingVoiceSfx);
+PlayGui.setMessage("go");
+PlayGui.startTimer();
+$Game::StateSchedule = schedule( 2000, 0, "setGameState", "Play");
+
+// Target the players to the end pad and let them lose
+for( %index = 0; %index < ClientGroup.getCount(); %index++ ) {
+%player = ClientGroup.getObject(%index).player;
+%player.setPad($Game::EndPad);
+%player.setMode(Normal);
+}
+}
+function GameConnection::onClientLeaveGame(%this)
+{
+if (isObject(%this.camera))
+%this.camera.delete();
+if (isObject(%this.player))
+%this.player.delete();
+exec("~/server/scripts/game.cs");
+exec("~/client/scripts/default.bind.cs");
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "The Ocean";
+         desc = "Explore the ocean using custom gravity!";
+         goldTime = "0";
+         level = "1";
+         gravity = "5";
+         startHelpText = "Use the up/down arrows to change gravity.";
+         UltimateTime = "0";
+         type = "Custom";
+         artist = "AJ Ferguson, gravity thingy by Marblemaster1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Intermediate/Intermediate_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 0";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Item() {
+      position = "-42.2 0 -48.4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-38.4 -19.4 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-41.4 0 -11.2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-35.8 17.4 -16.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-45.2 0 -34.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-34.6 0 -19.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-47.6 0 -24.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new Item() {
+      position = "-39.2 0 -12.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+         locked = "false";
+   };
+   new InteriorInstance() {
+      position = "18.7179 19.2748 -3.99775";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/The_Ocean.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-29.4595 3.41204 -4.3";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Look up to swim up and down to swim down!";
+   };
+   new StaticShape() {
+      position = "-46.3985 0.91472 5.42";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new StaticShape(EndPoint) {
+      position = "-46.2 2.75373e-006 0";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "20.94 -3.24145 24.3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EasterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

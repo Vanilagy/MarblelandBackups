@@ -1,0 +1,1131 @@
+//Fun fact: This Super Stop code is SLIGHTLY different to the one used
+//in Deceleration Derby. Spot the differences!
+datablock AudioProfile(PuSuperStopVoiceSfx)
+{
+   filename    = "~/data/sound/threefolder_GetSuperStop.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock AudioProfile(PuSuperStopVoiceSfx2)
+{
+   filename    = "~/data/sound/threefolder_getOctagon.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock AudioProfile(DoSuperStopSfx)
+{
+   filename    = "~/data/sound/threefolder_UseSuperStop.wav";
+   description = Audio2D;
+   preload = true;
+};
+
+datablock ItemData(SuperStopItem)
+{
+   // Mission editor category
+   category = "Powerups";
+   className = "PowerUp";
+   powerUpId = 69;
+
+   pickupAudio = PuSuperStopVoiceSfx;
+
+   // Basic Item properties
+   shapeFile = "~/data/shapes/superstop.dts";
+   mass = 1;
+   friction = 1;
+   elasticity = 0.3;
+
+   // Dynamic properties defined by the scripts
+   pickupName = "a Super Stop PowerUp!";
+   useName = "Super Stop PowerUp";
+   maxInventory = 1;
+};
+
+function Marble::doThePowerUpThing(%this) {
+	if (%this.hasCustomPowerup == true) {
+		switch (%this.CPpowerUpId) {
+		case 69:
+			%this.client.play2d(DoSuperStopSfx);
+			%marble = MPgetMyMarble();
+			%marble.applyImpulse("0 0 0", VectorScale($marbleVelocity, -1));
+			$mvTriggerCount1++;
+			schedule(30, 0, "eval", "$mvTriggerCount1++;");
+		}
+		%this.setPowerUp(0, false);
+		%this.CPpowerUpId = 0;
+		%this.hasCustomPowerup = false;
+	}
+}
+
+package StopRightThere
+{
+
+function mouseFire(%val) {
+	Parent::mouseFire(%val);
+	
+	if (%val)
+		LocalClientConnection.player.doThePowerUpThing();
+}
+
+function onFrameAdvance(%timeDelta) {
+	Parent::onFrameAdvance(%timeDelta);
+	
+	%marble = MPgetMyMarble();
+	%pos = getWords(%marble.getTransform(), 0, 2);
+	$marbleVelocity = VectorScale(VectorSub(%pos, $marblePrevPos), 1000/%timeDelta);
+	$marblePrevPos = %pos;
+	 if (getRandom() > 0.9999) {
+  SuperStopItem.pickupAudio = PuSuperStopVoiceSfx2;
+  schedule(50,0,"eval","SuperStopItem.pickupAudio = PuSuperStopVoiceSfx;");
+ }
+}
+
+function Marble::setPowerUp(%this, %item, %reset) {
+	Parent::setPowerUp(%this, %item, %reset);
+	if (%item.powerUpId > 5) {
+		%this.CPpowerUpId = %item.powerUpId;
+		%this.setPowerUpId(0, %reset);
+		%this.hasCustomPowerup = true;
+		return;
+	}
+	%this.hasCustomPowerup = false;
+	%this.CPpowerUpId = 0;
+}
+
+};
+
+activatePackage(StopRightThere);
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         ultimateTime = "39000";
+         desc = "Use the Super Stop in these aerial challenges.";
+         name = "Super Stop Drop";
+         goldTime = "50000";
+         artist = "Threefolder\nCode by Whirligig and HiGuy";
+         type = "custom";
+         music = "Quiet Lab.ogg";
+         startHelpText = "Use the floating Super Stop to grab the Gems and make it to the platform below.";
+         level = "16";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/beginner/Beginner_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.4817261 0.4817261 -0.7320382";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new Item() {
+      position = "0 8 373.75";
+      rotation = "1 0 0 75.00001";
+      scale = "2 2 2";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 -4 384.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(blades) {
+      position = "0 1 398.5";
+      rotation = "0 0 -1 98.11621";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "1 1 1";
+         initialPathPosition = "0 1 398.5 1 0 0 0";
+   };
+   new Item() {
+      position = "-28 74 75.75";
+      rotation = "0.3535474 0.6614394 0.6614395 218.9418";
+      scale = "2 2 2";
+      nameTag = "1";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "0 8 373.75";
+      rotation = "-1 0 0 14.99998";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-0 1 384.25";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-2.212502 8.152943 383.9854";
+      rotation = "0 0 1 101.25";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new Item() {
+      position = "0 13.07322 364.3232";
+      rotation = "1 0 0 44.99999";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "0 13.25 364.5";
+      rotation = "-1 0 0 44.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(blade1) {
+         position = "18.25 -20.5 408";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            reverseRotation = "1";
+            RotationMultiplier = "1";
+            Relative = "0";
+            SmoothStart = "0";
+            useRotation = "1";
+            Speed = "0";
+            DirectionRotation = "0";
+            timeToNext = "500";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "0";
+            delay = "0";
+            nextNode = "blade2";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+      };
+      new StaticShape(blade2) {
+         position = "20 -20.5 408";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            reverseRotation = "1";
+            RotationMultiplier = "1";
+            Relative = "0";
+            SmoothStart = "0";
+            useRotation = "1";
+            Speed = "0";
+            DirectionRotation = "0";
+            timeToNext = "499";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "0";
+            delay = "0";
+            nextNode = "blade3";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+      };
+      new StaticShape(blade3) {
+         position = "21.5 -20.5 408";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            reverseRotation = "1";
+            RotationMultiplier = "1";
+            Relative = "0";
+            SmoothStart = "0";
+            useRotation = "1";
+            Speed = "0";
+            DirectionRotation = "0";
+            timeToNext = "1";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "0";
+            delay = "0";
+            nextNode = "blade1";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+      };
+      new StaticShape(moveOOB) {
+         position = "-5 77 226.5";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            useScale = "0";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            Relative = "0";
+            SmoothStart = "0";
+            useRotation = "1";
+            Speed = "0";
+            DirectionRotation = "0";
+            timeToNext = "5000";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            delay = "0";
+            nextNode = "NULL";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+      };
+   };
+   new StaticShape() {
+      position = "-23.5 102.5 36";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "4.499995 188 96.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "glass_6shape";
+   };
+   new StaticShape() {
+      position = "-4 -8 385.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-4 -8.5 385.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-4 10 385.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "4.5 2 385.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "4.5 -8 385.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-4 2 385.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-4 52 352.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "glass_12shape";
+   };
+   new InteriorInstance() {
+      position = "0 24 359.75";
+      rotation = "-1 0 0 75.00001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "0 23.75 359.5";
+      rotation = "1 0 0 14.99998";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance(blades2) {
+      position = "0 64 365.5";
+      rotation = "0 0 -1 98.11621";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "1 1 1";
+         initialPathPosition = "0 64 365.5 1 0 0 0";
+   };
+   new StaticShape() {
+      position = "-4 76 352.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "4.5 52 352.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "glass_12shape";
+   };
+   new InteriorInstance(blades3) {
+      position = "-19.5 72 225";
+      rotation = "0 0 -1 98.11621";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "1 1 1";
+         initialPathPosition = "-19.5 72 225 1 0 0 0";
+   };
+   new StaticShape() {
+      position = "-20 76 212";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "glass_12shape";
+   };
+   new Item() {
+      position = "-0 64 351.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(superStopFall) {
+      position = "-4 62 351.5";
+      rotation = "1 0 0 0";
+      scale = "8 2 8";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Activate the Super Stop before you hit the floor! Avoid the wooden planks!";
+   };
+   new StaticShape() {
+      position = "-20 67.5 212";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "glass_12shape";
+   };
+   new Item() {
+      position = "0 72 236";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "0 72 236.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.05";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "1.625 72.125 284.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "3000";
+   };
+   new Trigger(check1trigger) {
+      position = "-16 76 211";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         respawnPoint = "check1";
+   };
+   new TSStatic(check1) {
+      position = "-10 72 211";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/buttons/checkPoint.dts";
+   };
+   new Trigger(goTheLongWayPls) {
+      position = "-150 177 340";
+      rotation = "1 0 0 0";
+      scale = "300 100 8";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(noped) {
+      position = "6.5 82 206.75";
+      rotation = "1 0 0 0";
+      scale = "1 20 32";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(goTheLongWayPls) {
+      position = "-150 67 340";
+      rotation = "1 0 0 0";
+      scale = "300 300 8";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(goTheLongWayPls) {
+      position = "5 77 340";
+      rotation = "1 0 0 0";
+      scale = "145 10 8";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(goTheLongWayPls) {
+      position = "-150 77 340";
+      rotation = "1 0 0 0";
+      scale = "145 10 8";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-2.298587 67.8516 350.9932";
+      rotation = "0.09780746 -0.06535288 -0.9930573 112.8684";
+      scale = "1 1 1";
+      dataBlock = "SignDown";
+   };
+   new Trigger(moveOOBtrigger) {
+      position = "-5 76.75 222";
+      rotation = "1 0 0 0";
+      scale = "10 10 4";
+      dataBlock = "PathTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         Path1 = "moveOOB";
+         object2 = "Object Name Here 2";
+         Path4 = "Path Node Name Here 4";
+         Path2 = "Path Node Name Here 2";
+         initialPosition1 = "Initial Position (Time) Here 1";
+         resetTime = "3246.284912";
+         initialPosition4 = "Initial Position (Time) Here 4";
+         object1 = "lolrip";
+         object4 = "Object Name Here 4";
+         TriggerOnce = "1";
+         initialPosition2 = "Initial Position (Time) Here 2";
+         Path3 = "Path Node Name Here 3";
+         object3 = "Object Name Here 3";
+         initialPosition3 = "Initial Position (Time) Here 3";
+   };
+   new Trigger(lolrip) {
+      position = "-5 124.5 226.5";
+      rotation = "1 0 0 0";
+      scale = "10 10 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         pathPrevNode = "moveOOB";
+         initialPathScale = "10 10 1";
+         initialPathPosition = "-5 124.5 226.5 1 0 0 0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_arches.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-28 74 74.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance(blades4) {
+      position = "-28 101.5 49";
+      rotation = "0 0 -1 98.11621";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "1 1 1";
+         initialPathPosition = "-28 101.5 49 1 0 0 0";
+   };
+   new Item() {
+      position = "-32 74 196.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-32 74 197.75";
+      rotation = "0.5773503 -0.5773503 -0.5773503 240";
+      scale = "2 2 2";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28 68 157.75";
+      rotation = "-0.8628565 -0.3574063 -0.3574066 98.421";
+      scale = "2 2 2";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28 68 156.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34 69 116.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34 69 117.75";
+      rotation = "0.5773503 -0.5773503 -0.5773503 240";
+      scale = "2 2 2";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-32 102.5 36";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-23.5 92.5 36";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-32 92.5 36";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "-33.8476 72.92488 196.9395";
+      rotation = "0.4263957 0.4263957 0.7977302 51.48248";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new StaticShape() {
+      position = "-23.68236 76.23923 211.9777";
+      rotation = "0 0 1 213.75";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new StaticShape() {
+      position = "-32.39221 83.76501 35.84938";
+      rotation = "-0.3815796 0.07590074 0.9212145 200.7674";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new Trigger(fallRings) {
+      position = "-24 76 210.5";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Grab the Gems as you fall through the rings! Those Super Stops may help you...";
+   };
+   new Trigger(check2trigger) {
+      position = "-32 107.5 35";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         respawnPoint = "check2";
+   };
+   new TSStatic(check2) {
+      position = "-28 101.5 35";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/buttons/checkPoint.dts";
+   };
+   new InteriorInstance(blades6) {
+      position = "-29 128 34.75";
+      rotation = "0 0 -1 98.11621";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "0.1 0.1 0.2";
+         initialPathPosition = "-29 128 34.75 1 0 0 0";
+   };
+   new InteriorInstance() {
+      position = "-29 128 36.75";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27 128 36.75";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-27 128 37";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-29 128 37";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance(blades5) {
+      position = "-27 128 34.75";
+      rotation = "0 0 -1 98.11621";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "0.1 0.1 0.2";
+         initialPathPosition = "-27 128 34.75 1 0 0 0";
+   };
+   new Item() {
+      position = "-28 111.5 34.75";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-32.26136 113.2635 35.98664";
+      rotation = "0 0 1 236.25";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new InteriorInstance() {
+      position = "-28 145.5 51";
+      rotation = "1 0 0 65.00001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-28 144.5937 50.57738";
+      rotation = "1 0 0 65.00001";
+      scale = "3 3 3";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-29 150.75 50.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-29 150.75 50";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(blades7) {
+      position = "-29 150.75 48";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new StaticShape() {
+      position = "-20.96389 194.7041 62.29185";
+      rotation = "-0.3980542 0.5356907 0.7447069 132.5365";
+      scale = "1 1 1";
+      dataBlock = "SignDown";
+   };
+   new InteriorInstance() {
+      position = "-28 181 65";
+      rotation = "1 0 0 84.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-28 181 65";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-21 192.5 61.5";
+      rotation = "0 1 0 75.00001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_ring.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-28 192.5 66.5";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-27 150.75 50";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-27 150.75 50.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance(blades8) {
+      position = "-27 150.75 48";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new Item() {
+      position = "-20.27546 192.5052 61.30628";
+      rotation = "0.519988 0.5199881 -0.6776614 111.752";
+      scale = "3 3 3";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(MARBLEBLASTISWORSETHANSUPERMAN64) {
+      position = "-32 113.5 35";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Fly through the rings to reach the finish!";
+   };
+   new InteriorInstance() {
+      position = "-14.5 191.5 55";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(blades9) {
+      position = "-14.5 193.5 53";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new StaticShape() {
+      position = "-14.5 193.5 55.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-14.5 193.5 55";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(blades10) {
+      position = "-14.5 191.5 53";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new StaticShape() {
+      position = "-14.5 191.5 55.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-12.5 191.5 55";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-12.5 191.5 55.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance(blades11) {
+      position = "-12.5 191.5 53";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new InteriorInstance() {
+      position = "-12.5 193.5 55";
+      rotation = "0 0 1 22.50002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superstopdrop_fanplat.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-12.5 193.5 55.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance(blades12) {
+      position = "-12.5 193.5 53";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.2";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+   };
+   new Trigger(flyHighMarbleGuy) {
+      position = "-20 195.5 56.75";
+      rotation = "1 0 0 0";
+      scale = "12 6 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Center yourself on the fans to fly as high as possible!";
+   };
+   new StaticShape() {
+      position = "-11.6972 191.4766 55.2314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new StaticShape() {
+      position = "-11.6972 193.4766 55.2314";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new Item() {
+      position = "14.5 192.5 103.375";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "SuperStopItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(finishHere) {
+      position = "8.5 196.5 103";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "The finish is right below you.";
+   };
+   new StaticShape() {
+      position = "8.398571 192.2602 100.5";
+      rotation = "0 0 1 56.24998";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new StaticShape() {
+      position = "-3.39066 195.3732 102.8891";
+      rotation = "0.7647418 0.4980792 -0.4087629 94.04131";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new StaticShape() {
+      position = "-3.44606 188.3892 104.3534";
+      rotation = "0.3320765 0.8017035 0.4969877 79.6189";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new StaticShape(EndPoint) {
+      position = "8.500006 192.5 95";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "0.4999971 196.5 104.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "8.499997 188 104.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "0.4999971 188 104.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "0.4999971 196.5 104.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "8.499997 196.5 104.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "17 184 110.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 0.58333 0.666";
+      dataBlock = "glass_12shape";
+   };
+   new StaticShape() {
+      position = "17 197 110.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 0.58333 0.666";
+      dataBlock = "glass_12shape";
+   };
+   new StaticShape() {
+      position = "4.5 188.5 96.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      dataBlock = "glass_3shape";
+   };
+   new StaticShape() {
+      position = "16.92897 196.5893 105.1009";
+      rotation = "-0.8160846 -0.5452901 -0.1914804 92.18123";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new StaticShape() {
+      position = "4.499992 196.5 96.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "glass_6shape";
+   };
+   new Trigger(Bounds) {
+      position = "-60 -36 32";
+      rotation = "1 0 0 0";
+      scale = "100 256 430";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-23.68757 113.2187 37.23728";
+      rotation = "0 0 1 33.74997";
+      scale = "1 1 1";
+      dataBlock = "SignCautionCaution";
+   };
+   new InteriorInstance(blades13) {
+      position = "13.5 192.5 117.5";
+      rotation = "0 0 -1 98.11621";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder/threefolder_superStopDrop_blades.dif";
+      showTerrainInside = "0";
+         Path = "blade1";
+         pathPrevNode = "blade1";
+         initialPathScale = "1 1 1";
+         initialPathPosition = "13.5 192.5 117.5 1 0 0 0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,250 @@
+$skyPath = "~/data/skies/LavaFlow/sky_day.dml";
+if (!isFile($skyPath))
+	$skyPath = "~/data/skies/Bonus/Bonus_Sky.dml";
+
+datablock ParticleEmitterData(NukeSmokeEmitter)
+{
+   ejectionPeriodMS = 80;
+   periodVarianceMS = 0;
+   ejectionVelocity = 3.0;
+   velocityVariance = 0.25;
+   thetaMin         = 80.0;
+   thetaMax         = 90.0;
+   lifetimeMS       = 9999999999999999999999999.0;
+   particles = "NukeSmokeParticle";
+};
+datablock ParticleEmitterData(NukeSparkEmitter)
+{
+   ejectionPeriodMS = 80;
+   periodVarianceMS = 0;
+   ejectionVelocity = 5.0;
+   velocityVariance = 0.25;
+   thetaMin         = 0.0;
+   thetaMax         = 360.0;
+   lifetimeMS       = 99999999999999999999999999.0;
+   particles = "NukeSparkParticle";
+};
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         UltimateTime = "0";
+         startHelpText = "Uh-oh, a lava pit!";
+         time = "45000";
+         name = "Volcano";
+         artist = "Dave & Zachary";
+         desc = "To ace this test, climb Mt. Taranaki! Be careful, in 45 seconds it\'ll blow!";
+         level = "42";
+         goldTime = "0";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = $skyPath;
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new Trigger(Bounds) {
+      position = "-83.7165 168.883 -30.5629";
+      rotation = "1 0 0 0";
+      scale = "200 300 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "0.0894017 -0.0122204 -0.235431";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Volcano.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(teehee) {
+      position = "-12.1809 31.9014 -2.52771";
+      rotation = "1 0 0 0";
+      scale = "25 35 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "0.825185 94.3093 138.931";
+      rotation = "1 0 0 0";
+      scale = "2 2 4";
+      interiorFile = "~/data/interiors/The real volcano.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-0.284927 47.2698 -4.30376";
+      rotation = "1 0 0 180";
+      scale = "0 0 0";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-0.199742 47.0517 -1.99714";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new ParticleEmitterNode() {
+      position = "1.54905 93.851 25.1398";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "FireWorkNode";
+      emitter = "NukeSmokeEmitter";
+      velocity = "1";
+   };
+   new ParticleEmitterNode() {
+      position = "1.54905 93.851 25.1398";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "FireWorkNode";
+      emitter = "NukeSparkEmitter";
+      velocity = "1";
+   };
+   new InteriorInstance() {
+      position = "0.113347 33.4691 -2.17345";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/really_long_path.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "3.03973 84.3142 5.00875";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "1.47531e-007 39.6208 -2.19862";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "1.38349 83.424 1.93119";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "0.525114 83.6166 2.65245";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new Item() {
+      position = "-3.92845 89.0774 15.6272";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "2.62594 84.6661 6.18246";
+      rotation = "-1 0 0 70";
+      scale = "2 2 2";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "3.39443 85.018 7.5483";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "0.0735197 86.1597 11.5062";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "2.75086 86.8226 14.0424";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "0.99329 89.1702 21.8455";
+      rotation = "-1 0 0 70";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "2.24625 90.0636 23.3598";
+      rotation = "-1 0 0 70";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-0.909148 90.8471 24.4112";
+      rotation = "-1 0 0 70";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "DuctFan";
+   };
+   new InteriorInstance() {
+      position = "-2.60269 18.7189 -5.79374";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/yellow_1x1.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "0.479648 93.7918 24.9088";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

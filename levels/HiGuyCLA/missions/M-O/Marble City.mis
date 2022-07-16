@@ -1,0 +1,783 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Beginner";
+         goldTime = "30000";
+         desc = "Find out what happens to Marble when it takes a stroll in the city!";
+         level = "39";
+         startHelpText = "Can you collect all the gems?";
+         name = "Marble City";
+         artist = "Aayrl";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.512126 0.512126 -0.689532";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "-114.24 -90.9932 516.1";
+         rotation = "0 0 1 90.1368";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "-116.134 -90.9783 518.565";
+         rotation = "-0.577504 -0.577043 -0.577503 119.947";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new Trigger(Bounds) {
+      position = "140.871 177.679 509.256";
+      rotation = "0 0 -1 89.9543";
+      scale = "130.089 130.681 40.6102";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "1786";
+         bonusTime = "0";
+         time = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2080";
+         bonusTime = "0";
+         time = "0";
+   };
+   new MessageVector(HudMessageVector) {
+   };
+   new StaticShape() {
+      position = "-114.7 -91.6032 534.496";
+      rotation = "3.25963e-009 -3.21949e-009 1 90.7099";
+      scale = "4 4 4";
+      dataBlock = "SignFinish";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "1585";
+         bonusTime = "0";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.444584 -107.606 515.782";
+      rotation = "1 0 0 0";
+      scale = "30 30 1";
+      interiorFile = "~/data/interiors/fubarextra/city road.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-13.122 9.76017 550.377";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.993 -185.492 550.745";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "81.478 9.8255 550.577";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "57.678 9.80906 545.977";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 8 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "34.078 9.79276 562.377";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.278 9.77633 565.577";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 13 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.083 -209.436 562.357";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.922 9.74374 553.777";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 10 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.722 9.7273 562.177";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-84.522 9.71087 557.377";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 11 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.958 -161.692 546.144";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 8 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.4 3.76383 562.157";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.366 -19.636 557.357";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 11 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.33 -43.436 562.157";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.295 -67.236 553.757";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 10 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-117.059 -91.036 550.357";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 9 8";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.225 -114.436 565.557";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 13 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.189 -138.236 562.357";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.154 -161.836 545.957";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 8 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-101.119 -185.636 550.557";
+      rotation = "-0.57777 0.576911 0.57737 119.924";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "105.493 -202.431 562.567";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-84.3069 -202.562 557.567";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 11 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.5069 -202.545 562.367";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.7069 -202.529 553.967";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 10 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-12.9069 -202.513 550.567";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.4931 -202.496 565.767";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 13 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "34.2931 -202.48 562.567";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "57.8931 -202.464 546.167";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 8 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "81.6931 -202.447 550.767";
+      rotation = "-1 -0.000345267 -0.000345542 89.9544";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.712 3.90756 562.344";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.746 -19.4924 557.544";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 11 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.782 -43.2924 562.344";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.817 -67.0924 553.944";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 10 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.853 -90.8924 550.544";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 9 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.887 -114.292 565.745";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 13 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "110.923 -138.092 562.544";
+      rotation = "-0.577769 0.576911 0.57737 119.924";
+      scale = "3 12 50";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "66.1708 -35.5546 515.832";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      interiorFile = "~/data/interiors/fubarextra/grassplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "52.6235 -78.5663 538.385";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "72.4235 -78.5676 538.385";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "18.6058 -165.972 542.082";
+      rotation = "-0.577503 -0.577504 -0.577044 119.947";
+      scale = "4 7 60";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "52.5679 -123.027 538.407";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "72.3679 -123.028 538.407";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "72.5644 -157.102 531.403";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "72.5462 -178.456 531.403";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "52.5717 -178.678 531.457";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "52.5899 -157.324 531.457";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.0875 -133.591 531.284";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.062 -133.369 531.23";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.0802 -112.015 531.23";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.1057 -112.237 531.284";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.0585 -90.4036 531.284";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.033 -90.1816 531.23";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.0512 -68.8276 531.23";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.0767 -69.0496 531.284";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.6627 -35.1675 542.204";
+      rotation = "-0.577503 -0.577504 -0.577044 119.947";
+      scale = "4 7 60";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.745 -90.7639 531.684";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.4987 -168.301 515.832";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      interiorFile = "~/data/interiors/fubarextra/grassplat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-24.4996 -123.333 542.482";
+      rotation = "-0.577503 -0.577504 -0.577044 119.947";
+      scale = "4 7 60";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-71.8958 -167.526 542.478";
+      rotation = "-0.577503 -0.577504 -0.577044 119.947";
+      scale = "4 7 60";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.9017 -90.1606 531.484";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-10.9272 -89.9386 531.43";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-10.909 -68.5846 531.43";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.8835 -68.8066 531.484";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.6544 -35.7261 538.607";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-31.4544 -35.7251 538.607";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-57.8501 -123.2 538.407";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.6501 -123.199 538.407";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "4 6 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-71.6031 -35.5639 541.776";
+      rotation = "-0.577503 -0.577504 -0.577044 119.947";
+      scale = "4 7 60";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.7268 -69.4099 531.684";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-57.7523 -69.1879 531.63";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-57.7705 -90.5419 531.63";
+      rotation = "-0.577504 -0.577503 -0.577044 119.947";
+      scale = "2 4 25";
+      interiorFile = "~/data/interiors/fubarextra/city building.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-114.671 -86.2574 539.296";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-115.998 -79.1841 516.139";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-116.005 -79.1821 519.724";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "8470";
+         bonusTime = "0";
+         time = "0";
+   };
+   new Item() {
+      position = "-114.671 -86.2574 539.296";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-114.671 -86.2574 539.296";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-114.671 -86.2574 539.296";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "-63.5615 -80.1967 516.157";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-18.6318 -34.8053 516.357";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "65.8395 -167.744 516.357";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "59.0758 -41.9698 546.24";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "43.0215 -42.0204 546.243";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "42.9874 -24.4923 545.882";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "59.0417 -24.4417 545.879";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-40.2323 -157.867 545.77";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-24.178 -157.817 545.767";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-40.1982 -175.395 546.13";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-24.1439 -175.345 546.128";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/xmastree.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-18.1189 -168.209 516.407";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "65.3985 -34.9322 516.407";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

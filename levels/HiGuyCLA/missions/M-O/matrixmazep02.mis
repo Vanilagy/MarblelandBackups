@@ -1,0 +1,229 @@
+$skybox_url = getrandom(4);
+if ( $skybox_url == 0 )
+{
+    $skybox_url = "~/data/skies/intermediate/intermediate_Sky.dml";
+    $sun_1 = "0.531491 -0.606518 -0.591314";
+    $sun_2 = "1.000000 0.900000 0.200000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.240000 1.000000";
+}
+else if ( $skybox_url == 1 )
+{
+    $skybox_url = "~/data/skies/beginner/beginner_Sky.dml";
+    $sun_1 = "-0.444514 0.746881 -0.494547";
+    $sun_2 = "1.000000 1.000000 1.000000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.300000 1.000000";
+}
+else if ( $skybox_url == 2 )
+{
+    $skybox_url = "~/data/skies/expert/expert_Sky.dml";
+    $sun_1 = "0.444514 -0.746881 -0.494547";
+    $sun_2 = "0.600000 0.600000 0.600000 1.000000";
+    $sun_3 = "0.300000 0.300000 0.450000 1.000000";
+}
+else if ( $skybox_url == 3 )
+{
+    $skybox_url = "~/data/skies/advanced/advanced_Sky.dml";
+    $sun_1 = "-0.668065 -0.506593 -0.545026";
+    $sun_2 = "1.600000 1.600000 1.600000 1.000000";
+    $sun_3 = "0.400000 0.400000 0.400000 1.000000";
+}
+else
+{
+    $skybox_url = "~/data/skies/bonus/bonus_Sky.dml";
+    $sun_1 = "-0.00945897 -0.68078 -0.732427";
+    $sun_2 = "0.600000 0.600000 0.250000 1.000000";
+    $sun_3 = "0.400000 0.400000 0.300000 1.000000";
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         level = "2";
+         type = "beginner";
+         name = "Matrix Maze P02";
+         goldTime = "32500";
+         UltimateTime = "25000";
+         artist = "CyberFox";
+         desc = "2nd level in the MMP series";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = $skybox_url;
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = $sun_1;
+      color = $sun_2;
+      ambient = $sun_3;
+   };
+   new StaticShape(EndPoint) {
+      position = "-11 -20 6";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+         locked = "1";
+   };
+   new StaticShape(StartPoint) {
+      position = "-20 11 6";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+         locked = "1";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/matrixmazep02.dif";
+      showTerrainInside = "0";
+         locked = "1";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/matrixmazep02.dif";
+      showTerrainInside = "0";
+         locked = "1";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/matrixmazep02.dif";
+      showTerrainInside = "0";
+         locked = "1";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/matrixmazep02.dif";
+      showTerrainInside = "0";
+         locked = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-36.8487 35.8659 -0.803814";
+      rotation = "1 0 0 0";
+      scale = "71.5403 72.1189 63.6019";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         locked = "1";
+   };
+   new Item() {
+      position = "-9.98624 -9.05359 2.05095";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-2.15364 2.21015 8.05776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2.06807 -1.94289 8.06228";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19.9197 -10.9497 6.05061";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "11.0064 -21.9888 4.05562";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-13.9292 -4.5586 6.05377";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.0677 27.0373 6.05655";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "9.02825 1.02609 6.075";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Metropolis.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "0.0361305 0.0213947 4.20662";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,481 @@
+//--- OBJECT WRITE BEGIN ---
+
+new SimGroup(MissionGroup) {
+
+
+
+   new ScriptObject(MissionInfo) {
+
+         desc = "You can\'t finish this, no way.";
+
+         name = "Paranoia";
+
+         artist = "nobody";
+
+         level = "1";
+
+         startHelpText = "Just try. ";
+
+         type = "custom";
+
+         goldTime = "0";
+
+         UltimateTime = "0";
+
+   };
+
+   new MissionArea(MissionArea) {
+
+      area = "-360 -648 720 1296";
+
+      flightCeiling = "300";
+
+      flightCeilingRange = "20";
+
+         locked = "true";
+
+   };
+
+   new Sky(Sky) {
+
+      position = "336 136 0";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      cloudHeightPer[0] = "0";
+
+      cloudHeightPer[1] = "0";
+
+      cloudHeightPer[2] = "0";
+
+      cloudSpeed1 = "0.0001";
+
+      cloudSpeed2 = "0.0002";
+
+      cloudSpeed3 = "0.0003";
+
+      visibleDistance = "50";
+
+      useSkyTextures = "0";
+
+      renderBottomTexture = "1";
+
+      SkySolidColor = "0.100000 0.100000 0.200000 1.000000";
+
+      fogDistance = "10";
+
+      fogColor = "0.200000 0.200000 0.300000 1.000000";
+
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+
+      materialList = "~/data/skies/Expert/Expert_Sky.dml";
+
+      windVelocity = "1 0 0";
+
+      windEffectPrecipitation = "0";
+
+      noRenderBans = "1";
+
+      fogVolumeColor1 = "20.000000 50.000000 50.000000 0.000000";
+
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+
+   };
+
+   new Sun() {
+
+      direction = "0.638261 0.459006 -0.61801";
+
+      color = "0.100000 0.200000 0.200000 1.000000";
+
+      ambient = "0.100000 0.200000 0.200000 1.000000";
+
+   };
+
+   new StaticShape(StartPoint) {
+
+      position = "-11.61 -55.2 -2.03";
+
+      rotation = "0 0 1 180";
+
+      scale = "0.5 0.5 0.5";
+
+      dataBlock = "StartPad";
+
+   };
+
+   new StaticShape(EndPoint) {
+
+      position = "15.56 -53.78 19.68";
+
+      rotation = "1 0 0 0";
+
+      scale = "0.25 0.25 0.25";
+
+      dataBlock = "EndPad";
+
+   };
+
+   new Trigger(Bounds) {
+
+      position = "-37.9568 -6.9791 -43.0505";
+
+      rotation = "1 0 0 0";
+
+      scale = "100 100 100";
+
+      dataBlock = "InBoundsTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+   };
+
+   new InteriorInstance() {
+
+      position = "4.25 -43.2 -6.5";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      interiorFile = "~/data/interiors/paranoia.dif";
+
+      showTerrainInside = "0";
+
+   };
+
+   new InteriorInstance() {
+
+      position = "25.7593 -79.7877 18.49";
+
+      rotation = "1 0 0 0";
+
+      scale = "5 5 0";
+
+      interiorFile = "~/data/interiors/tarmac_3x3.dif";
+
+      showTerrainInside = "0";
+
+   };
+
+   new Trigger(tele1dest) {
+
+      position = "-0.241959 -43.1124 -5.56824";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "DestinationTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+   };
+
+   new Trigger(tele1) {
+
+      position = "-13.1269 -78.2038 -15.9291";
+
+      rotation = "1 0 0 0";
+
+      scale = "3 5 7";
+
+      dataBlock = "TeleportTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+         destination = "tele1dest";
+
+   };
+
+   new Trigger(dead) {
+
+      position = "2.41534 -58.3548 14.2558";
+
+      rotation = "1 0 0 0";
+
+      scale = "15 15 2";
+						text = "You're as good as dead at this point...";
+
+      dataBlock = "HelpTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+   };
+
+   new Item() {
+
+      position = "38.1354 -37.73 -11.0759";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "TimeTravelItem";
+
+      collideable = "0";
+
+      static = "1";
+
+      rotate = "1";
+
+   };
+
+   new StaticShape() {
+
+      position = "39.0328 -42.841 -11.0103";
+
+      rotation = "0 0 1 180";
+
+      scale = "1 1 1";
+
+      dataBlock = "SignSide";
+
+   };
+
+   new StaticShape() {
+
+      position = "39.0353 -44.2919 -11.0035";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "SignSide";
+
+   };
+
+   new TSStatic() {
+
+      position = "40.3629 -59.5358 -8.99426";
+
+      rotation = "1 0 0 0";
+
+      scale = "0.3 0.3 0.3";
+
+      shapeName = "~/data/shapes/buttons/checkpoint.dts";
+
+   };
+
+   new StaticShape() {
+
+      position = "40.2266 -58.6467 -9.65568";
+
+      rotation = "-1 0 0 45";
+
+      scale = "0.5 0.5 0.5";
+
+      dataBlock = "DuctFan";
+
+   };
+
+   new TSStatic() {
+
+      position = "38.121 -53.9043 -13.2142";
+
+      rotation = "1 0 0 0";
+
+      scale = "2 1 0.25";
+
+      shapeName = "~/data/shapes/colmesh.dts";
+
+   };
+
+   new Trigger(tele2dest) {
+
+      position = "-4.58321 -51.6476 -12.6569";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "DestinationTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+   };
+
+   new Trigger(tele2) {
+
+      position = "37.6809 -53.4941 -13.0051";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "TeleportTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+         destination = "tele2dest";
+
+   };
+
+   new StaticShape() {
+
+      position = "3.54288 -63.6694 -12.5485";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "3.05694 -63.8108 -12.4956";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "3.27617 -64.0915 -12.5959";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "3.37698 -63.457 -12.4726";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "3.54288 -63.6694 -12.5485";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4653 -69.6119 -12.4275";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4527 -69.4139 -12.5626";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4527 -69.4139 -12.5626";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4527 -69.4139 -12.5626";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4527 -69.4139 -12.5626";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new StaticShape() {
+
+      position = "11.4668 -69.6366 -12.4106";
+
+      rotation = "1 0 0 0";
+
+      scale = "1 1 1";
+
+      dataBlock = "Magnet";
+
+   };
+
+   new Trigger(magnethelp) {
+
+      position = "-4.20332 -50.788 -13.498";
+
+      rotation = "1 0 0 0";
+
+      scale = "4 4 4";
+						text = "You'd better avoid containers of unknown contents...";
+
+      dataBlock = "HelpTrigger";
+
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+
+   };
+
+   new AudioProfile(MusicProfile) {
+
+      fileName = "~/data/sound/music/Metropolis.ogg";
+
+      description = "AudioMusic";
+
+      preload = "0";
+
+   };
+
+};
+
+//--- OBJECT WRITE END ---

@@ -1,0 +1,1237 @@
+datablock AudioProfile(GravWarnSfx)
+{
+   filename    = "~/data/sound/threefolder_gravWarn2.wav";
+   description = AudioDefault3d;
+   preload = true;
+};
+
+function AntiGravityItem::onPickup(%this,%obj,%user,%amount)
+{
+   %rotation = getWords(%obj.getTransform(),3);
+   %ortho = vectorOrthoBasis(%rotation);
+   %up = getWords(%ortho,6);
+   if (getGravityDir() !$= %up) {
+      Parent::onPickup(%this, %obj, %user, %amount);
+      setGravityDir(%ortho);
+   }
+   if (%obj.resets) {
+      schedule(5000,0,"setGravityDir", "1 0 0 0 -1 0 0 0 -1");
+   %user.client.play2d(GravWarnSfx);
+   }
+}
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         music = "Challenge.ogg";
+         startHelpText = "Gravity will return to normal five seconds after picking up a Gravity Defier.";
+         artist = "Threefolder / Code by Whirligig \nTested by Regislian";
+         level = "10";
+         desc = "The Gravity Defiers in this level are a little different...";
+         type = "Custom";
+         goldTime = "120000";
+         name = "Flip Out Again!";
+         ultimateTime = "105000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Advanced/Advanced_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 8 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Item() {
+      position = "0 18.75 1.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new TSStatic() {
+      position = "-14 8 16.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/threefolder_flipOutAgain.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "36 28 227";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-14 8.499997 40.5";
+      rotation = "0.5773503 0.5773503 -0.5773503 120";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new Item() {
+      position = "24 -5.5 7.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new TSStatic() {
+      position = "4.5 -4 16.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new StaticShape() {
+      position = "19.75 -4.41666 8.375";
+      rotation = "1.368582e-007 -0.3826834 0.9238796 180";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new Item() {
+      position = "0 4 16.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-4.25 -4.41666 16.333";
+      rotation = "-1 -7.301571e-007 -2.407005e-006 33.75002";
+      scale = "1 1 1";
+      dataBlock = "SignDownSide";
+   };
+   new Item() {
+      position = "0 -3.25 33.75";
+      rotation = "-1 0 0 44.99997";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new TSStatic() {
+      position = "-4.000004 20 24.5";
+      rotation = "0.5773503 0.5773503 -0.5773503 240";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new TSStatic() {
+      position = "28.5 -4.5 8.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.020825 1";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new TSStatic() {
+      position = "-4 14 24.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-4 4 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "28.5 14 14.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "28.5 -10.5 14.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new Item() {
+      position = "-18.82133 4 17.47867";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Trigger(flingintospace) {
+      position = "-20 8.5 16.5";
+      rotation = "1 0 0 0";
+      scale = "2 9 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Fling yourself up to the platform ahead with good timing! ";
+   };
+   new StaticShape(check1) {
+      position = "-32.5 4 57";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "checkPoint";
+   };
+   new Item() {
+      position = "-32.5 -14.75 58";
+      rotation = "-1 0 0 90.00008";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new TSStatic() {
+      position = "-30 -16 85";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1.0825";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-28 -0.5000005 57";
+      rotation = "0 0 1 89.99998";
+      scale = "1 0.5825 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-28 -16 57";
+      rotation = "1 0 0 0";
+      scale = "1 1.2925 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-28 -16 63";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-21.5 -16 69.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1.0825";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-29.5 -16 85";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.41666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-36.5 -16 84.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 0.91666 1";
+      shapeName = "~/data/shapes/Glass/15x3.dts";
+   };
+   new TSStatic() {
+      position = "-21 -16 93.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 0.8 1";
+      shapeName = "~/data/shapes/Glass/15x3.dts";
+   };
+   new TSStatic() {
+      position = "-21 -32.5 93.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-29.5 -24 93.5";
+      rotation = "1 0 0 0";
+      scale = "1 0.778 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-37.49999 -42 125.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1.333";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new Item() {
+      position = "-41.5 -38.75 96";
+      rotation = "-1 0 0 90.00008";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Item() {
+      position = "-49.5 19.5 107.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new TSStatic() {
+      position = "-45.5 -42 119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new StaticShape() {
+      position = "-45.75 -29.25 93.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new StaticShape() {
+      position = "-45.75 -27.75 93.5";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new TSStatic() {
+      position = "-37 -42 119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new Trigger(check2trigger) {
+      position = "-43.5 21.5 107.5";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         respawnPoint = "check2";
+   };
+   new TSStatic(check2) {
+      position = "-41.5 19.5 107.5";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/buttons/checkPoint.dts";
+   };
+   new Item() {
+      position = "-60.5 12.5 119.5";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-60.25 19.5 108.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Trigger(multiDefier) {
+      position = "-48.5 24 107.5";
+      rotation = "1 0 0 0";
+      scale = "1 9 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "The five seconds you have will not be extended if you pick up a second Gravity Defier.";
+   };
+   new TSStatic() {
+      position = "-49 11.5 132";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.375 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-61.5 23.5 107.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new TSStatic() {
+      position = "-61.5 23.5 113.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1.666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-49 -1 132";
+      rotation = "1 0 0 0";
+      scale = "1 1.0275 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new Item() {
+      position = "-36.5 12.5 150";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new TSStatic() {
+      position = "-57.5 11.5 124";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.333";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-57.5 7.5 132";
+      rotation = "1 0 0 0";
+      scale = "1 1.666 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-65.49999 7 132";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-59.5 -1.000006 146";
+      rotation = "0.5773503 0.5773503 -0.5773503 120";
+      scale = "1 1.1666 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-59.5 7 138";
+      rotation = "0.5773503 -0.5773503 -0.5773503 240";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-49.5 -1 146";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-49.5 7.5 146";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-49 -1 146";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new Item() {
+      position = "-64.25 3 133";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Item() {
+      position = "-64.5 3 150.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38.75 3 143";
+      rotation = "0 -1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new StaticShape() {
+      position = "-37.25 11.5 145.75";
+      rotation = "0.6913807 -0.209728 -0.6913805 156.3103";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new TSStatic() {
+      position = "-58 11.5 124";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 0.5825";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-49.5 7.5 138.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1.666 1.333";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new StaticShape(check3) {
+      position = "-29 3 158.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "checkPoint";
+   };
+   new Trigger(hazardTime) {
+      position = "-25 7.5 158.5";
+      rotation = "1 0 0 0";
+      scale = "1 9 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Can you make it past the hazards?";
+   };
+   new TSStatic() {
+      position = "-33 -1 158.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.027666 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-37.5 -1 154";
+      rotation = "0.5773503 0.5773503 -0.5773503 120";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-37.5 -1 154.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1.027666 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-33.5 11.5 154.5";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 0.666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-33 11.5 154.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 0.666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new StaticShape() {
+      position = "-18.125 6.875 172.5";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new TSStatic() {
+      position = "-24.5 7.5 158.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.666 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-24.5 11.5 158.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.041666 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-24.5 7 158.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-17 7.5 185.5";
+      rotation = "0.5773503 0.5773503 -0.5773503 120";
+      scale = "1 1.1666 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-23 7 186";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-23 7.5 186";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-23 -1.5 194.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-17 -1 201";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1.375 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-17 16 200.5";
+      rotation = "0.5773503 0.5773503 -0.5773503 120";
+      scale = "1 1.20825 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new StaticShape() {
+      position = "-18.125 6.875 178.5";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new Item() {
+      position = "-18.25 3 159.5";
+      rotation = "0 -1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Item() {
+      position = "-15 40 202.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-2 26.5 186";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-4 26.5 186";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "5 35.875 195.625";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new TSStatic() {
+      position = "-7 36 194.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new StaticShape() {
+      position = "5 35.875 197.875";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new Item() {
+      position = "13 24.5 193.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new StaticShape() {
+      position = "4.5 27.5 194.25";
+      rotation = "-0.57735 -0.5773507 0.5773502 119.9999";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new TSStatic() {
+      position = "-10.5 21.5 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.333";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "-19 21.5 202.5";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.375 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-10.5 21.5 202.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "-19 21.5 202.5";
+      rotation = "1 0 0 0";
+      scale = "1 0.778 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new StaticShape() {
+      position = "-7.250001 23.5 186";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new Item() {
+      position = "-28.41666 40 202.333";
+      rotation = "0 1 0 225";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new TSStatic(check4) {
+      position = "48 24 227";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/buttons/checkPoint.dts";
+   };
+   new StaticShape() {
+      position = "5 35.875 197.875";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new Trigger(fling2) {
+      position = "-37.25 35.5 192.75";
+      rotation = "1 0 0 0";
+      scale = "13 1 13";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Fly up to the next checkpoint! \nDiagonal movement is key!";
+   };
+   new StaticShape() {
+      position = "2 31 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-5 30 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-2 32 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-1 29 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-4 34 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "1 34 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "15 29 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "9 31 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "13 34 194.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new Trigger(check4trigger) {
+      position = "46 26 227";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         respawnPoint = "check4";
+   };
+   new StaticShape() {
+      position = "-29.5 28.25 200";
+      rotation = "0.3574066 0.3574067 -0.8628564 98.42105";
+      scale = "1 1 1";
+      dataBlock = "SignSide";
+   };
+   new Item() {
+      position = "-8.25 15.5 773";
+      rotation = "1 0 0 0";
+      scale = "1 1 1.3";
+      dataBlock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(oobzone2) {
+      position = "-23.25 -16.25 52.75";
+      rotation = "1 0 0 0";
+      scale = "50 50 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone2) {
+      position = "-73.25 33.75 52.75";
+      rotation = "1 0 0 0";
+      scale = "50 100 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "-33 -1 158.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.027666 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new Trigger(oobzone3) {
+      position = "-129.25 96.75 102.5";
+      rotation = "1 0 0 0";
+      scale = "200 100 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone3) {
+      position = "-36.25 59.75 128.25";
+      rotation = "1 0 0 0";
+      scale = "50 50 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone3) {
+      position = "-86.25 9.75 128.25";
+      rotation = "1 0 0 0";
+      scale = "100 50 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone4) {
+      position = "-15.75 5 152.25";
+      rotation = "1 0 0 0";
+      scale = "1 50 50";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone4) {
+      position = "-54.25 59.75 181.25";
+      rotation = "1 0 0 0";
+      scale = "100 50 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "52.5 8 227";
+      rotation = "1 0 0 0";
+      scale = "1 1.111 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "36 19.5 227";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "44 8 227";
+      rotation = "1 0 0 0";
+      scale = "1 0.9575 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new Item() {
+      position = "48 4.1666 228.333";
+      rotation = "1 0 0 225";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Item() {
+      position = "48 -25 263.375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "48 -36 263";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "48 -7.25 245.75";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Trigger(bounceonthewall) {
+      position = "45.5 -31 263";
+      rotation = "1 0 0 0";
+      scale = "5 1 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Bounce off the Gravity Defier on the striped platform below!";
+   };
+   new Trigger(oobzone5) {
+      position = "19.5 46.75 224.5";
+      rotation = "1 0 0 0";
+      scale = "50 100 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "52.5 -3 301";
+      rotation = "1 0 0 0";
+      scale = "1 1.25 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new TSStatic() {
+      position = "44 -40.5 263";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "52.5 9 272.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "44 9 272.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "44 -3 301";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.375 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "52.5 -3 301";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1.375 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "44 -3 301";
+      rotation = "1 0 0 0";
+      scale = "1 0.778 1";
+      shapeName = "~/data/shapes/Glass/9x3.dts";
+   };
+   new Trigger(stayhere) {
+      position = "-93 104.5 -14.75";
+      rotation = "1 0 0 0";
+      scale = "200 200 1000";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(check5) {
+      position = "40 15.5 301";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "checkPoint";
+   };
+   new Item() {
+      position = "14 15.5 305.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         resets = "1";
+   };
+   new Item() {
+      position = "24 15.5 301";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(oobzone5) {
+      position = "-20 5.75 297.25";
+      rotation = "1 0 0 0";
+      scale = "60 100 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(EndPoint) {
+      position = "-4 15.5 775.5";
+      rotation = "0 0 -1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "-4.249999 14.7 782.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(oobzone5) {
+      position = "-20 105.75 297.25";
+      rotation = "1 0 0 0";
+      scale = "100 100 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "21.75 11.25 301";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new Trigger(finalChallenge) {
+      position = "35 20 301";
+      rotation = "1 0 0 0";
+      scale = "1 9 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "This is the final challenge. Don\'t hit the beams going through the tower!";
+   };
+   new TSStatic() {
+      position = "8 20 775.5";
+      rotation = "1 0 0 0";
+      scale = "1 0.25 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "20.5 9.5 775.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "7.999999 9 775.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "7.999995 21.5 775.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-8 19.5 775.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.291666 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-7.999997 11 775.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1.291666 1";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-8 11.5 775.5";
+      rotation = "1 0 0 0";
+      scale = "1 1.333 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "8 9.5 775.5";
+      rotation = "1 0 0 0";
+      scale = "1 0.25 1";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new Item() {
+      position = "15.75 11.5 503";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(oobzone4) {
+      position = "20.5 8.749999 313.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 13 456";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone4) {
+      position = "6.25 22 313.5";
+      rotation = "1 0 0 0";
+      scale = "1 13 456";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone4) {
+      position = "20.75 22 313.5";
+      rotation = "1 0 0 0";
+      scale = "1 13 456";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oobzone4) {
+      position = "20.49999 23.25 313.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 13 456";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "17.25 28.5 233.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-41.5 10.5 117.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-2 32 200.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-32.5 -16.25 73.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "645";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-25.5 -16.25 73.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "645";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-25.5 -16.25 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "645";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-32.5 -16.25 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "645";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "-32.5 -16.25 73.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1000";
+            smoothingType = "Linear";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = $usermods @ "/data/interiors/threefolder_flipOutAgain.dif";
+         interiorIndex = "0";
+         basePosition = "0 0 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

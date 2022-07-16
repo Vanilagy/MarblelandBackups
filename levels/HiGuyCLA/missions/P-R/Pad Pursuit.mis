@@ -1,0 +1,537 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "custom";
+         startHelpText = "Chase after the finish pad!";
+         ultimateTime = "15000";
+         music = "Seaside Revisited.ogg";
+         level = "2";
+         name = "Pad Pursuit";
+         desc = "Chase after the finish pad along the trench. Catch it before it reaches the end for a better time.";
+         artist = "tue27";
+         goldTime = "21000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Advanced/Advanced_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new Item() {
+      position = "106.6 -65.50001 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-61.6 100 -100";
+      rotation = "1 0 0 0";
+      scale = "200 200 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/PadPursuit.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "3 49 -0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape(StartPoint) {
+      position = "-1.5 -7.5 0.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "22.35445 -64.62364 3.273329";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+         initialPathScale = "1 1 1";
+         Path = "path1";
+         initialPathPosition = "-1.5 0.5 0.25 1 0 0 0";
+         pathPrevNode = "path5";
+   };
+   new Item() {
+      position = "15.5 -42.25 3.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "14 -52.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "16.5 -51 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "16.5 -54 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "15 -54 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "14.5 -55.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "18 -55.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "17.5 -57 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "16 -55.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "15.5 -57 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "13.5 -55 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "13.5 -56.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "13.5 -53.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "17.5 -53.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "15.5 -52.5 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "13.5 -51 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "15 -51 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "17.5 -52 4.95";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "17.5 -58.5 3.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "15.5 -58.5 3.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "13.5 -58.5 3.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "13.5 -67.3735 4.319869";
+      rotation = "1 0 0 87.08958";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "15.5 -67.3735 4.319869";
+      rotation = "1 0 0 87.08958";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "17.5 -67.3735 4.319869";
+      rotation = "1 0 0 87.08958";
+      scale = "1 1 1";
+      dataBlock = "SmallDuctFan";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(path1) {
+         position = "-1.6 0.6 0.2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path2";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "500";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path2) {
+         position = "-1.721808 16.71503 0.3080186";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path3";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "1000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path3) {
+         position = "2.618068 16.39553 0.2014616";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path4";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "1000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path4) {
+         position = "3.787099 3.199211 0.07965356";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path5";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "1000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path5) {
+         position = "15.46712 2.942169 3.157846";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path6";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "15000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path6) {
+         position = "15.62017 -64.54458 3.278194";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path7";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "5750";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path7) {
+         position = "88.26952 -65.39759 3.225712";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path8";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "1500";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path8) {
+         position = "88.10287 -57.38357 3.286446";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path9";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "3000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path9) {
+         position = "104.5062 -57.30686 3.301251";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path10";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "1500";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path10) {
+         position = "104.4782 -65.75642 3.201226";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            nextNode = "path11";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "3000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+      new StaticShape(path11) {
+         position = "124.6782 -65.59305 3.611399";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            delay = "0";
+            Speed = "0";
+            useRotation = "0";
+            DirectionRotation = "0";
+            LookAtPoint = " ";
+            placed = "1";
+            bezier = "0";
+            branchNodes = " ";
+            usePosition = "1";
+            CamFOV = "0";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            timeToNext = "5000";
+            RotationMultiplier = "1";
+            useScale = "0";
+            reverseRotation = "0";
+            Relative = "0";
+            SmoothStart = "0";
+      };
+   };
+   new StaticShape() {
+      position = "-4.6 18.8 3.4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

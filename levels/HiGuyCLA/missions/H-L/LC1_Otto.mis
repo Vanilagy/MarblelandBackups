@@ -1,0 +1,313 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         desc = "Can you survive fast of all the challenges?";
+         goldTime = "40000";
+         level = "0";
+         UltimateTime = "35000";
+         type = "custom";
+         startHelpText = "Can you survive fast of all the challenges?";
+         name = "The Friction Race";
+         artist = "Ottomarble (Otto Itkonen)";
+         time = "50000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Beginner/Beginner_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 15";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+         locked = "true";
+   };
+   new StaticShape(EndPoint) {
+      position = "0 0 8";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+         locked = "true";
+   };
+   new StaticShape() {
+      position = "-0.2 -0.25 12.25";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+         locked = "true";
+   };
+   new Trigger(Bounds) {
+      position = "-40 50 -60";
+      rotation = "1 0 0 0";
+      scale = "300 300 150";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         locked = "true";
+   };
+   new InteriorInstance() {
+      position = "1.84069 -2.86483 14.5068";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionrace.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "206.315 -188.171 -16.4884";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/interiors/teleportpad.dts";
+         destination = "dest1";
+   };
+   new TSStatic() {
+      position = "206.518 -194.698 -16.4924";
+      rotation = "0 0 1 180";
+      scale = "0.2 0.2 0.2";
+      shapeName = "~/data/interiors/teleportpad.dts";
+   };
+   new Trigger(Teleport) {
+      position = "201.51 -184.269 -16.5043";
+      rotation = "1 0 0 0";
+      scale = "9.57829 8.52016 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "dest1";
+   };
+   new TSStatic() {
+      position = "206.325 -189.081 15.0016";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      shapeName = "~/data/interiors/teleportpad.dts";
+         destination = "dest1";
+   };
+   new Trigger(Teleport) {
+      position = "205.567 -193.834 -16.5769";
+      rotation = "1 0 0 0";
+      scale = "1.88631 1.67789 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "dest2";
+   };
+   new Trigger(dest1) {
+      position = "206.423 -189.183 15.4616";
+      rotation = "0 0 1 181.81";
+      scale = "0.1 0.1 0.1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "151.603 -185.61 16.831";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "206.423 -189.18 18.5436";
+      rotation = "1 0 0 0";
+      scale = "0 0 0";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance() {
+      position = "142.154 -110.829 -13.0912";
+      rotation = "0 0 1 33.2315";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "63.7573 -58.0938 -2.63027";
+      rotation = "0 0 -1 20.6265";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-13.7951 -209.725 22.5383";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-135.108 -193.356 50.0069";
+      rotation = "0 0 -1 10.3133";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "72.185 -277.784 -6.34746";
+      rotation = "0 0 1 1.71824";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "159.526 -244.206 13.8749";
+      rotation = "0 0 1 26.929";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "254.888 -282.687 -20.8071";
+      rotation = "0 0 -1 23.4912";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "262.843 -186.096 21.0654";
+      rotation = "0 0 1 21.7724";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "350.12 -150.269 -15.1567";
+      rotation = "0 0 1 12.0321";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.934 -68.1417 42.3826";
+      rotation = "0 0 -1 44.1177";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "340.769 -21.862 -1.69056";
+      rotation = "0 0 -1 23.4913";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "264.413 58.2119 -18.149";
+      rotation = "0 0 -1 7.44841";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "224.814 155.223 -21.0598";
+      rotation = "0 0 -1 17.7617";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "148.07 81.9857 -13.1216";
+      rotation = "0 0 -1 6.30252";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "30.7019 120.566 19.8863";
+      rotation = "0 0 1 38.3881";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-69.9721 118.954 -0.441947";
+      rotation = "0 0 -1 5.15661";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-133.691 12.4971 14.8288";
+      rotation = "0 0 -1 15.4698";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-35.5834 17.7229 8.6786";
+      rotation = "0 0 -1 15.4698";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-81.6027 -92.9768 14.8932";
+      rotation = "0 0 1 14.8969";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionracescenery.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(dest2) {
+      position = "274.612 59.7833 -8.02866";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "274.664 59.7343 -9.02866";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EasterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "1.8359 -2.86551 14.506";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/thefrictionrace2.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Metropolis.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,2164 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~ PARTICLES ~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+datablock ParticleData(OwParticle)
+{
+   textureName = "./Ow";
+   dragCoeffiecient = 1;
+   gravityCoefficient = 0;
+   windCoefficient = 0;
+   inheritedVelFactor = 0;
+   constantAcceleration = -0.3;
+   lifetimeMS = 1000;
+   lifetimeVarianceMS = 100;
+   useInvAlpha = true;
+   spinSpeed = 10;
+   spinRandomMin = -10;
+   spinRandomMax = 10;
+
+   colors[0] = "0.9 0.9 0.0 1.0";
+   colors[1] = "0.9 0.9 0.0 1.0";
+   colors[2] = "0.9 0.0 0.0 0.0";
+
+   sizes[0] = 0.5;
+   sizes[1] = 0.5;
+   sizes[2] = 0.5;
+
+   times[0] = 0;
+   times[1] = 0.5;
+   times[2] = 1.0;
+};
+
+datablock ParticleEmitterData(OwEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 2.0;
+   velocityVariance = 0.25;
+   ejectionOffset   = 0.75;
+   //phiReferenceVel  = 0;
+   //phiVariance      = 360;
+   //orientParticles  = false;
+   thetaMin = 0;
+   thetaMax = 180;
+   lifetimeMS = 50;
+   particles = "OwParticle";
+};
+
+function startOwParticles(%location) {
+	// Create the cleanup group.
+	if (!isObject(OwParticles)) {
+		new SimGroup(OwParticles);
+		MissionCleanup.add(OwParticles);
+	}
+	// Create a ParticleNode to run the emitter.
+	%position = %location.getPosition();
+	//%rotation = %location.rotation;
+	%obj = new ParticleEmitterNode(){
+		datablock = FireWorkNode;
+		emitter = OwEmitter;
+		position = %position;
+		//rotation = %rotation;
+	};
+	OwParticles.add(%obj);
+}
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~ TRIGGERS ~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Target player:
+// ClientGroup.getObject(%index).player
+
+//  Seamless motion trigger from the Sandbox PowerPack for MBPU by HiGuy
+// Dynamic field: offset
+// Type in the relative position to teleport the marble to in X Y Z.
+datablock TriggerData(SeamlessMotionTrigger) {
+	tickPeriodMS = 100;
+};
+function SeamlessMotionTrigger::onEnterTrigger(%this, %trigger, %obj) {
+	%obj.noPickup = true;
+	commandToClient(%obj.client, 'MarbleTeleport', %trigger.offset);
+	%obj.schedule((%obj.client.getPing() * 2) + 100, "setFieldValue", "noPickup", false);
+}
+
+// Since I have almost no experience with C++, let's just make a trigger for removing objects.
+// Dynamic fields: objectName1, objectName2, objectName3
+// Type in the name of the object to be deleted.
+// For example, typing FireWorks will delete any fire work emitters, and objects with that name.
+// Only one name works at a time for a single variable.
+datablock TriggerData(ClearTrigger) {
+	tickPeriodMS = 100;
+};
+function ClearTrigger::onEnterTrigger(%this,%trigger,%obj) {
+	// Do this if triggered.
+	if (isObject(%trigger.objectName1))
+		%trigger.objectName1.delete();
+	if (isObject(%trigger.objectName2))
+		%trigger.objectName2.delete();
+	if (isObject(%trigger.objectName3))
+		%trigger.objectName3.delete();
+}
+
+// FIREWORKS FTW!!!
+datablock AudioProfile(ShortFireworks)
+{
+   filename    = "./ShortFireworkBlasts.wav";
+   description = AudioDefault3d;
+   preload = true;
+};
+datablock TriggerData(FireworksTrigger) {
+	tickPeriodMS = 100;
+};
+function FireworksTrigger::onEnterTrigger(%this,%trigger,%obj) {
+	// Do this if triggered.
+	startFireWorks(ClientGroup.getObject(%index).player);
+	serverplay2d(ShortFireworks);
+}
+
+// Another fireworks trigger, but this time allows customPosition and customRotation dynamic fields.
+function startFireWorksCustom(%position, %rotation)
+{
+   // Create the cleanup group.
+   if (!isObject(FireWorks)) {
+      new SimGroup(FireWorks);
+      MissionCleanup.add(FireWorks);
+   }
+
+   // Create a ParticleNode to run the emitter.
+   %obj = new ParticleEmitterNode(){
+      datablock = FireWorkNode;
+      emitter = FireWorkSmokeEmitter;
+      position = %position;
+	  rotation = %rotation;
+   };
+   FireWorks.add(%obj);
+   
+   // Create the explosions.
+   $Game::FireWorkSchedule = schedule(0,0,"launchWave",0,%position, %rotation);
+}
+datablock TriggerData(PointFireworksTrigger) {
+	tickPeriodMS = 100;
+};
+function PointFireworksTrigger::onEnterTrigger(%this,%trigger,%obj) {
+	// Do this if triggered.
+	startFireWorksCustom(%trigger.customPosition, %trigger.customRotation);
+	serverplay2d(ShortFireworks);
+}
+
+// Ow!
+datablock TriggerData(OwTrigger) {
+	tickPeriodMS = 50;
+};
+function OwTrigger::onEnterTrigger(%this,%trigger,%obj) {
+	// Do this if triggered.
+	startOwParticles(ClientGroup.getObject(%index).player);
+}
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~ TEXTURES ~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new MaterialProperty(WWSand) {
+	friction = 1.8;
+	restitution = 0;
+};
+new MaterialProperty(WWTree) {
+	friction = 1.2;
+	restitution = 0.7;
+};
+new MaterialProperty(WWSnow) {
+	friction = 0.7;
+	restitution = 0.4;
+};
+new MaterialProperty(WWBump) {
+	friction = 1;
+	restitution = 0;
+	force = 11;
+};
+new MaterialProperty(WWRebound) {
+	friction = 1;
+	restitution = 2;
+};
+new MaterialProperty(WWGlue) {
+	restitution = -10;
+	friction = 10;
+	force = -10;
+};
+new MaterialProperty(WWCrash) {
+	restitution = -10000;
+	friction = -10000;
+	force = 10000;
+};
+
+addMaterialMapping("PG-Sand", WWSand);
+addMaterialMapping("PG-Sand-Dark", WWSand);
+addMaterialMapping("PG-Sand-Light", WWSand);
+addMaterialMapping("PG-PalmTreeBlue", WWTree);
+addMaterialMapping("PG-PalmTreeBrown", WWTree);
+addMaterialMapping("friction_bump", WWBump);
+addMaterialMapping("Floor-Rebound", WWRebound);
+addMaterialMapping("snow2", WWSnow);
+addMaterialMapping("CrashTexture", WWCrash);
+//  This is a list of path node times for an animation.
+//19300ms for one loop
+//SandCastle
+//10500
+//0
+//300
+//100
+//100
+//8300
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         music = "Seaside Revisited.ogg";
+         name = "Sandcastle Sprawl";
+         startHelpText = "Find the gems,\none of each color.";
+         artist = "WeatherWonders";
+         level = "4";
+         type = "Custom";
+         desc = "Collect the gems around one of the world\'s largest sandcastles, while exploring everything else on the island.\n\nI would say this took about 8 hours to make.";
+         goldTime = "140000";
+         ultimateTime = "110000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "300";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "10";
+      fogColor = "0.800000 1.000000 1.000000 1.000000";
+      fogVolume1 = "1 1 1";
+      fogVolume2 = "1 1 1";
+      fogVolume3 = "1 1 1";
+      materialList = "~/data/skies/Beginner/Beginner_Sky.dml";
+      windVelocity = "3 6 0.1";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.3864257 0.2793937 -0.8789848";
+      color = "1.400000 1.400000 1.400000 1.000000";
+      ambient = "0.400000 0.400000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "-58 -5 8.25";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 0.5";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-2 -5 25.5";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Trigger(Bounds) {
+      position = "-213.7932 171.6046 6";
+      rotation = "1 0 0 0";
+      scale = "414.6108 354.3193 600";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(text) {
+      position = "-16.23107 10.84556 21.48138";
+      rotation = "1 0 0 0";
+      scale = "2.422095 2.515668 3.526622";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Well that\'s pointless.";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-4.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-5.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.85572 5.718241 11.54473";
+      rotation = "0 0 1 112.5";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Towel-Blue.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.880251 -11.78009 6.7023";
+      rotation = "0 0 1 4.745462";
+      scale = "15.159 15.159 0";
+      interiorFile = "~/data/interiors/WeatherWonders/Ocean.dif";
+      showTerrainInside = "0";
+         Path = "SeaPoint1";
+   };
+   new InteriorInstance() {
+      position = "15.70636 5.183908 11.61776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/OversizedDrinkUmbrella.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-37.99195 -31.96126 9.953504";
+      rotation = "0 -1 0 11.24987";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MajikUmbrella.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(SeaPoint1) {
+         position = "-6.929057 -11.73377 6.75";
+         rotation = "0 0 1 4.99997";
+         scale = "15 15 0";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SeaPoint2";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(SeaPoint2) {
+         position = "-5.39429 -13.19029 5.25";
+         rotation = "0 0 -1 2.999965";
+         scale = "20 20 0";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SeaPoint3";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(SeaPoint4) {
+         position = "-8.052637 -13.39531 5.25";
+         rotation = "0 0 -1 4.99997";
+         scale = "20 20 0";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SeaPoint1";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(SeaPoint3) {
+         position = "-6.807802 -14.60871 6.75";
+         rotation = "0 0 1 7.000012";
+         scale = "15 15 0";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SeaPoint4";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket1) {
+         position = "-23.62531 -28.42706 11.99359";
+         rotation = "1 0 0 0";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket2) {
+         position = "-23.63479 -28.43763 12.71017";
+         rotation = "1 0 0 0";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1500";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket3) {
+         position = "-22.78042 -28.44441 13.41894";
+         rotation = "0 1 0 180";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1500";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket4) {
+         position = "-23.30439 -28.42338 12.26376";
+         rotation = "0 -1 0 101.25";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket5";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket5) {
+         position = "-22.80409 -28.45776 12.17724";
+         rotation = "0 -1 0 78.75001";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket6";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket6) {
+         position = "-21.91153 -28.49118 12.72501";
+         rotation = "0 1 0 11.24959";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket7";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket7) {
+         position = "-23.87586 -27.87876 13.08312";
+         rotation = "0 -1 0 11.25036";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket8";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket8) {
+         position = "-25.11232 -27.8008 13.19153";
+         rotation = "1 0 0 0";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket9";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket10) {
+         position = "-25.16777 -27.72952 14.34539";
+         rotation = "0 1 0 180";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket11";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "500";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket9) {
+         position = "-24.4764 -27.78144 13.76438";
+         rotation = "0 1 0 89.99998";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket10";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket11) {
+         position = "-25.17235 -27.74297 14.4757";
+         rotation = "0 1 0 180";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket12";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket12) {
+         position = "-25.15709 -27.71863 14.19513";
+         rotation = "0 1 0 180";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket13";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket13) {
+         position = "-25.16832 -27.74286 14.50905";
+         rotation = "0 1 0 180";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket14";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "2000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket14) {
+         position = "-23.99174 -28.09346 13.36659";
+         rotation = "0 1 0 11.25008";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket15";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "1000";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket15) {
+         position = "-23.61869 -28.40556 12.09191";
+         rotation = "0 -1 0 11.24973";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket16";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "200";
+            UseRotation = "1";
+      };
+      new StaticShape(Bucket16) {
+         position = "-23.62531 -28.42706 11.99359";
+         rotation = "1 0 0 0";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Bucket1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle4) {
+         position = "-25.15709 -27.71863 11.9888";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle5";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "100";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle1) {
+         position = "-25.15709 -27.71863 11.89011";
+         rotation = "1 0 0 2.999965";
+         scale = "1.5 1.5 0.1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle2";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "10500";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle2) {
+         position = "-23.11949 -27.16052 11.84121";
+         rotation = "1 0 0 0";
+         scale = "0.2 0.2 0.1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle3";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "0";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle3) {
+         position = "-25.15709 -27.71863 13.67814";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle4";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle5) {
+         position = "-25.15709 -27.71863 11.9888";
+         rotation = "1 0 0 0";
+         scale = "1.2 1.2 0.8";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle6";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "100";
+            UseRotation = "1";
+      };
+      new StaticShape(SandCastle6) {
+         position = "-25.15709 -27.71863 11.9888";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "SandCastle1";
+            RotationMultiplier = "1";
+            UseScale = "1";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "8300";
+            UseRotation = "1";
+      };
+      new StaticShape(MarbleText1) {
+         position = "13.52704 4.837828 11.91306";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "MarbleText2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "10000";
+            UseRotation = "0";
+      };
+      new StaticShape(MarbleText2) {
+         position = "13.52704 4.837828 11.91306";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "MarbleText3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "0";
+            UseRotation = "0";
+      };
+      new StaticShape(MarbleText3) {
+         position = "20.83183 5.972444 1.462639";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "MarbleText4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "10000";
+            UseRotation = "0";
+      };
+      new StaticShape(MarbleText4) {
+         position = "23.784 5.981222 1.444975";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "MarbleText1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "0";
+            UseRotation = "0";
+      };
+      new StaticShape(Gem1) {
+         position = "-25.16631 -27.62893 10.19862";
+         rotation = "0.0465957 -0.2663386 0.9627527 223.7415";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Gem2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "10500";
+            UseRotation = "1";
+      };
+      new StaticShape(Gem4) {
+         position = "-25.1909 -27.62575 12.54183";
+         rotation = "0.2581978 -0.2391059 0.9360355 214.2391";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Gem1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "8500";
+            UseRotation = "1";
+      };
+      new StaticShape(Gem3) {
+         position = "-25.19692 -27.60104 14.01062";
+         rotation = "0.2581978 -0.2391059 0.9360355 214.2391";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Gem4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(Gem2) {
+         position = "-23.16376 -27.45124 10.74595";
+         rotation = "0.2581978 -0.2391059 0.9360355 214.2391";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Gem3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "0";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat2) {
+         position = "-112.7093 89.96687 5.25";
+         rotation = "0 0 1 33.74999";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat1) {
+         position = "-192.4703 21.34625 6.75";
+         rotation = "0 0 1 22.50002";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat3) {
+         position = "-34.39807 143.6726 6.75";
+         rotation = "0 0 1 78.74997";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat4) {
+         position = "100.3105 137.2421 5.25";
+         rotation = "0 0 1 135";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat5";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat5) {
+         position = "193.0605 27.17972 6.75";
+         rotation = "0 0 1 168.7499";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat6";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat6) {
+         position = "204.0079 -106.1781 5.25";
+         rotation = "0 0 1 213.7499";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat7";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat7) {
+         position = "130.9786 -201.6786 6.75";
+         rotation = "0 0 -1 112.5001";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat8";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat8) {
+         position = "2.492157 -237.8923 5.25";
+         rotation = "0 0 -1 78.75007";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat9";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat10) {
+         position = "-190.2596 -83.66444 5.25";
+         rotation = "0 0 -1 11.25015";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Boat9) {
+         position = "-116.2731 -181.2503 6.75";
+         rotation = "0 0 -1 45.0001";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Boat10";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut1) {
+         position = "40.41447 -1.15361 17.69911";
+         rotation = "-0.4420145 0.8926886 -0.08792216 25.12325";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "500";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut2) {
+         position = "40.46455 -1.087164 11.0555";
+         rotation = "0.8985904 0.1759921 -0.4019481 146.1726";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "200";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut3) {
+         position = "42.07526 -0.84475 10.74909";
+         rotation = "0.1000213 0.8133851 -0.5730623 101.7038";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "200";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut4) {
+         position = "42.86552 -0.6737134 9.994363";
+         rotation = "0.1681841 0.1000591 0.9806642 73.81393";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut5";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut5) {
+         position = "43.66691 -0.5834697 9.68005";
+         rotation = "-0.1279625 -0.6635512 0.7371062 135.9588";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut6";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut6) {
+         position = "47.21305 -0.3624482 8.237637";
+         rotation = "0.714514 -0.3142019 0.6250975 143.7726";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut7";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "5000";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut7) {
+         position = "49.88583 -0.06731959 7.162044";
+         rotation = "-0.6269394 0.7426186 0.2355094 224.9933";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut8";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "9000";
+            UseRotation = "1";
+      };
+      new StaticShape(Coconut8) {
+         position = "60.81503 -0.6080898 0.6637606";
+         rotation = "-0.9656736 0.1269937 -0.2265992 116.8937";
+         scale = "0.3 0.3 0.3";
+         dataBlock = "PathNode";
+            UsePosition = "1";
+            NextNode = "Coconut1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "0";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket1) {
+         position = "3.52344 -1.056117 13.70131";
+         rotation = "0.06962205 -0.604481 0.7935714 145.2781";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket2";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "50";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket2) {
+         position = "3.8181 -1.347561 13.68636";
+         rotation = "0.1500593 -0.5825298 0.7988374 138.5964";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket3";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "50";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket3) {
+         position = "4.136071 -1.648778 13.68324";
+         rotation = "0.06962205 -0.604481 0.7935714 145.2781";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket4";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "300";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket4) {
+         position = "4.364997 -1.981272 13.67155";
+         rotation = "0.06962205 -0.604481 0.7935714 145.2781";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket5";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "50";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket5) {
+         position = "4.599783 -2.293605 13.68157";
+         rotation = "0.1500593 -0.5825298 0.7988374 138.5964";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket6";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "50";
+            UseRotation = "1";
+      };
+      new StaticShape(Stucket6) {
+         position = "4.852991 -2.628786 13.6807";
+         rotation = "0.06962205 -0.604481 0.7935714 145.2781";
+         scale = "0.2 0.2 0.2";
+         dataBlock = "PathNode";
+            UsePosition = "0";
+            NextNode = "Stucket1";
+            RotationMultiplier = "1";
+            UseScale = "0";
+            ReverseRotation = "0";
+            placed = "1";
+            TimeToNext = "4000";
+            UseRotation = "1";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-39.50557 -32.24736 11.5102";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Towel-Orange.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.18359 -35.28437 11.79366";
+      rotation = "0 0 -1 90.00005";
+      scale = "0.9 0.9 0.9";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBrown.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.45591 -32.35829 11.51226";
+      rotation = "0 0 -1 78.74997";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Towel-Green.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.92841 8.828789 11.54317";
+      rotation = "0 0 1 101.25";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Towel-Green-2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7.092424 -9.883366 0.54042";
+      rotation = "1 0 0 0";
+      scale = "15 15 1";
+      interiorFile = "~/data/interiors/WeatherWonders/SandcastleSprawl1-6.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "40.30006 -1.802606 10.41691";
+      rotation = "0 0 1 33.74999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBrown-Coconuts.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.02108 -33.62793 11.83111";
+      rotation = "0 0 1 22.49998";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBlue-TigerFigs.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.595518 34.11472 10.10987";
+      rotation = "0 0 1 191.25";
+      scale = "1.1 1.1 1.1";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBlue-TigerFigs.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "38.11004 -8.070358 10.40042";
+      rotation = "-0.1724652 -0.4163688 -0.8926885 25.12325";
+      scale = "1.3 1.3 1.3";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBlue-TigerFigs.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-33.64209 -36.05886 11.54771";
+      rotation = "-0.4333799 -0.4612235 0.7742447 40.03619";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/PalmTreeBlue.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "14.76884 3.616273 12.23396";
+      rotation = "-0.4492629 -0.2194814 0.8660201 198.7719";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes/balls/3dMarble.dts";
+   };
+   new Trigger(text) {
+      position = "8.228295 -15.62635 16.47376";
+      rotation = "1 0 0 0";
+      scale = "2.793694 3.398356 4.044083";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Who would put water jugs here?\nThis is the only way into the tower.";
+   };
+   new InteriorInstance() {
+      position = "10.59338 -18.59471 16.47698";
+      rotation = "0 0 1 22.49998";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/WaterJug.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.60682 -18.72054 17.97727";
+      rotation = "0 0 -1 33.74997";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/WaterJug.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "42.32345 -21.49962 7.443422";
+      rotation = "-0.2306072 -0.5810112 0.7805424 166.6286";
+      scale = "0.8423236 0.6667601 0.5982062";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(text) {
+      position = "10.06598 -18.21036 19.45977";
+      rotation = "1 0 0 0";
+      scale = "1.062613 0.8128986 1.073513";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t tell me you didn\'t know\nthere is another way in.";
+   };
+   new Trigger(WAT) {
+      position = "10.08754 -18.23678 19.46697";
+      rotation = "1 0 0 0";
+      scale = "0.8829165 0.8677578 1.07255";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "-23.63345 -28.43614 12.60913";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Bucket.dif";
+      showTerrainInside = "0";
+         Path = "Bucket1";
+   };
+   new InteriorInstance() {
+      position = "-24.99039 -27.67297 11.88611";
+      rotation = "1 0 0 2.754291";
+      scale = "1.393648 1.393648 0.1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+         Path = "SandCastle1";
+   };
+   new InteriorInstance() {
+      position = "14.77053 3.614387 12.24605";
+      rotation = "0.8080541 0.5356908 -0.2451204 113.7317";
+      scale = "0.11 0.11 0.11";
+      interiorFile = "~/data/interiors/WeatherWonders/GreenBouncyBallYAY.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(text) {
+      position = "14.59742 3.773882 12.0388";
+      rotation = "1 0 0 0";
+      scale = "0.3358917 0.3364201 0.3780613";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "What are you\nunder the impression of?!";
+   };
+   new Trigger(text) {
+      position = "13.52704 4.837828 11.91306";
+      rotation = "1 0 0 0";
+      scale = "2.759398 2.472613 2.682684";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Top-Smack Day,\nIsn\'t it?";
+         Path = "MarbleText1";
+   };
+   new Trigger(text) {
+      position = "20.87877 5.972584 1.462358";
+      rotation = "1 0 0 0";
+      scale = "2.759398 2.472613 2.682684";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Have you tried the\nTiger Figs here?";
+         Path = "MarbleText3";
+   };
+   new Item() {
+      position = "-25.00248 -27.61439 10.2434";
+      rotation = "0.06460476 -0.2645094 0.9622168 223.0301";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+         Path = "Gem1";
+   };
+   new Item() {
+      position = "11.88588 -19.90598 16.49504";
+      rotation = "0.09538281 0.9684398 -0.230275 46.31396";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "11 -9 23.2325";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "11 -1 23.2325";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34.57204 -33.37795 21.06684";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new InteriorInstance() {
+      position = "-33.34837 -34.78887 12.0405";
+      rotation = "0 0 -1 67.50003";
+      scale = "0.3 0.3 0.3";
+      interiorFile = "~/data/interiors/WeatherWonders/Plant-Fern.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.96907 -36.22007 12.03693";
+      rotation = "0 0 1 101.25";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/WeatherWonders/Plant-Fern.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-33.37645 -54.81621 5.144719";
+      rotation = "0.8377249 0.5440195 0.04753889 219.6092";
+      scale = "0.9 0.9 0.9";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.21003 -54.8829 6.778108";
+      rotation = "0.5376715 0.5677568 0.6233472 151.0449";
+      scale = "1 1 1.097222";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-34.1766 -54.05383 6.639705";
+      rotation = "0.2882087 -0.11938 0.950097 137.0364";
+      scale = "1 1 1";
+      dataBlock = "GemItemPlatinum";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "2.077907 34.40758 16.6322";
+      rotation = "0.9404268 -0.1465346 -0.3067982 144.6506";
+      scale = "1 1 1.401724";
+      dataBlock = "GemItemOrange";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new InteriorInstance() {
+      position = "40.84084 11.82345 9.345073";
+      rotation = "-0.1759994 -0.08483712 0.9807278 146.9914";
+      scale = "1.023166 1.099824 0.6105263";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "43.81502 -20.48012 5.916758";
+      rotation = "0.2700202 0.2185961 0.9377126 135.8265";
+      scale = "0.7387325 0.6667601 0.7700642";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "44.5243 10.10934 7.96242";
+      rotation = "-0.4229982 -0.4229985 -0.8013394 77.72057";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "42.72475 10.01909 8.887472";
+      rotation = "0.4723413 0.8112317 0.3446693 104.6276";
+      scale = "0.6353695 0.801388 0.6157663";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "41.77922 13.97399 7.220722";
+      rotation = "0.7631029 0.5395955 0.3556836 102.7023";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-12.64961 10.12763 21.04663";
+      rotation = "0.6513555 0.7476293 -0.1295626 214.4133";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "-11.25 -5 20";
+      rotation = "0 0 1 44.99997";
+      scale = "1 1 1";
+      dataBlock = "GemItemPurple";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "-13.38679 9.542135 15.67669";
+      rotation = "-0.3026004 0.9328803 0.1953647 175.4941";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlack";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "42.03129 11.19421 8.127238";
+      rotation = "-0.2550934 -0.4772461 -0.8409302 64.88161";
+      scale = "1 1 1";
+      dataBlock = "GemItemTurquoise";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Trigger(text) {
+      position = "0.2516309 36.36793 15.21772";
+      rotation = "1 0 0 0";
+      scale = "4.477493 4.588955 2.767592";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Tiger Figs grow on...\nPalm Trees?";
+   };
+   new InteriorInstance() {
+      position = "193.4086 22.93894 6.7023";
+      rotation = "0 0 1 170.1809";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/WeatherWonders/Boat.dif";
+      showTerrainInside = "0";
+         Path = "Boat1";
+   };
+   new InteriorInstance() {
+      position = "193.4086 22.93894 6.7023";
+      rotation = "0 0 1 170.1809";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/WeatherWonders/Boat-WakeUpAlready.dif";
+      showTerrainInside = "0";
+         Path = "Boat1";
+   };
+   new Item() {
+      position = "-36.85606 -31.95878 15.82599";
+      rotation = "0.0979728 -0.02971972 0.9947453 146.4173";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new InteriorInstance() {
+      position = "28.00311 -93.75607 4.922681";
+      rotation = "0.4634722 0.3781298 0.801381 78.20334";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "42.95507 -25.6987 5.911899";
+      rotation = "0.8465489 -0.4289386 0.3152248 99.63404";
+      scale = "0.7844796 0.897749 0.7103102";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "28.40635 -93.38893 1.010357";
+      rotation = "0 0 1 11.24987";
+      scale = "1.5 1.5 1.5";
+      dataBlock = "checkPoint";
+   };
+   new InteriorInstance() {
+      position = "27.70423 -89.28058 1.466443";
+      rotation = "0.3005008 0.9507737 -0.07568865 83.3344";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "30.8693 -90.4864 2.269149";
+      rotation = "0.7313244 -0.2284766 0.6426221 204.9576";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "24.85328 -90.98497 1.653128";
+      rotation = "0.4926168 0.7345473 -0.4666573 187.3384";
+      scale = "0.9268132 0.80629 1.039564";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "26.95372 -89.76028 3.04308";
+      rotation = "0.3746654 0.6197971 0.6895487 98.51432";
+      scale = "1.070344 0.897749 0.9616676";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "29.04606 -90.09843 3.023516";
+      rotation = "0.4548646 0.7031012 0.5465775 113.47";
+      scale = "1.070344 0.897749 1.000461";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "77.46089 -38.61013 1.752887";
+      rotation = "0.7460518 0.4579131 -0.4834484 184.8534";
+      scale = "1.070344 0.9728599 0.9915658";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.06203 -78.15629 1.957362";
+      rotation = "0.7460518 0.4579131 -0.4834484 184.8534";
+      scale = "1.070344 0.9728599 0.9915658";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.43952 -77.9949 1.669492";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "0.8947164 0.9227732 1.082033";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-20.35057 -76.1618 1.124125";
+      rotation = "-0.4440286 -0.0009526112 0.8960122 158.2963";
+      scale = "1.013699 1.269605 0.9789951";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.71185 -76.31154 2.058446";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "0.9662383 0.9227732 0.9735174";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-112.4261 -20.25653 2.739017";
+      rotation = "-0.4595518 -0.5624219 0.6873819 73.80125";
+      scale = "1.013699 1.269605 0.9789951";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-111.6164 -22.45639 1.497273";
+      rotation = "0.9660539 -0.07307291 0.2477909 129.827";
+      scale = "0.8947164 0.9227732 1.082033";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-111.7069 -15.56496 1.978554";
+      rotation = "0.9660539 -0.07307291 0.2477909 129.827";
+      scale = "0.9662383 0.9227732 0.9735174";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-110.6104 -17.57335 1.477931";
+      rotation = "0.1300847 0.945454 -0.298655 227.1859";
+      scale = "1.070344 0.9728599 0.9915658";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-37.86174 104.1372 2.515376";
+      rotation = "-0.4440286 -0.0009526112 0.8960122 158.2963";
+      scale = "1.013699 1.269605 0.9789951";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.32983 103.945 5.161187";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "0.8947164 0.9227732 1.082033";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.34784 103.7745 2.699072";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "1.04345 1.062782 1.110129";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.5732 102.1427 2.581368";
+      rotation = "0.7460518 0.4579131 -0.4834484 184.8534";
+      scale = "1.070344 0.9728599 0.9915658";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "76.31127 47.32943 1.007806";
+      rotation = "-0.4404512 -0.662254 0.6061539 66.50096";
+      scale = "1.013699 1.269605 0.9789951";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "78.42156 47.02489 1.553172";
+      rotation = "0.9789551 0.0222044 0.2028646 127.2887";
+      scale = "0.8947164 0.9227732 1.082033";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "75.43982 49.82462 1.942127";
+      rotation = "0.9789551 0.0222044 0.2028646 127.2887";
+      scale = "0.9662383 0.9227732 0.9735174";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "77.66084 49.28315 1.841043";
+      rotation = "0.03724597 0.965539 -0.2575797 230.3185";
+      scale = "1.070344 0.9728599 0.9915658";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "77.55424 -35.93166 0.9196497";
+      rotation = "-0.4440286 -0.0009526112 0.8960122 158.2963";
+      scale = "1.013699 1.269605 0.9789951";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "78.66444 -36.85567 2.707708";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "0.8947164 0.9227732 1.082033";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "79.7992 -33.72304 1.971852";
+      rotation = "-0.5062016 0.7216082 -0.4722727 190.9599";
+      scale = "0.9662383 0.9227732 0.9735174";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(SecretBounds) {
+      position = "14.02368 -76.32981 0.9774014";
+      rotation = "1 0 0 0";
+      scale = "24.84887 27.27884 4.146484";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "27.41089 -93.0822 1.93722";
+      rotation = "-0.3727655 0.6535801 -0.6586949 94.28239";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "29.67911 -93.9798 1.62291";
+      rotation = "0.8385381 -0.2408506 -0.4887177 106.7518";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "29.13729 -94.8902 2.421747";
+      rotation = "0.3934731 0.9152291 -0.08680252 105.7468";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-113.229 -86.38555 2.0358";
+      rotation = "0.789685 0.4203716 -0.4468617 161.2273";
+      scale = "0.9268132 0.80629 1.039564";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "24.36383 -91.69473 3.053129";
+      rotation = "0.2371594 0.8819977 -0.4072292 179.2412";
+      scale = "0.9442078 0.8928514 1.039564";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "24.09813 -93.91428 2.525516";
+      rotation = "0.7756006 0.4861529 0.4026154 174.6815";
+      scale = "0.9442078 0.6788122 0.8945314";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-111.0438 -87.4516 3.425752";
+      rotation = "0.4995756 0.2968879 0.8138071 141.5443";
+      scale = "1.070344 0.897749 0.9616676";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-110.228 -87.80911 1.849115";
+      rotation = "0.6487511 0.6338723 0.4211035 93.91639";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-110.1625 -89.37918 3.406188";
+      rotation = "0.6358686 0.3520986 0.6868026 148.8728";
+      scale = "1.070344 0.897749 1.000461";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-109.2298 -90.80367 2.236946";
+      rotation = "-0.6003575 0.6103861 -0.5167203 121.7997";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "47.9319 115.7851 1.204029";
+      rotation = "0.7717702 -0.6355731 -0.02043612 123.9663";
+      scale = "0.9268132 0.80629 1.039564";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "45.6329 114.9938 2.593982";
+      rotation = "-0.541371 0.4046706 -0.7369934 108.5507";
+      scale = "1.070344 0.897749 0.9616676";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "44.80322 114.6697 1.017344";
+      rotation = "0.609615 -0.2608356 0.7485549 182.6525";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "43.64673 115.7336 2.574418";
+      rotation = "-0.6362062 0.5065227 -0.5819591 118.8615";
+      scale = "1.070344 0.897749 1.000461";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "41.9342 116.4698 1.82005";
+      rotation = "0.3661088 0.8635641 0.3467295 105.7953";
+      scale = "1.070344 0.897749 0.8840986";
+      interiorFile = "~/data/interiors/WeatherWonders/Rock1.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "29.34345 -93.65385 2.269667";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(text) {
+      position = "-41.5422 108.944 0.9790316";
+      rotation = "1 0 0 0";
+      scale = "9.852623 9.672523 9.019106";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "And you did that...\nWhy exactly?";
+   };
+   new InteriorInstance() {
+      position = "60.76524 -0.6056263 0.6933651";
+      rotation = "-0.9656796 0.1312936 -0.2241091 117.3349";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Coconut.dif";
+      showTerrainInside = "0";
+         Path = "Coconut1";
+   };
+   new InteriorInstance() {
+      position = "-9.600923 -8.437206 12.07512";
+      rotation = "0.3973166 0.6119772 0.68383 197.2032";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/TigerFig.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.744258 -8.823241 12.15025";
+      rotation = "0.4396439 0.8225157 0.3608063 111.9596";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/TigerFig.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.472765 -8.830538 12.17716";
+      rotation = "1.458229e-007 -8.869333e-007 1 101.25";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/TigerFig.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.71973 -8.098208 12.18933";
+      rotation = "0 0 1 101.25";
+      scale = "0.3 0.3 0.3";
+      interiorFile = "~/data/interiors/WeatherWonders/Plant-Fern.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7.142759 2.233667 12.02056";
+      rotation = "0 0 1 44.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/WaterJug.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.74824 -1.738347 12.19432";
+      rotation = "0 0 1 44.99999";
+      scale = "0.3 0.3 0.3";
+      interiorFile = "~/data/interiors/WeatherWonders/Plant-Fern.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.715282 -0.9152825 12.20755";
+      rotation = "0.06962205 -0.604481 0.7935714 145.2781";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/Bucket.dif";
+      showTerrainInside = "0";
+         Path = "Stucket1";
+   };
+   new InteriorInstance() {
+      position = "4.011436 -1.876046 11.93834";
+      rotation = "0 0 1 44.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.228074 -1.137076 11.99068";
+      rotation = "0 0 1 101.25";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.454582 -1.734304 11.94334";
+      rotation = "0 0 1 78.74998";
+      scale = "1 1 0.8100198";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.81114 -0.751698 11.99101";
+      rotation = "0 0 1 236.2499";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.576628 -1.509818 11.96526";
+      rotation = "0 0 1 168.75";
+      scale = "1 1 1.1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.424847 -0.8629005 11.9914";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.117416 -1.668156 12.55084";
+      rotation = "0.972557 0.1934536 -0.1292614 113.965";
+      scale = "0.8 0.8 0.8";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(text) {
+      position = "-10.05264 -7.705719 11.85057";
+      rotation = "1 0 0 0";
+      scale = "1.024288 1.316602 1.213824";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Nom nom nom...";
+   };
+   new InteriorInstance() {
+      position = "4.166924 7.889037 12.08262";
+      rotation = "0.09697925 0.1451397 0.984647 68.32138";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/WeatherWonders/Boat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "5.36385 6.604334 11.80205";
+      rotation = "1 0 0 0";
+      scale = "0.4 0.4 0.4";
+      interiorFile = "~/data/interiors_mbp/water_3x3.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(text) {
+      position = "2.943276 9.077587 11.95117";
+      rotation = "1 0 0 0";
+      scale = "2.432456 2.457147 1.055648";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "THEN THE MONSTER MARBLE CRASHED OUT OF THE WATER\nAND THREW THE CREW OVERBOARD!";
+   };
+   new InteriorInstance() {
+      position = "11.75092 -19.74644 12.36879";
+      rotation = "0.984647 0.09697925 0.1451397 68.32138";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/WeatherWonders/Coconut.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "-11.72837 -8.10012 13.08251";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      shapeName = "~/data/custom_marbles/Custom/ball-superball.dts";
+   };
+   new TSStatic() {
+      position = "-11.63362 -8.317213 13.00707";
+      rotation = "0.7511998 0.5821341 0.3111571 70.86695";
+      scale = "0.2 0.2 0.2";
+      shapeName = "~/data/shapes/colmesh.dts";
+   };
+   new TSStatic() {
+      position = "-11.76913 -1.753205 13.09502";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      shapeName = "~/data/custom_marbles/Custom/ball-superball.dts";
+   };
+   new TSStatic() {
+      position = "-11.67438 -1.970298 13.01959";
+      rotation = "0.7511998 0.5821341 0.3111571 70.86695";
+      scale = "0.2 0.2 0.2";
+      shapeName = "~/data/shapes/colmesh.dts";
+   };
+   new Trigger(text) {
+      position = "10.19949 -18.25678 12.06602";
+      rotation = "1 0 0 0";
+      scale = "2.66148 2.845563 2.907164";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "If you thought cracking\na REGULAR coconut was hard...";
+   };
+   new TSStatic() {
+      position = "3.696122 -2.937146 17.04965";
+      rotation = "0 0 -1 89.99998";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/pads/startArea.dts";
+   };
+   new TSStatic() {
+      position = "0.2310936 -3.449873 17.59284";
+      rotation = "0 0 -1 89.99999";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/pads/endArea.dts";
+   };
+   new InteriorInstance() {
+      position = "0.2320549 -3.461494 16.99471";
+      rotation = "0 0 1 112.5";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.688227 -2.927186 16.45087";
+      rotation = "0 0 1 112.5";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "3.031337 -2.932069 16.99972";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/hazards/ductfan.dts";
+   };
+   new TSStatic() {
+      position = "2.101494 -2.934134 17.05095";
+      rotation = "0 0 1 67.49997";
+      scale = "0.1 0.1 0.3";
+      shapeName = "~/data/shapes/hazards/oilslick.dts";
+   };
+   new TSStatic() {
+      position = "2.641011 -2.931295 16.9956";
+      rotation = "0 0 1 89.99998";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/hazards/ductfan.dts";
+   };
+   new InteriorInstance() {
+      position = "2.104634 -2.930207 16.62942";
+      rotation = "0 0 1 112.5";
+      scale = "0.7 0.7 0.7";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "1.416287 -3.449377 17.27818";
+      rotation = "0 0 1 67.49998";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/bumpers/pball_round.dts";
+   };
+   new TSStatic() {
+      position = "1.745078 -2.943002 17.15655";
+      rotation = "0 0 1 89.99999";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "1.744692 -3.137505 17.29299";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "1.232883 -3.448585 17.27567";
+      rotation = "0 0 1 236.25";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/bumpers/pball_round.dts";
+   };
+   new InteriorInstance() {
+      position = "1.729436 -3.447305 16.99276";
+      rotation = "0 0 1 112.5";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "0.9312937 -3.465898 17.31201";
+      rotation = "0 0 1 56.24998";
+      scale = "0.1 0.1 0.1";
+      shapeName = "~/data/shapes/items/superjump.dts";
+   };
+   new InteriorInstance() {
+      position = "0.9359246 -3.466301 16.99076";
+      rotation = "0 0 1 202.5";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/WeatherWonders/MumbosCastle.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.70987 -34.39609 12.16348";
+      rotation = "0.7892364 -0.4553868 0.4119816 131.0322";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/WeatherWonders/TigerFig.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-47.33762 -7.903162 10.96012";
+      rotation = "0.4939897 0.6336493 -0.5953678 137.1888";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new Item() {
+      position = "-14.9282 9.558064 21.63229";
+      rotation = "0.5547403 0.8302277 0.0546373 170.6506";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

@@ -1,0 +1,1973 @@
+$isMBP = ($CurrentGame !$= "");
+
+package MBPSwitch {
+
+function getCameraTransform() {
+    if (!$isMBP)
+        return Parent::getCameraTransform();
+    else
+        return $MP::MyMarble.getCameraTransform();
+}
+
+};
+
+activatePackage(MBPSwitch);
+
+function p(){return LocalClientConnection.player;}
+
+function NetObject::maybeServer(%this) {
+    if ($isMBP) {
+        %this.forceNetUpdate();
+        return getClientSyncObject(%this.getSyncId());
+    }
+    else
+        return %this;
+}
+
+// Find server objects
+
+function inspectGet(%obj,%var) {
+   if (!isObject(dumpInspectFields)) {
+      new GuiInspector(dumpInspectFields) {
+         profile = "GuiDefaultProfile";
+         horizSizing = "width";
+         vertSizing = "bottom";
+         position = "0 0";
+         extent = "8 8";
+         minExtent = "8 8";
+         visible = "true";
+         setFirstResponder = "false";
+         modal = "true";
+         helpTag = "0";
+      };
+      RootGroup.add(dumpInspectFields);
+   }
+   dumpInspectFields.inspect(%obj);
+   for (%i = 0; %i < dumpInspectFields.getCount(); %i ++) {
+      %field = dumpInspectFields.getObject(%i);
+      if (strStr(%field.getName(), "InspectStatic") == 0) {
+         %name = (%format == 1 ? "   " : "") @ getSubStr(%field.getName(), strLen("InspectStatic"), strLen(%field.getName()));
+		 if (strrpos(%name, "_") < 0) continue;
+         %name = getSubStr(%name, 0, strrpos(%name, "_"));
+         %value = %field.getValue();
+         if (%value !$= "" && %value !$= "<NULL>")
+            if (%name $= %var)
+			   return %value;
+      }
+      if (strStr(%field.getName(), "InspectDynamic") == 0) {
+         %name = (%format == 1 ? "      " : "") @ getSubStr(%field.getName(), strLen("InspectDynamic"), strLen(%field.getName()));
+		 if (strrpos(%name, "_") < 0) continue;
+         %name = getSubStr(%name, 0, strrpos(%name, "_"));
+         %value = %field.getValue();
+         if (%value !$= "" && %value !$= "<NULL>")
+            if (%name $= %var)
+			   return %value;
+      }
+   }
+   return "";
+}
+
+function getStringValue(%str) {
+   %chars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()-=_+[]\\{}|;':\",./<>?`~";
+   %val = 0;
+   %factor = 1;
+   for (%i=0;%i<strLen(%str);%i++) {
+      %chr = getSubStr(%str,%i,1);
+	  %pos = strStr(%chars,%chr);
+	  %val += %factor*%pos;
+	  %factor *= strLen(%chars);
+	  %factor %= 33614625035;
+   }
+   return %val;
+}
+
+function getObjectValue(%obj,%incPos,%incScl) {
+   %val = 0;
+   if (%incPos) {
+      %val += getWord(%obj.getTransform(),0);
+      %val += 1.1234*getWord(%obj.getTransform(),1);
+      %val += 1.2124*getWord(%obj.getTransform(),2);
+      // %val += 1.3153*getWord(%obj.getTransform(),3);
+      // %val += 1.4163*getWord(%obj.getTransform(),4);
+      // %val += 1.5741*getWord(%obj.getTransform(),5);
+      // %val += 1.6325*getWord(%obj.getTransform(),6);
+   }
+   if (%incScl) {
+      %val += 1712.5*(getWord(%obj.getScale(),0)-1);
+      %val += 1863.1*(getWord(%obj.getScale(),1)-1);
+      %val += 1913.6*(getWord(%obj.getScale(),2)-1);
+   }
+   if (%obj.getClassName() !$= "") %val += 2.3624*(getStringValue(%obj.getClassName())/1000000000);
+   if (%obj.isGame()) {
+	   if (%obj.getDatablock() !$= "") %val += 2.0138*%obj.getDatablock();
+	   if (strStr(%obj.getDatablock().getName(),"Pathed") != -1) {
+		  %val += 2.1942*(getStringValue(inspectGet(%obj,"interiorResource"))/1000000000);
+		  %val += 2.2752*inspectGet(%obj,"interiorIndex");
+	   }
+   }
+   return %val;
+}
+
+function GameBase::getServer(%this) {
+   if ($isMBP) {
+        %this.forceNetUpdate();
+        return getClientSyncObject(%this.getSyncId());
+    }
+   return getServerObject(ServerConnection,%this.getID());
+}
+
+function NetObject::getServer(%this) {
+   if ($isMBP) {
+        %this.forceNetUpdate();
+        return getClientSyncObject(%this.getSyncId());
+    }
+   return getServerObject(ServerConnection,%this.getID());
+}
+
+function SimObject::isGame(%this) {
+   return 0;
+}
+
+function GameBase::isGame(%this) {
+   return 1;
+}
+
+function SimObject::isScene(%this) {
+   return 0;
+}
+
+function SceneObject::isScene(%this) {
+   return 1;
+}
+
+function getServerObject(%group,%obj) {
+   if (%group.isMember(%obj)) return %obj;
+   if (!isObject(ServerSimSet)) RootGroup.add(new SimSet(ServerSimSet) {});
+   for (%i=0;%i<ServerSimSet.getCount();%i++) {
+      %set = ServerSimSet.getObject(%i);
+	  if (%set.getCount() < 2) %set.delete();
+	  else {
+		  if (%set.getObject(0) == %obj) return %set.getObject(1);
+		  if (%set.getObject(1) == %obj) return %set.getObject(0);
+	  }
+   }
+   for (%i = 0;%i < %group.getCount();%i++) {
+      %object = %group.getObject(%i);
+      %type = %object.getClassName();
+      if (%type $= "SimGroup") {
+         %sub = getServerObject(%object,%obj);
+         if (%sub != -1) {
+		    %set = new SimSet();
+			%set.add(%obj);
+			%set.add(%sub);
+            ServerSimSet.add(%set);
+            return %sub;
+         }
+      }
+      else if (%object.getID() == %obj.getID()) return %object.getID();
+      else if (%obj.getClassName() $= "Sun") {
+         if (%type $= "Sun") {
+		    %set = new SimSet();
+			%set.add(%obj);
+			%set.add(%object);
+            ServerSimSet.add(%set);
+            return %object.getID();
+         }
+      }
+	  else if (%obj.getClassName() $= "Marble") {
+		error("IT'S A MARBLE");
+		error(%object SPC getObjectValue(%object,0,1) SPC %object.getScale());
+		error(%obj SPC getObjectValue(%obj,0,1) SPC %obj.getScale());
+         if (getObjectValue(%object,0,1) == getObjectValue(%obj,0,1)) {
+		    %set = new SimSet();
+			%set.add(%obj);
+			%set.add(%object);
+            ServerSimSet.add(%set);
+            return %object.getID();
+         }
+      }
+      else if (%object.isGame()) {
+         if (getObjectValue(%object,1,1) == getObjectValue(%obj,1,1)) {
+		    %set = new SimSet();
+			%set.add(%obj);
+			%set.add(%object);
+            ServerSimSet.add(%set);
+            return %object.getID();
+         }
+      }
+   }
+   if (%obj.getClassName() !$= "PathedInterior")
+      return -1;
+   for (%i = 0;%i < %group.getCount();%i++) {
+      %object = %group.getObject(%i);
+      %type = %object.getClassName();
+      if (%object.isGame()) {
+         if (getObjectValue(%object,0,0) == getObjectValue(%obj,0,0)) {
+		    %set = new SimSet();
+			%set.add(%obj);
+			%set.add(%object);
+            ServerSimSet.add(%set);
+            return %object.getID();
+         }
+      }
+   }
+   return -1;
+}
+
+// position from a transform
+function MatrixPos(%mat) {
+   return getWords(%mat,0,2);
+}
+
+// up vector from a transform
+function MatrixUp(%mat) {
+   return MatrixMulVector(%mat,"0 0 1");
+}
+
+function event(%name,%arg) {
+   call(%name,%arg);
+   groupEvent(%name,%arg,MissionGroup);
+   groupEvent(%name,%arg,MissionCleanup);
+}
+
+function groupEvent(%name,%arg,%group) {
+   if (!isObject(%group)) return;
+   for (%i=0;%i<%group.getCount();%i++) {
+      %object = %group.getObject(%i);
+      %class = %object.getClassName();
+      if (%class $= "SimGroup") groupEvent(%name,%arg,%object);
+	  %object.schedule(0,%name,%arg);
+      if (%object.isGame()) {
+		 %object.getDatablock().schedule(0,%name,%object,%arg);
+      }
+   }
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+function SceneObject::clearMovementSw(%this) {
+   if (!isObject(LocalClientConnection)) {
+      echo("\c1approachObject: No game running.");
+      return;
+   }
+   %game = LocalClientConnection;
+   if (%this.movingIndexSw !$= "") {
+      %ind = %this.movingIndexSw;
+   }
+   else {
+      return;
+   }
+   %game.movingActiveSw[%ind] = false;
+}
+
+function GameConnection::updateMoversSw(%this,%timeDelta) {
+   for (%ind=1;%ind<=%this.movingCountSw;%ind++) {
+      if (!%this.movingActiveSw[%ind]) continue;
+      if (!isObject(%this.movingIndexSw[%ind])) {
+         %this.movingActiveSw[%ind] = false;
+         continue;
+      }
+      
+      if (%this.movingIndexSw[%ind].startTransform $= "") %this.movingIndexSw[%ind].startTransform = %this.movingIndexSw[%ind].getTransform();
+
+      if (%this.movingTypeSw[%ind] $= "Path") {
+	     %this.movingIndexSw[%ind].t += %timeDelta;
+		 updateNodes(%this.movingIndexSw[%ind]);
+         %prev = %this.movingIndexSw[%ind].prevNode.position;
+		 %next = %this.movingIndexSw[%ind].nextNode.position;
+		 %prevRot = getWords(%this.movingIndexSw[%ind].prevNode.getTransform(),3);
+		 %nextRot = getWords(%this.movingIndexSw[%ind].nextNode.getTransform(),3);
+		 %dist = VectorDist(%prev,%next);
+		 %a = VectorAdd(%prev,VectorScale(MatrixForward(%this.movingIndexSw[%ind].prevNode.getTransform()),%dist/3));
+		 %b = VectorSub(%next,VectorScale(MatrixForward(%this.movingIndexSw[%ind].nextNode.getTransform()),%dist/3));
+		 %tm = getNodeT(%this.movingIndexSw[%ind]);
+		 %type = %this.movingIndexSw[%ind].prevNode.smoothingType;
+		 %rotType = %this.movingIndexSw[%ind].prevNode.rotationType;
+		 if (%rotType $= "")
+			%rotType = %type;
+			
+		 if (%type !$= "Spline") {
+		    if (%type $= "Accelerate") {
+			   %tm2 = QuadEase(%tm);
+			}
+			else
+			   %tm2 = %tm;
+			%pos = VectorInterpolate(%prev,%next,%tm2);
+		 }
+		 else {
+		    %pos = VectorBezierSw(%prev,%a,%b,%next,%tm);
+		 }
+		 
+		 if (%rotType !$= "Spline" && %rotType !$= "Cubic") {
+		    if (%rotType $= "Accelerate") {
+			   %tm2 = QuadEase(%tm);
+			}
+			else
+			   %tm2 = %tm;
+			%rot = RotInterpolateSw(%prevRot,%nextRot,%tm2);
+		 }
+		 else if (%rotType $= "Cubic") {
+			%twoPrevNode = %this.movingIndexSw[%ind].twoPrevNode;
+			%twoNextNode = %this.movingIndexSw[%ind].twoNextNode;
+			if (!isObject(%twoPrevNode))
+				%twoPrevNode = %this.movingIndexSw[%ind].prevNode;
+			if (!isObject(%twoNextNode))
+				%twoNextNode = %this.movingIndexSw[%ind].nextNode;
+			%twoPrevRot = getWords(%twoPrevNode.getTransform(),3);
+			%twoNextRot = getWords(%twoNextNode.getTransform(),3);
+			
+			%twoPrevTime = -%twoPrevNode.msToNext;
+			%prevTime = 0;
+			%nextTime = %this.movingIndexSw[%ind].prevNode.msToNext;
+			%twoNextTime = %this.movingIndexSw[%ind].nextNode.msToNext;
+			
+			%rot = RotCubic(%twoPrevTime,%prevTime,%nextTime,%twoNextTime,%twoPrevRot,%prevRot,%nextRot,%twoNextRot,%this.movingIndexSw[%ind].t);
+		 }
+		 else {
+			%rot = RotInterpolateSw(%prevRot,%nextRot,%tm);
+			%rot = RotPointSw(%rot,VectorBezierVelSw(%prev,%a,%b,%next,%tm),"0 1 0");
+		 }
+		 
+		 %this.movingIndexSw[%ind].setTransform(MatrixMultiply(%pos SPC %rot,%this.movingMatrixSw[%ind]));
+      }
+   }
+}
+
+function GameConnection::clearMoversSw(%this) {
+   %this.movingCountSw = 0;
+}
+
+function GameConnection::resetMoversSw(%this) {
+   for (%ind=1;%ind<=%this.movingCountSw;%ind++) {
+      if (!%this.movingActiveSw[%ind]) continue;
+      if (!isObject(%this.movingIndexSw[%ind])) {
+         %this.movingActiveSw[%ind] = false;
+         continue;
+      }
+      %this.movingIndexSw[%ind].setTransform(%this.movingIndexSw[%ind].startTransform);
+   }
+}
+
+function SceneObject::setPathSw(%this,%pathGroup,%useServer,%offset) {
+   if (!isObject(LocalClientConnection)) {
+      echo("\c1approach: No game running.");
+      return;
+   }
+   if (%useServer) {
+      %this.maybeServer().setPathSw(%pathGroup,false,%offset);
+	  return;
+   }
+   %game = LocalClientConnection;
+   if (%this.movingIndexSw !$= "") {
+      %ind = %this.movingIndexSw;
+   }
+   else {
+      %game.movingCountSw++;
+      %ind = %game.movingCountSw;
+      %this.movingIndexSw = %ind;
+   }
+   %game.movingIndexSw[%ind] = %this;
+   %game.movingActiveSw[%ind] = true;
+   %game.movingTypeSw[%ind] = "Path";
+   if (%offset $= "")
+      %offset = "0 0 0 1 0 0 0";
+   %game.movingMatrixSw[%ind] = %offset;
+   %this.pathGroup = %pathGroup;
+   %this.t = 0;
+   %this.prevNode = findNode(%pathGroup,0);
+   %this.nextNode = findNode(%pathGroup,1);
+   %this.twoNextNode = findNode(%pathGroup,2);
+}
+
+function SceneObject::setPathPositionSw(%this,%t) {
+   %this.t = %t;
+   %this.maybeServer().t = %t;
+}
+
+function findNode(%group,%ind) {
+   %maxInd = 0;
+   for (%i=0;%i<%group.getCount();%i++) {
+      %obj = %group.getObject(%i);
+	  if (%obj.getClassName() $= "Marker") {
+	     if (%obj.seqNum == %ind)
+		    return %obj;
+	     if (%obj.seqNum > %maxInd)
+		    %maxInd = %obj.seqNum;
+      }
+   }
+   if (%ind == %maxInd + 1)
+      return findNode(%group,0);
+   return -1;
+}
+
+function updateNodes(%this) {
+   while (%this.t > %this.prevNode.msToNext) {
+      %this.t -= %this.prevNode.msToNext;
+	  %this.prevNode = %this.nextNode;
+	  %this.nextNode = findNode(%this.pathGroup,%this.prevNode.seqNum+1);
+	  %this.twoPrevNode = findNode(%this.pathGroup,%this.prevNode.seqNum-1);
+	  %this.twoNextNode = findNode(%this.pathGroup,%this.prevNode.seqNum+2);
+   }
+}
+
+function getNodeT(%this) {
+   return %this.t/%this.prevNode.msToNext;
+}
+
+// interpolate through a set of points with Bezier interpolation
+function VectorBezierSw(%p1,%p2,%p3,%p4,%t) {
+	return VectorAdd(VectorAdd(VectorScale(%p1,mPow(1-%t,3)),VectorScale(%p2,3*mPow(1-%t,2)*%t)),VectorAdd(VectorScale(%p3,3*(1-%t)*mPow(%t,2)),VectorScale(%p4,mPow(%t,3))));
+}
+
+// get the derivative of the Bezier curve above
+function VectorBezierVelSw(%p1,%p2,%p3,%p4,%t) {
+	return VectorAdd(VectorAdd(VectorScale(VectorSub(%p2,%p1),3*mPow(1-%t,2)),VectorScale(VectorSub(%p3,%p2),6*(1-%t)*%t)),VectorScale(VectorSub(%p4,%p3),3*mPow(%t,2)));
+}
+
+// interpolates between two rotations
+function RotInterpolateSw(%rot1,%rot2,%t) {
+   %mat1 = "0 0 0" SPC %rot1;
+   %mat2 = "0 0 0" SPC %rot2;
+   %matSub = MatrixDivideSw(%mat2,%mat1);
+   %subAxis = getWords(%matSub,3,5);
+   %subAng = getWord(%matSub,6);
+   %newAng = %t*%subAng;
+   %newSub = "0 0 0" SPC %subAxis SPC %newAng;
+   %newMat = MatrixMultiply(%newSub,%mat1);
+   if (getWords(%newMat,3) $= "nan nan nan nan")
+      return %rot1;
+   return getWords(%newMat,3);
+}
+
+// composes two rotations
+function RotMultiplySw(%rot1,%rot2) {
+   return getWords(MatrixMultiply("0 0 0" SPC %rot1,"0 0 0" SPC %rot2),3);
+}
+
+// transforms a vector by a rotation
+function RotMulVectorSw(%rot,%vec) {
+   return MatrixMulVector("0 0 0" SPC %rot,%vec);
+}
+
+// returns a four-vector rotation mapping u onto v (directionally)
+function VectorRotSw(%u,%v) {
+   return VectorAxisSw(%u,%v) SPC -VectorAngleSw(%u,%v);
+}
+
+// angle between two vectors
+function VectorAngleSw(%u,%v) {
+   return mAcos(VectorDot(%u,%v)/VectorLen(%u)/VectorLen(%v));
+}
+
+// cross product; if the vectors are antiparallel, still finds a vector perpendicular to both
+function VectorCrossSpecialSw(%u,%v) {
+   if (VectorAngle(%u,%v) >= 3.14159) {
+      if (mAbs(getWord(%u,0)) < 0.01 && mAbs(getWord(%u,1)) < 0.01) return VectorCross(%u,"1 0 0");
+      return VectorCross(%u,"0 0 1");
+   }
+   return VectorCross(%u,%v);
+}
+
+// returns the axis needed to rotate from u to v
+function VectorAxisSw(%u,%v) {
+   return VectorNormalize(VectorCrossSpecialSw(%u,%v));
+}
+
+// divides one matrix by another matrix
+function MatrixDivideSw(%mat1,%mat2) {
+   if (%mat1 $= %mat2)
+      return "0 0 0 1 0 0 0";
+   return MatrixMultiply(%mat1,MatrixInverse(%mat2));
+}
+
+// rotates a rotation to point a given vector towards a given direction
+function RotPointSw(%rot,%dir,%vec) {
+   if (%vec $= "")
+      %vec = "0 0 1";
+   %vecrot = VectorRotSw(RotMulVectorSw(%rot,%vec),%dir);
+   return RotMultiplySw(%vecrot,%rot);
+}
+
+function QuadEase(%t) {
+   if (%t <= 0.5) return %t*%t*2;
+   else return 1-QuadEase(1-%t);
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+datablock ParticleData(swParticle)
+{
+   textureName          = "~/data/particles/star";
+   dragCoeffiecient     = 0.0;
+   gravityCoefficient   = 0.0;
+   windCoefficient      = 0;
+   inheritedVelFactor   = 0;
+   constantAcceleration = 0;
+   lifetimeMS           = 300;
+   lifetimeVarianceMS   = 10;
+   useInvAlpha =  true;
+   spinSpeed     = 0;
+
+   colors[0]     = "1 0.83 0 1.0";
+   colors[1]     = "1 0.83 0 1.0";
+   colors[2]     = "1 0.83 0 0.0";
+
+   sizes[0]      = 0.2;
+   sizes[1]      = 0.2;
+   sizes[2]      = 0.2;
+
+   times[0]      = 0;
+   times[1]      = 0.8;
+   times[2]		 = 1.0;
+};
+
+datablock ParticleEmitterData(swEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 1.5;
+   velocityVariance = 0.25;
+   ejectionOffset   = 0.0;
+   thetaMin         = 0;
+   thetaMax         = 180;
+   phiReferenceVel  = 0;
+   phiVariance      = 360;
+   overrideAdvances = false;
+   orientParticles  = false;
+   particles = "swParticle";
+};
+
+function findRealMarble() {
+   if (!isObject(LocalClientConnection.player)) return "";
+   if (LocalClientConnection.getControlObject() == LocalClientConnection.player && isObject(ServerConnection.getControlObject())) return ServerConnection.getControlObject();
+   //Iterate through all objects in client-side server connection
+   for (%i = 0; %i < ServerConnection.getCount(); %i ++) {
+      //Get the object from the iteration
+      %obj = ServerConnection.getObject(%i);
+      //Check for ID. The marble ID will *always* be higher.
+      //Analysis shaped by using tree();
+      //tree(); is one of those hidden-but-useful functions
+      if (%obj.getId() < LocalClientConnection.player.getId())
+         continue;
+      //If it's a marble, then we're good!
+      //This is *guaranteed* to be the client-side marble, 100%
+      //of the time, if you are playing single player
+      if (%obj.getClassName() $= "Marble") {
+         return %obj;
+      }
+   }
+}
+
+datablock ItemData(SwHelicopterItem)
+{
+   // Mission editor category
+   category = "Powerups";
+   className = "PowerUp";
+
+   pickupAudio = PuGyrocopterVoiceSfx;
+
+   // Basic Item properties
+   shapeFile = "~/data/shapes/images/helicopter.dts";
+   mass = 1;
+   friction = 1;
+   elasticity = 0.3;
+
+   // Dynamic properties defined by the scripts
+   pickupName = "a Gyrocopter PowerUp!";
+   useName = "Gyrocopter PowerUp";
+   maxInventory = 1;
+};
+
+function SwHelicopterItem::onAdd(%this, %obj) {
+    MissionCleanup.add(%obj.particles = new ParticleEmitterNode() {position = %obj.position; datablock = FireWorkNode; emitter = swEmitter;});
+}
+
+function SwHelicopterItem::onPickup(%this,%obj,%user,%amount)
+{
+    Parent::onPickup(%this, %obj, %user, %amount);
+    addHelpLine("Use the camera to fly. Press <func:bind mousefire> to blast away objects for gems!", 1);
+    swStartFlymode();
+}
+
+function swStartFlymode() {
+   if ($swflyMode) return;
+   $swflyMode = true;
+   moveforward(0);
+   movebackward(0);
+   moveleft(0);
+   moveright(0);
+   $controlsDisabled = true;
+   $mvTriggerCount1++;
+   $pvVector = VectorNormalize("0 1 -0.3");
+   // Create the marker!
+   MissionCleanup.add(new Marker(FlyModeMarker) {position = getWords(LocalClientConnection.player.getTransform(), 0, 2);});
+   // Create the plane!
+   // resetSpin();
+   schedule(5,0,"swStartFlymode2");
+}
+
+function swStartFlymode2() {
+   if (!isObject(findRealMarble())) {
+      schedule(5,0,"swStartFlymode2");
+      return;
+   }
+   if ($isMBP)
+    LocalClientConnection.player.mountImage(ActualHelicopterImage,1);
+   else
+    LocalClientConnection.player.mountImage(HelicopterImage,1);
+   // LocalClientConnection.player.applyVelocity("0 0 0",VectorScale($marbleVelocity,-1));
+   %p = LocalClientConnection.player;
+   $flymodeGrav = %p.getDatablock().gravity;
+   %p.getDatablock().gravity = 0;
+}
+
+$planeVelocity = 25;
+$planeLength = 0.4;
+$limitAltitude = 100;
+
+function swLoopFlymode(%timeDelta) {
+   if ($marbleYawPrev5 $= "") $marbleYawPrev5 = $marbleYaw;
+   %cam = getCameraTransform();
+   // findRealMarble().applyVelocity("0 0 0",VectorScale($marbleVelocity,-1));
+   %oldPos = getWords(FlyModeMarker.getTransform(),0,2);
+   %pvTarget = MatrixMulVector(%cam,"0 -1 0");
+   $pvVector = VectorAdd(VectorScale($pvVector, 0.95), VectorScale(%pvTarget, 0.05));
+   %newPos = VectorAdd(%oldPos,VectorScale(VectorScale($pvVector,$planeVelocity*%timeDelta/1000),-1));
+   %rayDiff = VectorScale(VectorScale($pvVector,$planeLength),-1);
+   %masks = $TypeMasks::InteriorObjectType | $TypeMasks::StaticShapeObjectType | $TypeMasks::StaticObjectType;
+   if (!ContainerRayCast(%oldPos,VectorAdd(%oldPos,%rayDiff),%masks)) {
+      if (getWord(%newPos,2) > $limitAltitude && $limitAltitude > 0) FlyModeMarker.setTransform(getWords(%newPos,0,1) SPC $limitAltitude SPC getWords(%cam,3));
+      else FlyModeMarker.setTransform(%newPos SPC getWords(%cam,3));
+   }
+   else {
+      swStopFlymode();
+      return;
+   }
+   $marbleYawPrev5 = $marbleYawPrev4;
+   $marbleYawPrev4 = $marbleYawPrev3;
+   $marbleYawPrev3 = $marbleYawPrev2;
+   $marbleYawPrev2 = $marbleYawPrev;
+   $marbleYawPrev = $marbleYaw;
+   findRealMarble().setTransform(FlyModeMarker.getTransform());
+}
+
+function swStopFlymode(%spawn) {
+   if ($swflyMode)
+      $mvTriggerCount1++;
+   $swflyMode = false;
+   $controlsDisabled = false;
+   LocalClientConnection.player.unmountImage(1);
+   LocalClientConnection.player.getDatablock().gravity = $flymodeGrav;
+   FlyModeMarker.delete();
+   if (!%spawn) LocalClientConnection.onOutOfBounds();
+   // if (!%spawn) resetSpin();
+}
+
+package OverrideOFA {
+
+function onFrameAdvance(%timeDelta) {
+    Parent::onFrameAdvance(%timeDelta);
+    if (!MissionInfo.swHacks231) return;
+    if ($swflyMode) swLoopFlymode(%timeDelta);
+    if (isObject(MissionGroup)) event("onSwStep",%timeDelta);
+    LocalClientConnection.updateMoversSw(%timeDelta);
+}
+
+function mouseFire(%val)
+{
+   Parent::mouseFire(%val);
+   if (!MissionInfo.swHacks231) return;
+   if ($swflyMode && %val) {
+    event("onSwFire");
+   }
+}
+
+function jump(%val) {
+    if (!MissionInfo.swHacks231) {
+        Parent::jump(%val);
+        return;
+    }
+    if ($swflyMode) {
+        $planeVelocity = 25 - 15*%val;
+    }
+}
+
+function moveleft(%val) {
+    if ($controlsDisabled) return;
+    Parent::moveleft(%val);
+}
+
+function moveright(%val) {
+    if ($controlsDisabled) return;
+    Parent::moveright(%val);
+}
+
+function moveforward(%val) {
+    if ($controlsDisabled) return;
+    Parent::moveforward(%val);
+}
+
+function movebackward(%val) {
+    if ($controlsDisabled) return;
+    Parent::movebackward(%val);
+}
+
+function moveXAxis(%val) {
+    if ($controlsDisabled) return;
+    Parent::moveXAxis(%val);
+}
+
+function moveYAxis(%val) {
+    if ($controlsDisabled) return;
+    Parent::moveYAxis(%val);
+}
+
+function GameConnection::onFoundGem(%this, %amount) {
+    Parent::onFoundGem(%this, %amount);
+    if (!MissionInfo.swHacks231) return;
+    if (%this.gemCount == $Game::GemCount) {
+            swStopFlymode(1);
+             messageClient(%this, 'MsgRaceOver', '\c0Congratulations! You\'ve finished!');
+        if ($isMBP) {
+            endGameSetup();
+        }
+        else {
+                %this.player.setMode(Victory);
+		 event("onFinish");
+         setGameState("End");
+        }
+    }
+}
+
+function GameConnection::respawnPlayer(%this, %pos) {
+    if (MissionInfo.swHacks231) swStopFlymode(1);
+    Parent::respawnPlayer(%this, %pos);
+}
+
+function GameConnection::onClientLeaveGame(%this) {
+    swStopFlymode(1);
+    Parent::onClientLeaveGame(%this);
+}
+
+};
+
+activatePackage(OverrideOFA);
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+datablock ParticleEmitterData(swRingEmitter)
+{
+   ejectionPeriodMS = 5;
+   periodVarianceMS = 0;
+   ejectionVelocity = 2.5;
+   velocityVariance = 0.5;
+   ejectionOffset   = 0.0;
+   thetaMin         = 0;
+   thetaMax         = 180;
+   phiReferenceVel  = 0;
+   phiVariance      = 360;
+   overrideAdvances = false;
+   orientParticles  = false;
+   particles = "swParticle";
+};
+
+datablock StaticShapeData(GemRing)
+{
+   category = "Rings";
+   classname = "RingGem";
+   scopeAlways = true;
+};
+
+function GemRing::onAdd(%this,%obj) {
+	%obj.playThread(0,"spin");
+	%obj.setScale("2 2 2");
+    %obj.t = 0;
+	if (!isObject(MissionCleanup)) {
+		new SimGroup(MissionCleanup);
+		ServerGroup.add(MissionCleanup);
+	}
+	MissionCleanup.add(%obj.myGem = new Item() {
+		position = %obj.position;
+		rotation = "1 0 0 0";
+		scale = "2 2 2";
+		dataBlock = "GemItemYellow";
+		collideable = "0";
+		static = "1";
+		rotate = "1";
+	});
+    MissionCleanup.add(%obj.particles = new ParticleEmitterNode() {position = %obj.position; datablock = FireWorkNode; emitter = swRingEmitter;});
+}
+
+function onSwStep() {
+}
+
+datablock ExplosionData(SwExplosion)
+{
+   soundProfile = ExplodeSfx;
+   lifeTimeMS = 1200;
+
+   // Volume particles
+   particleEmitter = LandMineEmitter;
+   particleDensity = 80;
+   particleRadius = 1;
+
+   // Point emission
+   emitter[0] = LandMineSmokeEmitter;
+   emitter[1] = LandMineSparkEmitter;
+
+   // Sub explosion objects
+   subExplosion[0] = LandMineSubExplosion1;
+   subExplosion[1] = LandMineSubExplosion2;
+
+   // Dynamic light
+   lightStartRadius = 6;
+   lightEndRadius = 3;
+   lightStartColor = "0.5 0.5 0";
+   lightEndColor = "0 0 0";
+};
+
+function onSwFire() {
+  MissionCleanup.add(new Explosion() {
+     datablock = SwExplosion;
+     position = getWords(LocalClientConnection.player.getTransform(), 0, 2);
+     rotation = "1 0 0 0";
+  });
+}
+
+function GemRing::onSwStep(%this,%obj,%timeDelta) {
+	%obj.myGem.setTransform(MatrixPos(%obj.getTransform()) SPC "1 0 0 0");
+	%obj.timer -= %timeDelta;
+    %obj.t += %timeDelta;
+	if (!%obj.myGem.isHidden() && %obj.prevPos !$= "" && %obj.timer <= 0) {
+		// This segment is the player's movement in the last step
+		%pos1 = %obj.prevPos;
+		%pos2 = MatrixPos(p().getTransform());
+		// The plane will be the plane of the powerup
+		%orig = MatrixPos(%obj.getTransform());
+		%nor = MatrixUp(%obj.getTransform());
+		// This k-factor is the solution to this system (the interpolation amount) as solved in Maple
+		%k = (VectorDot(%pos1,%nor)-VectorDot(%orig,%nor))/(VectorDot(%pos1,%nor)-VectorDot(%pos2,%nor));
+		// Determine if the crossing is within the segment
+		if (%k >= 0 && %k <= 1) {
+			// Find the location of the crossing
+			%pos3 = VectorAdd(%pos1,VectorScale(VectorSub(%pos2,%pos1),%k));
+			// Check if this is within the circle
+			%dist = VectorDist(%pos3,%orig);
+			if (%dist < 2.2*getWord(%obj.scale,0)) {
+				GemItem.onPickup(%obj.myGem,p(),1);
+				%obj.timer = 200;
+			}
+		}
+	}
+	else if (%obj.myGem.isHidden()) {
+		%scl = getWord(%obj.scale,0);
+		%scl -= %timeDelta/500;
+		if (%scl < 0) %scl = 0;
+		%obj.setScale(%scl SPC %scl SPC %scl);
+	}
+	%obj.prevPos = MatrixPos(LocalClientConnection.player.getTransform());
+    
+    // Particle transform
+    %theta = %obj.t / 130;
+    %vec = mCos(%theta) SPC mSin(%theta) SPC 0;
+    %vec = VectorScale(%vec, 4);
+    %vec = MatrixMulPoint(%obj.getTransform(), %vec);
+    %obj.particles.getServer().setTransform(%vec SPC "1 0 0 0");
+}
+
+function GemRing::onMissionReset(%this,%obj) {
+	%obj.timer = 200;
+	%obj.setScale("2 2 2");
+    
+    $Game::GemCount = 32;
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+datablock StaticShapeData(SpiderSpawner)
+{
+   category = "Spawners";
+   classname = "Spawner";
+   scopeAlways = true;
+};
+
+function SpiderSpawner::onAdd(%this,%obj) {
+	if (!isObject(MissionCleanup)) {
+		new SimGroup(MissionCleanup);
+		ServerGroup.add(MissionCleanup);
+	}
+    %obj.t = 0;
+    %obj.wave = 0.4;
+    %obj.boomed = 0;
+	MissionCleanup.add(%obj.w1 = new InteriorInstance() {
+      position = %obj.position;
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = $usermods @ "/data/interiors/sw/spiderweb.dif";
+      showTerrainInside = "0";
+   });
+   MissionCleanup.add(%obj.w2 = new InteriorInstance() {
+      position = %obj.position;
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = $usermods @ "/data/interiors/sw/spiderweb.dif";
+      showTerrainInside = "0";
+   });
+   MissionCleanup.add(%obj.w3 = new InteriorInstance() {
+      position = %obj.position;
+      rotation = "1 0 0 0";
+      scale = "1 1 2";
+      interiorFile = $usermods @ "/data/interiors/sw/spiderweb.dif";
+      showTerrainInside = "0";
+   });
+   MissionCleanup.add(%obj.s = new InteriorInstance() {
+      position = %obj.position;
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = $usermods @ "/data/interiors/sw/spider.dif";
+      showTerrainInside = "0";
+   });
+}
+
+function SpiderSpawner::onMissionReset(%this,%obj) {
+	%obj.boomed = 0;
+    %obj.wave = 0.4;
+}
+    
+$pi = 3.14159265;
+    
+function SpiderSpawner::onSwStep(%this,%obj,%timeDelta) {
+    %obj.t += %timeDelta;
+    %s1 = mSin(%obj.t / 700);
+    %s2 = mSin(%obj.t / 700 + 1);
+    %s3 = mSin(%obj.t / 700 + 2);
+    %s4 = mSin(%obj.t / 700 + 3);
+    
+    %a1 = %s1 * %obj.wave;
+    %a2 = %s2 * %obj.wave + %a1;
+    %a3 = %s3 * %obj.wave + %a2;
+    %a4 = %s4 * %obj.wave + %a3;
+    
+    %pos1 = %obj.position;
+    %rot1 = getWords(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC ($pi + %a1)), 3);
+    %offs = MatrixMulVector(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC %a1), "0 0 -2");
+    
+    %pos2 = VectorAdd(%pos1, %offs);
+    %rot2 = getWords(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC ($pi + %a2)), 3);
+    %offs = MatrixMulVector(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC %a2), "0 0 -2");
+    
+    %pos3 = VectorAdd(%pos2, %offs);
+    %rot3 = getWords(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC ($pi + %a3)), 3);
+    %offs = MatrixMulVector(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC %a3), "0 0 -2");
+    
+    %pos4 = VectorAdd(%pos3, %offs);
+    %rot4 = getWords(MatrixMultiply("0 0 0" SPC getWords(%obj.getTransform(), 3), "0 0 0 0 1 0" SPC (%a4)), 3);
+    
+    %obj.w1.maybeServer().setTransform(%pos1 SPC %rot1);
+    %obj.w2.maybeServer().setTransform(%pos2 SPC %rot2);
+    %obj.w3.maybeServer().setTransform(%pos3 SPC %rot3);
+    
+    if (%obj.boomed) {
+        %obj.wave /= 1.01;
+        %obj.s.maybeServer().setTransform("9999 9999 9999 1 0 0 0");
+    }
+    else
+        %obj.s.maybeServer().setTransform(%pos4 SPC %rot4);
+    
+}
+
+function SpiderSpawner::onSwFire(%this,%obj) {
+    error("BOOM");
+	if (!%obj.boomed) {
+        %pos1 = getWords(%obj.s.maybeServer().getTransform(), 0, 2);
+        %pos2 = getWords(LocalClientConnection.player.getTransform(), 0, 2);
+        if (VectorDist(%pos1, %pos2) < 4) {
+            %obj.boomed = 1;
+            LocalClientConnection.onFoundGem(1);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+datablock ParticleData(swBoatParticle)
+{
+   textureName          = "~/data/particles/bubble";
+   dragCoeffiecient     = 0.0;
+   gravityCoefficient   = 0.0;
+   windCoefficient      = 0;
+   inheritedVelFactor   = 0;
+   constantAcceleration = 0;
+   lifetimeMS           = 300;
+   lifetimeVarianceMS   = 10;
+   useInvAlpha =  true;
+   spinSpeed     = 0;
+
+   colors[0]     = "0.5 1 1 1.0";
+   colors[1]     = "0.5 1 1 1.0";
+   colors[2]     = "0.5 1 1 0.0";
+
+   sizes[0]      = 0.2;
+   sizes[1]      = 0.2;
+   sizes[2]      = 0.2;
+
+   times[0]      = 0;
+   times[1]      = 0.8;
+   times[2]		 = 1.0;
+};
+
+datablock ParticleEmitterData(swBoatEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 1.5;
+   velocityVariance = 0.25;
+   ejectionOffset   = 0.0;
+   thetaMin         = 0;
+   thetaMax         = 180;
+   phiReferenceVel  = 0;
+   phiVariance      = 360;
+   overrideAdvances = false;
+   orientParticles  = false;
+   particles = "swBoatParticle";
+};
+
+datablock StaticShapeData(BoatSpawner)
+{
+   category = "Spawners";
+   classname = "Spawner";
+   scopeAlways = true;
+};
+
+function BoatSpawner::onAdd(%this, %obj) {
+    MissionCleanup.add(%obj.b = new InteriorInstance() {
+      position = "200 200 200";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = $usermods @ "/data/interiors/sw/boat.dif";
+      showTerrainInside = "0";
+   });
+   %obj.boomed = 0;
+    MissionCleanup.add(%obj.particles = new ParticleEmitterNode() {position = "200 200 200"; datablock = FireWorkNode; emitter = swBoatEmitter;});
+}
+
+function BoatSpawner::onMissionReset(%this, %obj) {
+    schedule(1000,0,"bs",%obj);
+}
+
+function bs(%obj) {
+    %obj.b.setPathSw(%obj.path, 1, "0 0 0.3 1 0 0 -0.3");
+    %obj.b.setPathPositionSw(%obj.offset);
+    %obj.boomed = 0;
+}
+
+function BoatSpawner::onSwStep(%this, %obj, %timeDelta) {
+    %obj.particles.getServer().setTransform(MatrixMultiply(%obj.b.maybeServer().getTransform(), "0 -1 0 1 0 0 0"));
+}
+
+function BoatSpawner::onSwFire(%this,%obj) {
+	if (!%obj.boomed) {
+        %pos1 = getWords(%obj.b.maybeServer().getTransform(), 0, 2);
+        %pos2 = getWords(LocalClientConnection.player.getTransform(), 0, 2);
+        if (VectorDist(%pos1, %pos2) < 6) {
+            %obj.boomed = 1;
+            LocalClientConnection.onFoundGem(1);
+            %obj.b.maybeServer().clearMovementSw();
+            %obj.b.maybeServer().setTransform("99999 99999 99999 1 0 0 0");
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------------------------------------------------------------
+
+datablock ParticleData(swPlaneParticle)
+{
+   textureName          = "~/data/particles/smoke";
+   dragCoeffiecient     = 0.0;
+   gravityCoefficient   = 0.0;
+   windCoefficient      = 0;
+   inheritedVelFactor   = 0;
+   constantAcceleration = 0;
+   lifetimeMS           = 300;
+   lifetimeVarianceMS   = 10;
+   useInvAlpha =  true;
+   spinSpeed     = 0;
+
+   colors[0]     = "0.9 0.9 0.9 1.0";
+   colors[1]     = "0.9 0.9 0.9 1.0";
+   colors[2]     = "0.9 0.9 0.9 0.0";
+
+   sizes[0]      = 0.2;
+   sizes[1]      = 0.2;
+   sizes[2]      = 0.2;
+
+   times[0]      = 0;
+   times[1]      = 0.8;
+   times[2]		 = 1.0;
+};
+
+datablock ParticleEmitterData(swPlaneEmitter)
+{
+   ejectionPeriodMS = 20;
+   periodVarianceMS = 0;
+   ejectionVelocity = 1.5;
+   velocityVariance = 0.25;
+   ejectionOffset   = 0.0;
+   thetaMin         = 0;
+   thetaMax         = 180;
+   phiReferenceVel  = 0;
+   phiVariance      = 360;
+   overrideAdvances = false;
+   orientParticles  = false;
+   particles = "swPlaneParticle";
+};
+
+datablock StaticShapeData(PlaneSpawner)
+{
+   category = "Spawners";
+   classname = "Spawner";
+   scopeAlways = true;
+};
+
+function PlaneSpawner::onAdd(%this, %obj) {
+    MissionCleanup.add(%obj.p = new InteriorInstance() {
+      position = "200 200 200";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = $usermods @ "/data/interiors/sw/plane.dif";
+      showTerrainInside = "0";
+   });
+   %obj.boomed = 0;
+    MissionCleanup.add(%obj.particles = new ParticleEmitterNode() {position = "200 200 200"; datablock = FireWorkNode; emitter = swPlaneEmitter;});
+}
+
+function PlaneSpawner::onMissionReset(%this, %obj) {
+    schedule(1000,0,"ps",%obj);
+}
+
+function ps(%obj) {
+    %obj.p.setPathSw(%obj.path, 1, "0 0 0.3 1 0 0 -0.3");
+    %obj.p.setPathPositionSw(%obj.offset);
+    %obj.boomed = 0;
+}
+
+function PlaneSpawner::onSwStep(%this, %obj, %timeDelta) {
+    %obj.particles.getServer().setTransform(MatrixMultiply(%obj.p.maybeServer().getTransform(), "0 -1 0 1 0 0 0"));
+}
+
+function PlaneSpawner::onSwFire(%this,%obj) {
+	if (!%obj.boomed) {
+        %pos1 = getWords(%obj.p.maybeServer().getTransform(), 0, 2);
+        %pos2 = getWords(LocalClientConnection.player.getTransform(), 0, 2);
+        if (VectorDist(%pos1, %pos2) < 6) {
+            %obj.boomed = 1;
+            LocalClientConnection.onFoundGem(1);
+            %obj.p.maybeServer().clearMovementSw();
+            %obj.p.maybeServer().setTransform("99999 99999 99999 1 0 0 0");
+        }
+    }
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         level = "9999999999";
+         name = "Marble Speedway Whirligig231 48-1";
+         desc = "Use the Super Gyrocopter to fly around this level as quickly as you can. Clear all of the Rings, Spiders, Boats, and Planes to finish!\n\nBased on the speedways in the amazing game Spyro 2: Ripto's Rage! (Gateway to Glimmer in PAL countries) by Insomniac, 1999. (Some assets from the game were used.)";
+         type = "custom";
+         artist = "Whirligig231";
+         goldTime = "65000";
+         ultimateTime = "55000";
+         startHelpText = "Fly through all of the Rings, and blast the Spiders, Boats, and Planes!";
+         swHacks231 = "1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.000000 0.100000 0.300000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sw/sky_metro.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "0.300000 0.200000 0.400000 1.000000";
+      ambient = "0.100000 0.100000 0.200000 1.000000";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+         position = "0 0 0";
+   };
+   new StaticShape(StartPoint) {
+      position = "-64 44 54";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = $usermods @ "/data/interiors/sw/city.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-64 31.5 55.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SwHelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         particles = "13208";
+   };
+   new StaticShape() {
+      position = "10.1634 -159.958 -4.7019";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13212";
+         w3 = "13213";
+         S = "13214";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13211";
+   };
+   new StaticShape() {
+      position = "30.6634 -163.208 -0.7019";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13217";
+         w3 = "13218";
+         S = "13219";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13216";
+   };
+   new StaticShape() {
+      position = "-64.3746 14.8172 54.1386";
+      rotation = "-1 0 0 90.0002";
+      scale = "0 0 0";
+      dataBlock = "GemRing";
+         myGem = "13221";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-176690";
+         particles = "13222";
+   };
+   new StaticShape() {
+      position = "-48.9855 -23.3335 48.9506";
+      rotation = "-0.986509 -0.0996574 -0.129877 105.751";
+      scale = "0 0 0";
+      dataBlock = "GemRing";
+         myGem = "13224";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-49018";
+         particles = "13225";
+   };
+   new StaticShape() {
+      position = "-43.0616 -50.2223 43.1104";
+      rotation = "-0.935113 0.250562 0.250563 93.8412";
+      scale = "0 0 0";
+      dataBlock = "GemRing";
+         myGem = "13227";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-48628";
+         particles = "13228";
+   };
+   new StaticShape() {
+      position = "-69.0918 -58.0441 36.8698";
+      rotation = "0 1 0 120";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "13230";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-181042";
+         particles = "13231";
+   };
+   new StaticShape() {
+      position = "-97.7922 -62.5153 9.06831";
+      rotation = "0 1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "13233";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-181042";
+         particles = "13234";
+   };
+   new StaticShape() {
+      position = "-124.532 -48.6841 8.32014";
+      rotation = "1 0 0 90.001";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "13236";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-181042";
+         particles = "13237";
+   };
+   new StaticShape() {
+      position = "-122.809 6.85229 9.79627";
+      rotation = "0.935113 -0.250563 0.250564 93.8412";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "13239";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-181042";
+         particles = "13240";
+   };
+   new StaticShape() {
+      position = "-77.3302 13.4167 6.68321";
+      rotation = "-0.281747 -0.886452 0.367181 111.553";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "13242";
+         prevPos = "-64 44 54.3987";
+         t = "407186";
+         timer = "-181042";
+         particles = "13243";
+   };
+   new StaticShape() {
+      position = "-60.1231 -29.8809 -12.8435";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13246";
+         w3 = "13247";
+         S = "13248";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13245";
+   };
+   new StaticShape() {
+      position = "-56.4436 -69.6356 -13.0679";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13251";
+         w3 = "13252";
+         S = "13253";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13250";
+   };
+   new StaticShape() {
+      position = "-62.0089 -89.6079 -12.7481";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13256";
+         w3 = "13257";
+         S = "13258";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13255";
+   };
+   new StaticShape() {
+      position = "-58.4741 -129.577 -12.8934";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13261";
+         w3 = "13262";
+         S = "13263";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13260";
+   };
+   new StaticShape() {
+      position = "-50.3366 -160.708 -12.9519";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13266";
+         w3 = "13267";
+         S = "13268";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13265";
+   };
+   new StaticShape() {
+      position = "-29.5866 -156.208 -12.9519";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpiderSpawner";
+         w2 = "13271";
+         w3 = "13272";
+         S = "13273";
+         wave = "0.4";
+         t = "407186";
+         boomed = "0";
+         w1 = "13270";
+   };
+   new Path(BoatPath) {
+
+      new Marker(boats) {
+         position = "115.25 -162.5 -12";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 1";
+         seqNum = "0";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "135.499 -150.735 -12";
+         rotation = "0 0 1 60.0001";
+         scale = "1 1 1";
+         seqNum = "1";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "138.009 -125.5 -12";
+         rotation = "0 0 -1 15";
+         scale = "1 1 1";
+         seqNum = "2";
+         msToNext = "3000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "125.147 -85.897 -12";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         seqNum = "3";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "132.638 -51.5218 -12";
+         rotation = "0 0 1 15";
+         scale = "1 1 1";
+         seqNum = "4";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "125.044 -27.9228 -12";
+         rotation = "0 0 -1 75.0002";
+         scale = "1 1 1";
+         seqNum = "5";
+         msToNext = "1500";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "94.5436 -16.7289 -12";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 1";
+         seqNum = "6";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "78.5436 -16.729 -12";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 1";
+         seqNum = "7";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "70.5436 -16.729 -12";
+         rotation = "0.0751461 0.130157 0.988642 239.435";
+         scale = "1 1 1";
+         seqNum = "8";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "59.0415 -23.3697 -8.44125";
+         rotation = "0.104431 0.0801329 0.991299 194.871";
+         scale = "1 1 1";
+         seqNum = "9";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "55.1394 -37.6659 -7.43219";
+         rotation = "0.150292 -6.99406e-008 0.988642 120.565";
+         scale = "1 1 1";
+         seqNum = "10";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "62.8009 -42.2425 -8.84688";
+         rotation = "0 0 1 75.0002";
+         scale = "1 1 1";
+         seqNum = "11";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "76.0824 -38.6838 -8.84688";
+         rotation = "0 0 1 120";
+         scale = "1 1 1";
+         seqNum = "12";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "83.4436 -42.9338 -8.84688";
+         rotation = "0 0 1 120";
+         scale = "1 1 1";
+         seqNum = "13";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "88.4232 -45.8088 -10.0969";
+         rotation = "0.0751464 -0.130157 0.988642 120.565";
+         scale = "1 1 1";
+         seqNum = "14";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "93.4503 -48.6972 -11.8998";
+         rotation = "-8.17301e-008 4.55968e-007 1 120";
+         scale = "1 1 1";
+         seqNum = "15";
+         msToNext = "300";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "96.7003 -56.1972 -11.8998";
+         rotation = "0 0 1 165";
+         scale = "1 1 1";
+         seqNum = "16";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "101.877 -75.5157 -11.8998";
+         rotation = "0 0 1 195";
+         scale = "1 1 1";
+         seqNum = "17";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "94.436 -103.286 -11.8998";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         seqNum = "18";
+         msToNext = "3000";
+         smoothingType = "Spline";
+      };
+      new Marker(boats) {
+         position = "99.436 -139.286 -11.8998";
+         rotation = "0 0 1 150";
+         scale = "1 1 1";
+         seqNum = "19";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+   };
+   new StaticShape() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13296";
+         Path = "BoatPath";
+         offset = "0";
+         particles = "13297";
+   };
+   new StaticShape() {
+      position = "0 0 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13299";
+         Path = "BoatPath";
+         offset = "2500";
+         particles = "13300";
+   };
+   new StaticShape() {
+      position = "0 0 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13302";
+         Path = "BoatPath";
+         offset = "5000";
+         particles = "13303";
+   };
+   new StaticShape() {
+      position = "0 0 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13305";
+         Path = "BoatPath";
+         offset = "7500";
+         particles = "13306";
+   };
+   new StaticShape() {
+      position = "0 0 4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13308";
+         Path = "BoatPath";
+         offset = "10000";
+         particles = "13309";
+   };
+   new StaticShape() {
+      position = "0 0 5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13311";
+         Path = "BoatPath";
+         offset = "12500";
+         particles = "13312";
+   };
+   new StaticShape() {
+      position = "0 0 6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13314";
+         Path = "BoatPath";
+         offset = "15000";
+         particles = "13315";
+   };
+   new StaticShape() {
+      position = "0 0 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BoatSpawner";
+         boomed = "0";
+         b = "13317";
+         Path = "BoatPath";
+         offset = "17500";
+         particles = "13318";
+   };
+   new Path(PlanePath) {
+
+      new Marker(planes) {
+         position = "48.75 -159.75 8.75";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         seqNum = "0";
+         msToNext = "3000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "48.75 -123 9.25";
+         rotation = "1 0 0 15";
+         scale = "1 1 1";
+         seqNum = "1";
+         msToNext = "3000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "48.75 -74.9452 -3.62625";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         seqNum = "2";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "48.75 -53.1952 1.37375";
+         rotation = "0 0 -1 30.0001";
+         scale = "1 1 1";
+         seqNum = "3";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "39.875 -37.8233 10.1237";
+         rotation = "-0.409065 -0.236174 -0.881412 66.4522";
+         scale = "1 1 1";
+         seqNum = "4";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "30.875 -32.6272 16.1237";
+         rotation = "-0.725578 -0.418914 -0.545937 93.2036";
+         scale = "1 1 1";
+         seqNum = "5";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "29.25 -31.689 23.1267";
+         rotation = "0.00633474 0.742067 0.670296 200.364";
+         scale = "1 1 1";
+         seqNum = "6";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "27.625 -30.7508 30.1297";
+         rotation = "-0.677276 0.617744 0.399611 114.069";
+         scale = "1 1 1";
+         seqNum = "7";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "25.7197 -29.6509 38.3401";
+         rotation = "-0.967958 -0.0276941 -0.249581 82.6033";
+         scale = "1 1 1";
+         seqNum = "8";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "24.4308 -28.9068 43.8942";
+         rotation = "-0.392034 -0.636262 -0.66444 117.566";
+         scale = "1 1 1";
+         seqNum = "9";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "18.3881 -28.7379 52.6315";
+         rotation = "-0.140211 -0.359 -0.922746 105.235";
+         scale = "1 1 1";
+         seqNum = "10";
+         msToNext = "500";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "10.9473 -29.6382 57.6139";
+         rotation = "0.0628213 -0.108804 -0.992076 104.055";
+         scale = "1 1 1";
+         seqNum = "11";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-13.8911 -34.391 65.1364";
+         rotation = "-2.13685e-006 0.100052 0.994982 196.306";
+         scale = "1 1 1";
+         seqNum = "12";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-23.2149 -65.8951 70.3978";
+         rotation = "-0.0278647 0.103983 0.994189 226.146";
+         scale = "1 1 1";
+         seqNum = "13";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-31.5861 -74.1398 69.7283";
+         rotation = "0.0258116 0.0963384 0.995014 166.454";
+         scale = "1 1 1";
+         seqNum = "14";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-31.5582 -82.3809 68.9211";
+         rotation = "0 0 1 195";
+         scale = "1 1 1";
+         seqNum = "15";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-35.3758 -96.6283 63.4211";
+         rotation = "-0.079889 -0.606817 0.790817 191.888";
+         scale = "1 1 1";
+         seqNum = "16";
+         msToNext = "3000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-36.9668 -102.566 40.4803";
+         rotation = "0.467853 -0.261079 0.844364 105.624";
+         scale = "1 1 1";
+         seqNum = "17";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-25.5266 -107.627 20.4902";
+         rotation = "0.381553 -0.155452 0.911182 99.2318";
+         scale = "1 1 1";
+         seqNum = "18";
+         msToNext = "1000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "-9.85371 -115.147 19.0527";
+         rotation = "0 0 1 120";
+         scale = "1 1 1";
+         seqNum = "19";
+         msToNext = "2000";
+         smoothingType = "Spline";
+      };
+      new Marker(planes) {
+         position = "18.8169 -138.028 11.5527";
+         rotation = "0 0 1 165";
+         scale = "1 1 1";
+         seqNum = "20";
+         msToNext = "4000";
+         smoothingType = "Spline";
+      };
+   };
+   new StaticShape() {
+      position = "9 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13342";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "0";
+         particles = "13343";
+   };
+   new StaticShape() {
+      position = "9 0 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13345";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "4000";
+         particles = "13346";
+   };
+   new StaticShape() {
+      position = "9 0 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13348";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "8000";
+         particles = "13349";
+   };
+   new StaticShape() {
+      position = "9 0 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13351";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "12000";
+         particles = "13352";
+   };
+   new StaticShape() {
+      position = "9 0 4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13354";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "16000";
+         particles = "13355";
+   };
+   new StaticShape() {
+      position = "9 0 5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13357";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "20000";
+         particles = "13358";
+   };
+   new StaticShape() {
+      position = "9 0 6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13360";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "24000";
+         particles = "13361";
+   };
+   new StaticShape() {
+      position = "9 0 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PlaneSpawner";
+         p = "13363";
+         boomed = "0";
+         Path = "PlanePath";
+         offset = "28000";
+         particles = "13364";
+   };
+   new Trigger(Bounds) {
+      position = "-171.75 88.5 -27.75";
+      rotation = "1 0 0 0";
+      scale = "364.288 278.079 293.288";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/!ShelI.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Trigger(oob) {
+      position = "-70.5437 11.2825 -24.9945";
+      rotation = "1 0 0 0";
+      scale = "19.7955 1 7.70669";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---

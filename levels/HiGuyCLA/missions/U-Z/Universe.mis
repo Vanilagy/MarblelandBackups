@@ -1,0 +1,522 @@
+function setMarbleAttributes(%attribute, %value)
+{
+eval("MarbleOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEleven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwelve." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFourteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleFifteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSixteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleSeventeen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleEighteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleNineteen." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwenty." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentySix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentySeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleTwentyNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirty." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyOne." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyTwo." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyThree." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyFour." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyFive." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtySix." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtySeven." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyEight." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleThirtyNine." @ %attribute @ "=" @ %value @ ";");
+eval("MarbleForty." @ %attribute @ "=" @ %value @ ";");
+eval("defaultMarble." @ %attribute @ "=" @ %value @ ";");
+eval("ThreeDMarble." @ %attribute @ "=" @ %value @ ";");
+eval("MidPMarble." @ %attribute @ "=" @ %value @ ";");
+eval("ggMarble." @ %attribute @ "=" @ %value @ ";");
+eval("sm1Marble." @ %attribute @ "=" @ %value @ ";");
+eval("sm2Marble." @ %attribute @ "=" @ %value @ ";");
+eval("sm3Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm1Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm2Marble." @ %attribute @ "=" @ %value @ ";");
+eval("bm3Marble." @ %attribute @ "=" @ %value @ ";");
+eval("CustomMarble." @ %attribute @ "=" @ %value @ ";");
+}
+
+datablock StaticShapeData(Blackhole)
+{
+   category = "Hazards";
+   shapeFile = "~/data/shapes/hazards/Blackhole.dts";
+   scopeAlways = true;
+
+   // Pull the marble in
+   forceType[0] = Spherical;  // Force type {Spherical, Field, Cone}
+   forceStrength[0] = -120;     // Force to apply
+   forceRadius[0] = 12;       // Max radius
+};
+
+function Blackhole::onAdd(%this,%obj)
+{
+   %obj.playThread(0,"ambient");
+   %obj.setPoweredState(true);
+}
+
+function panUp( %val )
+{
+setMarbleAttributes("gravity", -2);
+}
+function panDown( %val )
+{
+setMarbleAttributes("gravity", 5);
+}
+function State::start()
+{
+setMarbleAttributes("gravity", 20);
+$Pref::Server::TimeLimit = 20;
+PlayGui.resetTimer();
+PlayGui.setMessage("");
+PlayGui.setGemCount(0);
+PlayGui.setMaxGems($Game::GemCount);
+$Game::StateSchedule = schedule( 500, 0, "setGameState", "Ready");
+if(MissionInfo.startHelpText !$= "")
+{
+addHelpLine(MissionInfo.startHelpText, true);
+}
+}
+function State::go()
+{
+$Pref::Server::TimeLimit = 21;
+serverPlay2d(GetRollingVoiceSfx);
+PlayGui.setMessage("go");
+PlayGui.startTimer();
+$Game::StateSchedule = schedule( 2000, 0, "setGameState", "Play");
+
+// Target the players to the end pad and let them lose
+for( %index = 0; %index < ClientGroup.getCount(); %index++ ) {
+%player = ClientGroup.getObject(%index).player;
+%player.setPad($Game::EndPad);
+%player.setMode(Normal);
+}
+}
+function GameConnection::onClientLeaveGame(%this)
+{
+if (isObject(%this.camera))
+%this.camera.delete();
+if (isObject(%this.player))
+%this.player.delete();
+exec("~/server/scripts/game.cs");
+exec("~/client/scripts/default.bind.cs");
+}
+
+$skyPath = "~/data/skies/SpaceStation/SpaceStationSky.dml";
+if (!isFile($skyPath))
+	$skyPath = "~/data/skies/Bonus/Bonus_Sky.dml";
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Dave";
+         type = "Custom";
+         goldTime = "100000";
+         name = "Space Exploration";
+         gravity = "3";
+         time = "120000";
+         UltimateTime = "90000";
+         desc = "Explore the length of the Asteroid Belt and land on the tiny planets! Alternate Controls: Press Camera Up to decrease gravity, press Camera Down to increase it. The only catch: YOU HAVE TO USE THE DEFAULT-SIZED MARBLE!";
+         startHelpText = "When you land on a planet,  make sure you\'re in neutral gravity.";
+         level = "46";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = $skyPath;
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new Trigger(Bounds) {
+      position = "-219.9 210.517 -187.634";
+      rotation = "1 0 0 0";
+      scale = "300 300 300";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 -0.0834051";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "3.88132 -4.04108 -4.07537";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors_mbp/mbp_rock.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-11.921 25.5788 -0.282057";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.9134 26.275 0.118845";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Meteorhole.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-33.1649 7.16197 8.81473";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbp/mbp_rock.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-79.3019 38.904 -64.9263";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Blackhole";
+   };
+   new InteriorInstance() {
+      position = "-39.223 37.1896 -56.4979";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbp/mmg_1flag.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37.35 -2.51318 8.6118";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Asteroids.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "66.0755 57.8705 7.66287";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Asteroids.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "14.9825 60.8284 -2.06718";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance(planet) {
+      position = "-71.1696 30.941 -72.1134";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/Sphere.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "-32.7945 7.41066 -1.13841";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "73.6767 0.246973 -1.2181";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "8.72008 6.98442 12.6225";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-37.3861 -9.5126 8.45412";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance(planet) {
+      position = "-31.0424 126.578 -62.9049";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/Sphere.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-39.1747 134.541 -55.7178";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Blackhole";
+   };
+   new Trigger(gravity) {
+      position = "-46.3865 142.316 -64.5422";
+      rotation = "1 0 0 0";
+      scale = "17 17 20";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "To escape this planet\'s gravitational pull, get some speed and jump!";
+   };
+   new Item() {
+      position = "-39.1056 134.675 -62.9414";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-38.8879 134.596 -46.7422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance() {
+      position = "-76.0819 38.4523 -56.7689";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbp/mmg_2flag.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-82.7152 87.6498 -62.8122";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new Item() {
+      position = "-120.155 75.6315 -27.0992";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EasterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(time) {
+      position = "-118 73.9781 -25.5096";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "space";
+         delay = "-1";
+   };
+   new Trigger(wow) {
+      position = "-122.502 96.8781 -28.5018";
+      rotation = "1 0 0 0";
+      scale = "5 1 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "wowdest";
+         delay = "-1";
+   };
+   new InteriorInstance() {
+      position = "-120 59 -26";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Whoa.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-120 79 -26";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Whoa.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(Whoa) {
+      position = "-122.589 58.2994 -28.4219";
+      rotation = "1 0 0 0";
+      scale = "5 1 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "whoadest";
+         delay = "-1";
+   };
+   new Trigger(whoadest) {
+      position = "-120.15 98.1099 -28.4622";
+      rotation = "1 0 0 0";
+      scale = "5 1 5";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(wowdest) {
+      position = "-120.081 56.5335 -28.62";
+      rotation = "1 0 0 0";
+      scale = "0 0 0";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-49.7215 67.394 11.6584";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance(planet) {
+      position = "-75.3055 80.0115 -78.8813";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/Sphere.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-79.7656 87.8128 -62.9276";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbp/mmg_3flag.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-83.4378 87.9743 -71.6942";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Blackhole";
+   };
+   new Trigger(space) {
+      position = "-120.588 77.5 -25.9939";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-79.0411 38.3348 -56.0962";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance() {
+      position = "30.1484 33.2732 -71.6359";
+      rotation = "1 0 0 0";
+      scale = "3 3 1";
+      interiorFile = "~/data/interiors/Sphere.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "23.8943 39.385 -67.7743";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "-42.8977 38.0944 -65.0728";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Blackhole";
+   };
+   new InteriorInstance(planet) {
+      position = "-34.7654 30.1315 -72.2599";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/Sphere.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-50.1525 36.1893 -63.6557";
+      rotation = "-0.128423 0.982299 -0.136369 87.5842";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new Item() {
+      position = "-42.1751 37.9698 -56.1908";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
