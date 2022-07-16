@@ -1,0 +1,527 @@
+ 
+//--- Particle ---
+datablock ParticleData(TeleportParticle) {
+   dragCoefficient = "4.90196";
+   windCoefficient = "0.686275";
+   gravityCoefficient = "-0.0196078";
+   inheritedVelFactor = "0.588235";
+   constantAcceleration = "-0.588235";
+   lifetimeMS = "716";
+   lifetimeVarianceMS = "39";
+   spinSpeed = "5.88235";
+   spinRandomMin = "-56.8627";
+   spinRandomMax = "274.51";
+   useInvAlpha = "0";
+   animateTexture = "0";
+   framesPerSec = "1";
+   textureName = "platinum/data/particles/twirl";
+   animTexName[0] = "platinum/data/particles/twirl";
+   colors[0] = "0.000000 0.000000 1.000000 1.000000";
+   colors[1] = "1.000000 0.000000 0.000000 1.000000";
+   colors[2] = "0.000000 1.000000 0.000000 1.000000";
+   colors[3] = "1.000000 1.000000 1.000000 0.000000";
+   sizes[0] = "1.23";
+   sizes[1] = "0.24";
+   sizes[2] = "0.64";
+   sizes[3] = "1";
+   times[0] = "0";
+   times[1] = "0.25";
+   times[2] = "0.75";
+   times[3] = "1.5";
+      dragCoeffiecient = "1";
+};
+ 
+//--- Emitter ---
+datablock ParticleEmitterData(TeleportParticleEmitter) {
+   className = "ParticleEmitterData";
+   ejectionPeriodMS = "50";
+   periodVarianceMS = "0";
+   ejectionVelocity = "7.35294";
+   velocityVariance = "0.882353";
+   ejectionOffset = "1.76471";
+   thetaMin = "26.4706";
+   thetaMax = "93.5294";
+   phiReferenceVel = "-843.137";
+   phiVariance = "236.471";
+   overrideAdvance = "0";
+   orientParticles = "0";
+   orientOnVelocity = "1";
+   particles = "TeleportParticle\tTrailParticle";
+   lifetimeMS = "0";
+   lifetimeVarianceMS = "0";
+   useEmitterSizes = "0";
+   useEmitterColors = "0";
+      newVarianceMS = "2";
+      noHide = "0";
+      oldVarianceMS = "2";
+};
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         GracePeriod = "3000";
+         MinimumSpeed = "10";
+         PenaltyDelay = "2000";
+         artist = "RandomityGuy";
+         awesomeHint = "Don\'t hit the barrier, try some shortcuts using the building. Try to teleport as such that you smoothly hit the curve wall.";
+         awesomeTime = "45000";
+         blast = "0";
+         customRadarRule = "0";
+         desc = "Are you able to do 3 laps around this incomplete building?";
+         eggHint = "The rooftops! But keep your speed.";
+         forceRadar = "0";
+         game = "PlatinumQuest";
+         gameMode = "laps consistency";
+         generalHint = "Parkour your way!";
+         hideRadar = "0";
+         lapsNumber = "3";
+         level = "1000";
+         mega = "0";
+         music = "Racing Forever.ogg";
+         name = "Building Rounds";
+         noAntiCheckpoint = "0";
+         noBlast = "0";
+         noLapsCheckpoint = "0";
+         persistStartHelpTextTime = "0";
+         platinumTime = "75000";
+         radar = "0";
+         startHelpText = "Don\'t be too fast, don\'t be too slow either";
+         time = "0";
+         type = "Custom";
+         ultimateHint = "Do a clean(and fast!) run! Skip some parts tho.";
+         ultimateTime = "50000";
+         useUltraMarble = "0";
+   };
+   new SimGroup(MissionData) {
+
+      new MissionArea(MissionArea) {
+         area = "-360 -648 720 1296";
+         flightCeiling = "300";
+         flightCeilingRange = "20";
+            locked = "true";
+      };
+      new Sky(Sky) {
+         position = "336 136 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         cloudHeightPer[0] = "0";
+         cloudHeightPer[1] = "0";
+         cloudHeightPer[2] = "0";
+         cloudSpeed1 = "0.0001";
+         cloudSpeed2 = "0.0002";
+         cloudSpeed3 = "0.0003";
+         visibleDistance = "500";
+         useSkyTextures = "1";
+         renderBottomTexture = "1";
+         SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+         fogDistance = "300";
+         fogColor = "0.600000 0.600000 0.600000 1.000000";
+         fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+         fogVolume2 = "-1 1.07208e-014 8.756e-014";
+         fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+         materialList = "~/data/skies_pq/Blender3/blender3.dml";
+         windVelocity = "1 0 0";
+         windEffectPrecipitation = "0";
+         noRenderBans = "1";
+         fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+         fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+         fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+      };
+   };
+   new SimGroup(SceneryGroup) {
+   };
+   new SimGroup(HelpBubbleGroup) {
+
+      new StaticShape() {
+         position = "31 12.75 99";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Don\'t stop, jump over the start pad and land on the next ramp";
+            triggerRadius = "3";
+      };
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "14.201 28.6906 109.424";
+         rotation = "-0.0318322 -0.167706 0.985323 201.187";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            delay = "0";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "1";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath2) {
+         position = "16.9012 -11.7839 107.554";
+         rotation = "0.360673 0.149882 -0.920571 48.5906";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath3) {
+         position = "-38.0537 -17.0761 108.895";
+         rotation = "0.693898 -0.175864 0.698267 39.8977";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            delay = "0";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "10";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath4) {
+         position = "-40.0362 11.7777 99.7897";
+         rotation = "0.0453602 -0.047003 0.997864 92.1602";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath5) {
+         position = "-20.7308 11.4635 98.9763";
+         rotation = "0.0522302 -0.0543977 0.997152 92.4925";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            delay = "0";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "1";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath6) {
+         position = "49.961 25.0981 106.449";
+         rotation = "-0.117547 -0.261921 0.957904 226.525";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath7";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath7) {
+         position = "20.1536 21.7808 104.527";
+         rotation = "-0.0554057 -0.173476 0.983278 214.869";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath8";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath8) {
+         position = "0.599406 15.9549 103.859";
+         rotation = "0.570475 -0.136606 0.809875 32.9434";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath9";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath9) {
+         position = "-2.55302 14.1786 106.299";
+         rotation = "0.0817741 -0.153697 0.984729 124.698";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            delay = "0";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "1";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new Trigger(DT1) {
+      position = "49.0631 13.1004 97.167";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "9.11481 12.8392 101.417";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad_PQ_Construction";
+   };
+   new Trigger(Bounds) {
+      position = "-66.9523 -54.3397 81.667";
+      rotation = "1 0 0 0";
+      scale = "133.961 94.363 85.125";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-17.9313 11.1668 98.1733";
+      rotation = "0 0 1 90.0002";
+      scale = "1.6 1 1";
+      dataBlock = "Spectrum4";
+   };
+   new Trigger(tp1) {
+      position = "-18.3096 12.7571 96.667";
+      rotation = "1 0 0 0";
+      scale = "0.196706 2.7795 3.05475";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "-90";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "dt1";
+         inverseVelocity = "1";
+         keepAngular = "1";
+         keepCamera = "0";
+         keepVelocity = "1";
+         silent = "0";
+   };
+   new Trigger(tp2) {
+      position = "-17.7151 12.7508 96.7225";
+      rotation = "1 0 0 0";
+      scale = "0.283854 2.87763 2.93423";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "90";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "dt2";
+         inverseVelocity = "1";
+         keepAngular = "1";
+         keepCamera = "0";
+         keepVelocity = "1";
+         silent = "0";
+   };
+   new Trigger(dt2) {
+      position = "1.9532 23.7827 101.445";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new SimGroup(LapsGroup) {
+
+      new Trigger() {
+         position = "6.98194 6.79751 101.417";
+         rotation = "1 0 0 0";
+         scale = "4.40222 1 4.22375";
+         dataBlock = "LapsCounterTrigger";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+      new Trigger() {
+         position = "4.39316 -1.4755 101.417";
+         rotation = "1 0 0 0";
+         scale = "1 5.26826 3.61835";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            checkpointNumber = "1";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+      new Trigger() {
+         position = "-24.1984 -0.578365 103.063";
+         rotation = "1 0 0 0";
+         scale = "1 7.65742 7.03938";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            checkpointNumber = "2";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+      new Trigger() {
+         position = "-30.757 14.3414 96.792";
+         rotation = "1 0 0 0";
+         scale = "1 7.36408 6.10334";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            checkpointNumber = "3";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+      new Trigger() {
+         position = "39.2226 15.5919 96.577";
+         rotation = "1 0 0 0";
+         scale = "1 5.82973 6.60647";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            checkpointNumber = "4";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+      new Trigger() {
+         position = "-10.775 14.1071 96.349";
+         rotation = "1 0 0 0";
+         scale = "1 5.52614 4.46162";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+            checkpointNumber = "5";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+      };
+   };
+   new StaticShape() {
+      position = "-45.6268 10.437 98.7913";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DetourRoadsignYellow";
+         skin = "Right";
+   };
+   new Item() {
+      position = "-33.1294 3.83431 107.078";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "NestEgg_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         skin = "base";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-8.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-0.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-4.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-5.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-7.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.5346 11.2678 100.792";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/constructiontroubles-6.dif";
+      showTerrainInside = "0";
+   };
+   new ParticleEmitterNode() {
+      position = "-17.8195 11.5164 97.7382";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "FireWorkNode";
+      emitter = "TeleportParticleEmitter";
+      velocity = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Electroforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

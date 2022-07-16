@@ -1,0 +1,885 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "CylinderKnot";
+         customRadarRule = "5";
+         desc = "What is familiar to you is distorted slightly. Arguably, that is worse than unfamiliar things.";
+         game = "Custom";
+         gameMode = "null";
+         generalHint = "Excluding the first part, each MBG level has been redone to require a different way of reaching the end. Gravity Helix requires fast movement. Moebius Strip requires a loop exit.";
+         level = "1000";
+         name = "A Slight Distortion";
+         platinumTime = "120000";
+         radar = "1";
+         startHelpText = "Press W to roll the marble forward!";
+         trivia = "Marble Playground got axed. You wouldn\'t have enjoyed trying to beat it entirely in normal gravity.";
+         type = "Custom";
+         ultimateHint = "If you have more than 40 seconds at the end of Skee Ball Bonus, you will fail.. Routing should be quick and easy.";
+         ultimateTime = "45000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies_pq/Blender3/blender3.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "64.75 1.5 127.656";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_PQ";
+   };
+   new StaticShape(EndPoint) {
+      position = "78.25 11.25 1327";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "EndPad_PQ";
+   };
+   new Trigger(Bounds) {
+      position = "-71.75 157.25 99.75";
+      rotation = "1 0 0 0";
+      scale = "300 300 1300";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "79.5877 -28.8833 410.96";
+         rotation = "0.887845 -0.0201347 0.459703 5.64849";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "76.75 5.5 126.5";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/beginner/training1.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "88.75 -6.5 127.656";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/endpad.dts";
+   };
+   new StaticShape() {
+      position = "64.75 21.75 128.928";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "93 17.5 128.928";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new InteriorInstance() {
+      position = "79.0001 -1.68755 412.5";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/beginner/training_gravity.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(LTR_end) {
+      position = "86.75 -4.5 127.656";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "GH_start";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(GH_start) {
+      position = "78.5 -64.25 411.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "79 -64.75 409.469";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/startpad.dts";
+   };
+   new TSStatic() {
+      position = "79 81.25 409.469";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/endpad.dts";
+   };
+   new Item() {
+      position = "80 -25.75 409.862";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "78 14.5 415.076";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(GH_checkpoint) {
+      position = "77 -62.75 409.469";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         gravity = "0";
+         respawnPoint = "GH_checkpointstart";
+   };
+   new Trigger(GH_checkpointstart) {
+      position = "79 -64.75 410";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DefaultTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "76.8887 -5.5 413.5";
+      rotation = "0 1 0 90.0002";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "81.4239 42.25 411.5";
+      rotation = "0 -1 0 90.0002";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(GH_end) {
+      position = "77 83.25 409.469";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "MF_start";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new InteriorInstance() {
+      position = "78.25 7.25 709";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/beginner/training_mines.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "90.25 19.25 708.969";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/startpad.dts";
+   };
+   new TSStatic() {
+      position = "66.25 11.25 710.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/endpad.dts";
+   };
+   new Trigger(MF_checkpoint) {
+      position = "88.25 21.25 708.969";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         gravity = "0";
+         respawnPoint = "MF_checkpointstart";
+   };
+   new Trigger(MF_start) {
+      position = "89.75 19.75 710.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(MF_checkpointstart) {
+      position = "90.25 19.25 709.469";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DefaultTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "83.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "83.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "83.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "83.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "81.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "81.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "81.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "81.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "77.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "77.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "77.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "77.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "79.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "79.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "79.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "79.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "73.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "73.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "73.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "73.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "75.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "75.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "75.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "75.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new Trigger(LTR_help_1) {
+      position = "59.75 8 127.656";
+      rotation = "1 0 0 0";
+      scale = "10 1 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Press A to roll the marble to the left!";
+   };
+   new Trigger(LTR_help_2) {
+      position = "60.75 14 127.656";
+      rotation = "1 0 0 0";
+      scale = "10 1 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Press D to roll the marble to the right!";
+   };
+   new Trigger(LTR_help_3) {
+      position = "78.25 22.5 127.656";
+      rotation = "1 0 0 0";
+      scale = "1 10 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Press S to roll the marble backward!";
+   };
+   new Trigger(GH_help_1) {
+      position = "76 -61.75 409.469";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Pick up two Gravity Modifiers to fly to the finish!";
+   };
+   new StaticShape() {
+      position = "76 -23.75 410.725";
+      rotation = "0 0 -1 22.5";
+      scale = "1 1 1";
+      dataBlock = "SignCautionCaution";
+   };
+   new Trigger(MF_help_1) {
+      position = "87.25 22.25 708.969";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Blast to the finish!";
+   };
+   new StaticShape() {
+      position = "86.75 1.25 710.225";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignCautionDanger";
+   };
+   new Trigger(MF_help_2) {
+      position = "86.75 0.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 10 3";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Beware of walls!";
+   };
+   new StaticShape() {
+      position = "71.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "71.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "71.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "71.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "85.25 -1.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "85.25 -3.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "85.25 -5.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "85.25 -7.75 708.969";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new InteriorInstance() {
+      position = "80.4998 48 1016.25";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/intermediate/intskeeball.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(MF_end) {
+      position = "64.25 13.25 711";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "SBB_start";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(MF_OOB_1) {
+      position = "70.25 -8.5 703.75";
+      rotation = "1 0 0 0";
+      scale = "16 1 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(MF_OOB_2) {
+      position = "72.5 0 703.75";
+      rotation = "1 0 0 0";
+      scale = "11.5 1 10";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "80.5 50 1028.25";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/startpad.dts";
+   };
+   new Trigger(SBB_checkpoint) {
+      position = "78.5 52 1028.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         gravity = "0";
+         respawnPoint = "SBB_checkpointstart";
+   };
+   new Trigger(SBB_start) {
+      position = "80 50.5 1030.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SBB_checkpointstart) {
+      position = "80.5 50 1028.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DefaultTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "80.5 -16.5 1022.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "80.5 -15.25 1020";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "80.5 -10.75 1012.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "80.75 25.75 1016.29";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         timeBonus = "2000";
+   };
+   new Item() {
+      position = "80.5 -12.25 1015";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         timeBonus = "4000";
+   };
+   new Item() {
+      position = "80.5 -13.75 1017.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         timeBonus = "6000";
+   };
+   new Item() {
+      position = "68.25 -27.75 1008.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         timeBonus = "8000";
+   };
+   new Item() {
+      position = "68.25 -34.75 1008.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         timeBonus = "10000";
+   };
+   new Item() {
+      position = "91.25 -37.75 1009.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new TSStatic() {
+      position = "65.75 -38.5 1010.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/endpad.dts";
+   };
+   new Trigger(SBB_help) {
+      position = "77.5 53 1028.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Go for the second from the top hole!";
+   };
+   new InteriorInstance() {
+      position = "78.25 39.25 1326";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/intermediate/moebius.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "78.25 3.25 1327";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pq/Gameplay/pads/startpad.dts";
+   };
+   new Trigger(MS_checkpointstart) {
+      position = "78.25 3.25 1327.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DefaultTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SBB_end) {
+      position = "63.75 -36.5 1010.75";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         GemsToActivate = "3";
+         centerDestPoint = "1";
+         delay = "1";
+         destination = "MS_start";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(MS_checkpoint) {
+      position = "76.25 5.25 1327";
+      rotation = "1 0 0 0";
+      scale = "4 4 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         gravity = "0";
+         respawnPoint = "MS_checkpointstart";
+   };
+   new Trigger(MS_start) {
+      position = "77.75 3.75 1329";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(MS_help) {
+      position = "75.25 6.25 1327";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Last section - no gravity on the outside! You\'re finishing in normal gravity, too.";
+   };
+   new Item() {
+      position = "78.25 7.25 1325.95";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "78.25 35.75 1303.75";
+      rotation = "1 0 0 90.0002";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "78.25 50.25 1314.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "78.25 -35.75 1314.75";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "78.25 -20.5 1325.5";
+      rotation = "-1 0 0 90.0002";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(oob1) {
+      position = "-173.817 235.833 350.399";
+      rotation = "1 0 0 0";
+      scale = "500 500 25";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oob2) {
+      position = "-157.091 255.885 666.413";
+      rotation = "1 0 0 0";
+      scale = "500 500 25";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oob3) {
+      position = "-173.832 206.8 909.42";
+      rotation = "1 0 0 0";
+      scale = "500 500 25";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(oob4) {
+      position = "-112.117 276.342 1222.33";
+      rotation = "1 0 0 0";
+      scale = "500 500 25";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---

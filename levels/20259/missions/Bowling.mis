@@ -1,0 +1,686 @@
+//-----------------------------------------------------------------------------
+// Bowling.mis
+// Copyright (c) 2014 HiGuy
+//
+// Put about 4 hours of work into this; props to Whirligig231 for the math
+//  functions which I'd never figure out on my own.
+//
+// Comments written at 12:30AM; I make no guarantee of comprehensibility or
+//  looking like I know what I'm doing. Just pretend it works.
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// Settings section
+//-----------------------------------------------------------------------------
+
+$RED_LINE = 14.5;
+$OOB_BOTTOM = -5;
+$RESPAWN_POS = "0 0 3 1 0 0 0";
+$MARBLE_COUNT = 40;
+$TICK_TIME = 30;
+$FUDGE_FACTOR = 1.1;
+$NORMAL_JUMP_IMPULSE = 7.5;
+$REBOUND_CONSTANT = 1;
+$BOWL_MARBLE_MASS = 0.9;
+$PLAYER_MARBLE_MASS = 3;
+$FRICTION_COEFFICIENT = 0;
+
+//-----------------------------------------------------------------------------
+
+//MBG Marble
+//$BOWL_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/ball-superball.dts";
+//MBU Marble
+$BOWL_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/UltraMarble.dts";
+//Mega Marble (hilarious to watch)
+//$BOWL_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/MegaMarble.dts";
+
+//MBG Marble
+//$PLAYER_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/ball-superball.dts";
+//MBU Marble
+//$PLAYER_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/UltraMarble.dts";
+//Mega Marble (hilarious to watch)
+$PLAYER_MARBLE_SHAPE = $usermods @ "/data/shapes/balls/MegaMarble.dts";
+
+//-----------------------------------------------------------------------------
+// Datablock Party
+//-----------------------------------------------------------------------------
+
+datablock MarbleData(BowlingMarble : DefaultMarble) {
+	shapeFile = $BOWL_MARBLE_SHAPE;
+
+	mass = $BOWL_MARBLE_MASS;
+};
+
+MaterialGroup.add(new MaterialProperty(FrictionlessMaterial) {
+	friction = $FRICTION_COEFFICIENT;
+	restitution = 0;
+});
+
+addMaterialMapping("custom_woodblockside_nofric", FrictionlessMaterial);
+addMaterialMapping("mbu_edge_white2_nofric", FrictionlessMaterial);
+
+DefaultMarble.shapeFile = $PLAYER_MARBLE_SHAPE;
+CustomMarble.shapeFile = $PLAYER_MARBLE_SHAPE;
+DefaultMarble.mass = $PLAYER_MARBLE_MASS;
+CustomMarble.mass = $PLAYER_MARBLE_MASS;
+
+//-----------------------------------------------------------------------------
+// Actual logic
+//-----------------------------------------------------------------------------
+
+function bowlUpdate() {
+	//Annihilate the errors
+	MPGetMyMarble();
+	cancel($bowlSchedule);
+
+	if (!isObject(ServerConnection))
+		return;
+
+	//Disable jump past the red line
+	if (mAbs(getWord($MP::MyMarble.getPosition(), 1)) > $RED_LINE) {
+		$MP::MyMarble.getDatablock().jumpImpulse = 0;
+
+		//Push our marble outwards if we've slowed down, to keep the game running (magic number warning)
+		if ($MP::MyMarble.speed < 1)
+			$MP::MyMarble.applyImpulse("0 0 0", VectorScale(VectorNormalize($MP::MyMarble.getPosition()), 0.1 / ($MP::MyMarble.speed + 1)));
+	} else {
+		//Enable jump
+		$MP::MyMarble.getDatablock().jumpImpulse = $NORMAL_JUMP_IMPULSE;
+	}
+
+	//Update velocities first
+	%count = ServerConnection.getCount();
+	for (%i = 0; %i < %count; %i ++) {
+		%obj = ServerConnection.getObject(%i);
+		if (%obj.getClassName() $= "Marble") {
+			%obj.updateVelocity($TICK_TIME);
+		}
+	}
+
+	//Then test for collisions and respond, if necessary
+	for (%i = 0; %i < %count; %i ++) {
+		%obj = ServerConnection.getObject(%i);
+		if (%obj.getClassName() $= "Marble" && %obj.speed > 0) {
+			%obj.checkCollision();
+		}
+	}
+
+	//Reschedule
+	$bowlSchedule = schedule($TICK_TIME, 0, "bowlUpdate");
+}
+
+//-----------------------------------------------------------------------------
+
+function Marble::checkCollision(%this) {
+	//No inf-recursion
+	if (%this.checkingCollision)
+		return;
+
+	//We went OOB, stop us before we hit the trigger
+	if (%this.getID() == $MP::MyMarble.getID() && getWord(%this.getPosition(), 2) < $OOB_BOTTOM) {
+		ClientGroup.getObject(0).player.setTransform($RESPAWN_POS);
+	}
+
+	//If a marble goes OOB, give us points
+	if (%this.getID() != $MP::MyMarble.getID() && !boxInterceptsBox(%this.getWorldBox(), Bounds.getWorldBox())) {
+		if (!%this.oob)
+			ClientGroup.getObject(0).onFoundGem(1);
+		//And take it out of the collision check list
+		%this.oob = true;
+		return;
+	} else {
+		//No longer OOB (restarted)
+		%this.oob = false;
+	}
+
+	//Optimize (slightly)
+	if (%this.oob)
+		return;
+
+	%this.checkingCollision = true;
+
+	%pos = %this.getPosition();
+	%count = ServerConnection.getCount();
+
+	//Check collision with all marbles
+	for (%i = 0; %i < %count; %i ++) {
+		%obj = ServerConnection.getObject(%i);
+
+		//Non-player marbles are >= 1 unit
+		if (%obj.getClassName() $= "Marble" && getWord(%obj.getScale(), 0) >= 1) {
+
+			//Crashes if you collide with yourself
+			if (%obj.getID() == %this.getID())
+				continue;
+
+			//Marble, check collision
+			%mpos = %obj.getPosition();
+
+			//Check distance
+			%offset = VectorSub(%pos, %mpos);
+			if (VectorLen(%offset) < $FUDGE_FACTOR * (%this.radius + %obj.radius) / 2) {
+				//Collision
+				%this.collideWith(%obj);
+			}
+
+			//Store for the pseudo-CCD
+			%this.lastRelation[%obj] = %offset;
+			%obj.lastRelation[%this] = VectorScale(%offset, -1);
+		}
+	}
+	%this.checkingCollision = false;
+}
+
+//Super lazy velocity function, just simple checking
+function Marble::updateVelocity(%this, %delta) {
+	%last = %this.lastPosition;
+	%this.lastPosition = getWords(%this.getTransform(), 0, 2);
+	%diff = VectorSub(%this.lastPosition, %last);
+
+	//Actual vars
+	%this.speedRaw = VectorLen(%diff) / (%delta * 0.001);
+	%this.speed = (%this.speed + %this.speedRaw) / 2;
+	%this.heading = VectorNormalize(%diff);
+
+	if (%this.radius $= "") {
+		if (%this.getID() == $MP::MyMarble.getID())
+			%this.radius = VectorLen(VectorSub(getWords(ClientGroup.getObject(0).player.getWorldBox(), 3, 5), getWords(ClientGroup.getObject(0).player.getWorldBox(), 0, 2))) / 2;
+		else
+			%this.radius = VectorLen(VectorSub(getWords(%this.getWorldBox(), 3, 5), getWords(%this.getWorldBox(), 0, 2))) / 2;
+	}
+
+
+	//Crashes if heading is non-unit (0 0 0)
+	if (%this.heading $= "0 0 0") {
+		%this.heading = "0 0 1";
+		%this.speed = 0;
+	}
+}
+
+function Marble::collideWith(%this, %obj) {
+	//Disable double-collisions
+	if (%this.speed < %obj.speed)
+		return;
+
+	//Find the normal of collision
+	%diff = VectorNormalize(%this.lastRelation[%obj]);
+	%head = %this.heading;
+
+	//Angle of collision
+	%angle = VectorAngle(%head, %diff);
+	//Axis of normal
+	%axis  = VectorCrossSpecial(%head, %diff);
+
+	//Rotate heading by axis
+	%newHeading = VectorRotate(%head, %axis, %angle);
+
+	//Optimize
+	if (%head $= %newHeading)
+		return;
+
+	%thisMass = %this.getDataBlock().mass;
+	%objMass  =  %obj.getDataBlock().mass;
+
+	%thisQuot = (%objMass / %thisMass);
+	%objQuot  = (%thisMass / %objMass);
+
+	//Stop both marbles
+	%this.applyImpulse("0 0 0", VectorScale(%this.heading, -%this.speed * 1.1));
+	%obj.applyImpulse("0 0 0",  VectorScale(%obj.heading, -%obj.speed * 1.1));
+
+	//And apply force of the new heading
+	%this.applyImpulse("0 0 0", VectorScale(%newHeading, %obj.speed));
+	%obj.applyImpulse("0 0 0",  VectorScale(%newHeading, -%this.speed));
+}
+
+function Marble::onMissionReset(%this) {
+	//Lazy position reset
+	%this.setTransform(%this.getTransform());
+
+	if (!%this.skinned && %this.getDataBlock().getName() $= "BowlingMarble") {
+		%this.skinned = true;
+		%this.setSkinName("skin" @ getRandom(0, 55));
+	}
+}
+
+//-----------------------------------------------------------------------------
+//Hax because I need to override GemCount
+//-----------------------------------------------------------------------------
+
+package Bowling {
+	function GameConnection::respawnPlayer(%this, %a) {
+		//Parent!
+		Parent::respawnPlayer(%this, %a);
+
+		//Don't do this on other levels
+		if (MissionInfo.bowling) {
+			//Set gem count
+			$Game::GemCount = $MARBLE_COUNT;
+			PlayGui.setMaxGems($MARBLE_COUNT);
+
+			//Start the loop if needed
+			bowlUpdate();
+		}
+	}
+	function GameConnection::spawnPlayer(%this, %a) {
+		//Same as above
+		Parent::spawnPlayer(%this, %a);
+		if (MissionInfo.bowling) {
+			$Game::GemCount = $MARBLE_COUNT;
+			PlayGui.setMaxGems($MARBLE_COUNT);
+			bowlUpdate();
+		}
+	}
+};
+
+activatePackage(Bowling);
+//Same as above, just down here
+$Game::GemCount = $MARBLE_COUNT;
+PlayGui.setMaxGems($MARBLE_COUNT);
+MPGetMyMarble();
+
+//-----------------------------------------------------------------------------
+// Super Scary Whirligig231 Math Section of Which I Know Roughly 5%
+//-----------------------------------------------------------------------------
+
+// angle between two vectors
+function VectorAngle(%u,%v) {
+	return mAcos(VectorDot(%u,%v)/VectorLen(%u)/VectorLen(%v));
+}
+
+// rotate one vector around another
+function VectorRotate(%vec,%axis,%angle) {
+	%axis = VectorNormalize(%axis);
+	%part1 = VectorScale(%vec,mCos(%angle));
+	%part2 = VectorScale(VectorCross(%axis,%vec),mSin(%angle));
+	%part3 = VectorScale(%axis,VectorDot(%axis,%vec)*(1-mCos(%angle)));
+	return VectorAdd(VectorAdd(%part1,%part2),%part3);
+}
+
+// cross product; if the vectors are antiparallel, still finds a vector perpendicular to both
+function VectorCrossSpecial(%u,%v) {
+	if (VectorAngle(%u,%v) >= 3.14159) {
+		if (mAbs(getWord(%u,0)) < 0.01 && mAbs(getWord(%u,1)) < 0.01) return VectorCross(%u,"1 0 0");
+			return VectorCross(%u,"0 0 1");
+	}
+	return VectorCross(%u,%v);
+}
+
+//-----------------------------------------------------------------------------
+// Whew, that was scary. Almost didn't make it.
+//-----------------------------------------------------------------------------
+
+//Begin boring part
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Bowling";
+         level = "2";
+         desc = "Go and try your hand at the bowling alley. Line up your shot and give it your best go!";
+         type = "Custom";
+         artist = "HiGuy";
+         music = "Tim Trance.ogg";
+         startHelpText = "Win by knocking all the marbles Out of Bounds!";
+         time = "0";
+         goldTime = "120000";
+         ultimateTime = "105000";
+         Bowling = "1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "1000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      materialList = "~/data/skies/Cloudy/cloudy.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun(Sun) {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(SkySphere) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1000 1000 1000";
+      dataBlock = "clear";
+   };
+   new Trigger(Bounds) {
+      position = "-100 100 -10";
+      rotation = "1 0 0 0";
+      scale = "200 200 1000";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "11 0 1";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-11 0 1";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/Bowling.dif";
+      showTerrainInside = "1";
+   };
+   new SimGroup(MarbleGroup) {
+
+      new Marble() {
+         position = "-6 -60.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-5.25 -62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6.75 -62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-4.5 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-7.5 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-3.75 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-5.25 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6.75 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-8.25 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6 60.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-5.25 62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6.75 62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-4.5 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-7.5 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-3.75 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-5.25 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-6.75 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "-8.25 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6 -60.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "5.25 -62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6.75 -62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "4.5 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "7.5 -63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "3.75 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "5.25 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6.75 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "8.25 -65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6 60.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "5.25 62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6.75 62 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "4.5 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "7.5 63.5 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "3.75 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "5.25 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "6.75 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+      new Marble() {
+         position = "8.25 65 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "BowlingMarble";
+         Controllable = "0";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
+
+//PQ WHERe
