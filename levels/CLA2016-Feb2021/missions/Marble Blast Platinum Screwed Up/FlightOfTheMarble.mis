@@ -1,0 +1,1508 @@
+// UT Tip: Get from the first diamond to the second by using one helicopter item only.
+// Rep. by Matan
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Ian, modified by Thegeniusyoshi";
+         blast = "1";
+         desc = "Don\'t forget about the gems on the pillars!";
+         goldTime = "11000";
+         level = "7";
+         music = "Seaside Revisited.ogg";
+         name = "Something is missing here...";
+         startHelpText = "You will need a mega marble powerup to get to the finish, and look behind signs, pillars, and if you fall, go between the 2 pillars underneath the start pad to get back up.";
+         type = "Beginner";
+         ultimateTime = "9000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+38 -2.19536e+38";
+      fogVolume2 = "-1 -2.2087e+38 -2.19536e+38";
+      fogVolume3 = "-1 -2.18196e+38 -2.16867e+38";
+      materialList = "~/data/skies/Beginner/Beginner_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647643306393613037507444736.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541534601988090029785743360.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289989668889361412515692544.000000";
+   };
+   new Sun() {
+      direction = "0.4817261 0.4817261 -0.7320382";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape() {
+      position = "-69.6 -2.8 -14.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new StaticShape(StartPoint) {
+      position = "39.708 9.99774 0.25";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Item() {
+      position = "-62 10 -14.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.14972 10.98827 17.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "0 0 -1 89.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/lbinteriors_mbp/FlightOfTheMarble.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-61 10 -14.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-100 10 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19.99239 12.16263 16.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RandomPowerUpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-110 8.2 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignDown";
+   };
+   new StaticShape() {
+      position = "-69.6 -16.8 -14.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new Item() {
+      position = "15.81767 11.29675 17";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-69.6 37.4 -14.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new StaticShape() {
+      position = "-69.6 22.4 -14.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignUp";
+   };
+   new Trigger(dest1) {
+      position = "17.27362 10.32174 17.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "33.76672 14.82499 -78.75";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "dest1";
+   };
+   new Item() {
+      position = "18 8.25 16.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19.25 11 17";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 11.25 17";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19.79472 8.54833 17.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "15.5 7.75 16.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-59.92791 9.860404 -14.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-54.4429 10.11866 -14.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "checkPoint";
+   };
+   new Item() {
+      position = "-89.25 9.25 -30.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "10000";
+   };
+   new Item() {
+      position = "37.75 10.25 -0.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "25000";
+   };
+   new Item() {
+      position = "-110.25 8.25 -10.25";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21.25 -37 15.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "37.25 56 16.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "58.75 30 16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "58.5 -10.5 16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "37.5 -38 16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1 -30.25 15.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1 49.5 15.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21 54.75 16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-118.25 -33.5 -77.75";
+      rotation = "0 -1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "72.57555 -94.99517 -78.75";
+      rotation = "1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-120.9972 -92.41449 -79";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-120.4335 113.1927 -78.75";
+      rotation = "-1 0 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "73.66374 112.4044 -78.75";
+      rotation = "0 1 0 89.99998";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-119.8655 -94.19571 -79.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "dest2";
+   };
+   new Trigger(Help) {
+      position = "-121.25 -33.5 -79";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "If you want to skip the edge tightropes part, go to where the finish pad used to be. Also, if you do decide to take the easy way, you will get A LOT of time penalties.";
+   };
+   new Item() {
+      position = "-40 -30.5 15.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-40.25 49 16";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "832.25 -775.75 85";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbu/beginner/multiplayer_training.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(dest2) {
+      position = "840.75 -805 101.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "841.2331 -805.5499 102.5";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "908.5 -753.25 96.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "895 -720.5 95.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "846 -805.5 99";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 12 16.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-91.05998 14.45244 -30.5";
+      rotation = "1 0 0 0";
+      scale = "1 10 10";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         destination = "dest3";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new StaticShape(EndPoint) {
+      position = "896 -723.75 97";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "896.1675 -724.4945 106.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(dest3) {
+      position = "907.1622 -752.5001 98.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907.5 -752.25 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.75 99.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimePenaltyItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timePenalty = "5000";
+   };
+   new Item() {
+      position = "907 -752.5 101.75";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Trigger(tphelp) {
+      position = "37.65697 10.25351 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Go between the pillars underneath here,";
+   };
+};
+//--- OBJECT WRITE END ---

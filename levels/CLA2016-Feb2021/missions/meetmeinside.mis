@@ -1,0 +1,3034 @@
+new MaterialProperty(CeilingFrictionMaterial) {
+   friction = 0;
+   restitution = 1;
+};
+addMaterialMapping("mbp_hot5_frictionless", CeilingFrictionMaterial);
+
+addMaterialMapping("tarmac_normalfriction", DefaultMaterial);
+addMaterialMapping("mmg_jellyfish_sandfriction", SandFrictionMaterial);
+
+new MaterialProperty(RimMaterial) {
+   friction = 0;
+   restitution = 1;
+};
+addMaterialMapping("solid_warm2_frictionless", RimMaterial);
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Meet Me Inside";
+         artist = "hPerks";
+         type = "custom";
+         level = "1";
+         desc = "It's quiet uptown...";
+         startHelpText = "No foundation repair needed here!";
+         game = "Platinum";
+         goldTime = "180000";
+         ultimateTime = "60000";
+         music = "Thoughts of You.ogg";
+         blast = "1";
+         radar = "1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0";
+      cloudSpeed2 = "0";
+      cloudSpeed3 = "0";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0 0 0 0";
+      fogDistance = "300";
+      fogColor = "0 0 0 0";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/city/city_Sky.dml";
+      windVelocity = "0 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "0 0 0 0";
+      fogVolumeColor2 = "0 0 0 0";
+      fogVolumeColor3 = "0 0 0 0";
+   };
+   new Sun() {
+      direction = "-0.5 -0.5 -0.5";
+      color = "1.4 1.2 0.4 1";
+      ambient = "0.3 0.3 0.4 1";
+   };
+
+
+
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside.dif";
+      showTerrainInside = "0";
+   };
+
+   new Trigger() {
+      position = "-78 63 -18";
+      rotation = "1 0 0 0";
+      scale = "161 122 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+   };
+
+
+
+   // FRONT ENTRANCE
+
+
+
+   new StaticShape(StartPoint) {
+      position = "57 -11 -13";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "61 -11 -13";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+
+
+
+   new InteriorInstance(front_door) {
+      position = "28 -13 -13";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(front_door_open) {
+      position = "27.75 -13 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 4 0 0 0 -7";
+         object1 = "front_door";
+         Path1 = "door90_ccw_open150_delay";
+   };
+
+   new Trigger() {
+      position = "29.5 -8.5 -13";
+      rotation = "1 0 0 0";
+      scale = "5 5 8";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Knock on the front door to get in!";
+   };
+
+
+
+   new Item() {
+      position = "31 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "40.75 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "50.5 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "40.75 3 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "40.75 -20 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // FRONT HALL
+
+
+
+   new Trigger() {
+      position = "22 -8 -13";
+      rotation = "1 0 0 0";
+      scale = "2 5 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Use the super speeds to ride up the railings!";
+   };
+
+
+
+   new Item() {
+      position = "22 -9.0625 -11.83";
+      rotation = "0 -1 0 45";
+      scale = "0.25 0.25 0.25";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22 -12.9375 -11.83";
+      rotation = "0 -1 0 45";
+      scale = "0.25 0.25 0.25";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "25 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 -9.0625 -8.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "16 -9.0625 -5.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13 -9.0625 -2.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 -12.9375 -8.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "16 -12.9375 -5.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13 -12.9375 -2.875";
+      rotation = "0 -1 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7.5 -11 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // COAT ROOM
+
+
+
+   new TSStatic() {
+      position = "28.5 -22 -9";
+      rotation = "1 0 0 0";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new TSStatic() {
+      position = "15 -26.5 -9";
+      rotation = "0 0 1 90";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+
+
+
+
+   new Item() {
+      position = "20.5 -24.75 -11.91";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17.5 -24.75 -12.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 -24.75 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "25.5 -24.5 -12.9375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "25.5 -24.75 -5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 -24.75 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.5 -24.75 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17.5 -24.75 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 -19 -12.9375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 -21 -12.9375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21 -19 -12.9375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "12 -24 -7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "9 -20 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "25.5 -24.75 -6.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+
+
+
+   // KITCHEN
+
+
+
+   new TSStatic() {
+      position = "28.5 -4 -9";
+      rotation = "1 0 0 0";
+      scale = "1 0.5833 0.6666";
+      shapeName = "~/data/shapes/Glass/12x3.dts";
+   };
+   new TSStatic() {
+      position = "15 14 -9";
+      rotation = "0 0 1 90";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+
+   new Trigger() {
+      position = "10 14 -13";
+      rotation = "1 0 0 0";
+      scale = "18 22 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The kitchen - don't mind Savage in the corner by the sink";
+   };
+
+   new SimGroup() {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 -1.25 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger() {
+         position = "18.875 10.4375 -12.25";
+         rotation = "1 0 0 0";
+         scale = "4.25 0.5 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1000";
+      };
+      new Trigger() {
+         position = "18.875 11.375 -12.25";
+         rotation = "1 0 0 0";
+         scale = "4.25 0.03125 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "0";
+      };
+      new PathedInterior() {
+         position = "0 2 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "platinum/data/interiors/meetmeinside.dif";
+         interiorIndex = "2";
+         basePosition = "0 2 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+
+   new Item() {
+      position = "15 -2 -10.91";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22 12.75 -9.9375";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20 11.25 -9.72";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "13 -2 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 1 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21 -2 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 -5 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 -2 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17 -2 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item() {
+      position = "16 11.5 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.125 12.625 -9.8125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.875 11.375 -9.8125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "12 12 -6.625";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "9 3 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "20 11.125 -12";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21 11.125 -12";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22 11.125 -12";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // LIVING ROOM
+
+
+
+   new TSStatic() {
+      position = "-8 -22 -9";
+      rotation = "1 0 0 0";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new InteriorInstance(leftside_door) {
+      position = "-6 -26 -13";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(leftside_door_open) {
+      position = "-6 -26.75 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 4 0 0 0 1 0 0 0 -7";
+         object1 = "leftside_door";
+         Path1 = "door180_ccw_open120_delay";
+   };
+   new InteriorInstance(livingroom_door) {
+      position = "-6 -14 -13";
+      rotation = "0 0 1 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_cw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(livingroom_door_open) {
+      position = "-6 -14.25 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 4 0 0 0 1 0 0 0 -7";
+         object1 = "livingroom_door";
+         Path1 = "door0_cw_open120_delay";
+   };
+
+   new Trigger() {
+      position = "-8 -14 -13";
+      rotation = "1 0 0 0";
+      scale = "16 12 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The living room - can you snag those TTs on the mantelpiece?";
+   };
+   new Trigger() {
+      position = "3 -26.5 -12";
+      rotation = "1 0 0 0";
+      scale = "4 2 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Use the super jumps to spring up the chimney!";
+   };
+   new Trigger() {
+      position = "3 -26.5 13";
+      rotation = "1 0 0 0";
+      scale = "4 2 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Whee!";
+   };
+
+
+
+   new Item() {
+      position = "4 -27.5 -11.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4 -27.5 -9.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 -27.5 -11.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 -27.5 -9.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.25 -14.75 -12.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.25 -25.25 -12.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "4 -25 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -26 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 -25 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2 -15.5 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4 -15.5 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3 -19 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4 -20 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "3.75 -24.5 -8.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -24.5 -8.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.25 -24.5 -8.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4 -26 18.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+   new Item() {
+      position = "6 -26 18.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+
+
+
+   // FAMILY ROOM
+
+
+
+   new TSStatic() {
+      position = "-8 -4 -9";
+      rotation = "1 0 0 0";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new InteriorInstance(rightside_door) {
+      position = "-8.5 9 -13";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(rightside_door_open) {
+      position = "-8.75 9 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 4 0 0 0 -7";
+         object1 = "rightside_door";
+         Path1 = "door90_ccw_open150_delay";
+   };
+   new InteriorInstance(familyroom_door) {
+      position = "-6 -8 -13";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(familyroom_door_open) {
+      position = "-6 -8.75 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 4 0 0 0 1 0 0 0 -7";
+         object1 = "familyroom_door";
+         Path1 = "door180_ccw_open120_delay";
+   };
+
+   new Trigger() {
+      position = "-8 14 -13";
+      rotation = "1 0 0 0";
+      scale = "16 22 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The family room - looks like we lost the TV remote again...";
+   };
+
+   new SimGroup(Drawer) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 1.25 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger() {
+         position = "3.875 -0.4375 -12.25";
+         rotation = "1 0 0 0";
+         scale = "2.25 0.5 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 1 0 0 0 1";
+            targetTime = "1000";
+      };
+      new Trigger() {
+         position = "3.875 -1.375 -12.25";
+         rotation = "1 0 0 0";
+         scale = "2.25 0.03125 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 1 0 0 0 1";
+            targetTime = "0";
+      };
+      new PathedInterior() {
+         position = "0 -2 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "platinum/data/interiors/meetmeinside.dif";
+         interiorIndex = "1";
+         basePosition = "0 -2 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+
+
+   new Item() {
+      position = "5 8 -12.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.25 -7.25 -12.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "4 12.5 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 12.5 -11.875";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.5 8 -12.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.5 8 -12.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -1 -12.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4 -4 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-5.5 11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "5 8 -12.5625";
+      rotation = "1 0 0 0";
+      scale = "0.375 0.375 0.375";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+   new Item() {
+      position = "5 -2.5 -9.75";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+
+
+
+   // BATHROOM
+
+
+
+   new TSStatic() {
+      position = "-8 -22 4";
+      rotation = "1 0 0 0";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/3x3.dts";
+   };
+   new InteriorInstance(bathroom_door) {
+      position = "-2 -14 0";
+      rotation = "0 0 1 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_cw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(bathroom_door_open) {
+      position = "-2 -14.25 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 4 0 0 0 1 0 0 0 -7";
+         object1 = "bathroom_door";
+         Path1 = "door0_cw_open120_delay";
+   };
+
+   new Trigger() {
+      position = "-2 -13.5 0";
+      rotation = "1 0 0 0";
+      scale = "4 0.5 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The bathroom - 100% better than Xelna's tbh";
+   };
+
+
+
+   new Item() {
+      position = "-7.188 -25.188 0.09";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "6.875 -23.9375 0.0625";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.25";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.9375 -25.4375 1.125";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0.375 -24 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7.0625 -18 2.75";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.188 -25.188 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.188 -25.188 3.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+   new Item() {
+      position = "-7.188 -25.188 5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-6.625 -19 1.125";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // BEDROOM
+
+
+
+   new TSStatic() {
+      position = "-8 -4 4";
+      rotation = "1 0 0 0";
+      scale = "1 0.6666 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new InteriorInstance(bedroom_door) {
+      position = "-6 -8 0";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(bedroom_door_open) {
+      position = "-6 -8.75 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 4 0 0 0 1 0 0 0 -7";
+         object1 = "bedroom_door";
+         Path1 = "door180_ccw_open120_delay";
+   };
+
+   new Trigger() {
+      position = "-6 -8 0";
+      rotation = "1 0 0 0";
+      scale = "4 0.5 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The bedroom - room for two in this bed!";
+   };
+
+   new SimGroup(Drawer) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "0 -1.25 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger() {
+         position = "-1.125 4.4375 0.75";
+         rotation = "1 0 0 0";
+         scale = "2.25 0.5 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "1000";
+      };
+      new Trigger() {
+         position = "-1.125 5.375 0.75";
+         rotation = "1 0 0 0";
+         scale = "2.25 0.03125 1.25";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+            targetTime = "0";
+      };
+      new PathedInterior() {
+         position = "0 2 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "platinum/data/interiors/meetmeinside.dif";
+         interiorIndex = "0";
+         basePosition = "0 2 0";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialTargetPosition = "0";
+      };
+   };
+
+
+
+   new Item() {
+      position = "3 0 1.3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.25 -7.25 0.18";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "0 5 0.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.625 1.75 6.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.625 -1.75 6.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0 5 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-6.625 6.875 2.375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4.375 6.875 2.375";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7 7 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5.5 4 0.0625";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7 4 0.125";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-7.25 -7.25 0.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+   new Item() {
+      position = "7.75 0 3.25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "15000";
+   };
+
+
+
+   // BEDROOM CLOSET
+
+
+
+   new InteriorInstance() {
+      position = "8.25 10.5 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_fakewall.dif";
+      showTerrainInside = "0";
+   };
+//   new InteriorInstance() {
+//      position = "8.5 10.5 0";
+//      rotation = "1 0 0 0";
+//      scale = "0 1 1";
+//      interiorFile = "~/data/interiors/meetmeinside_fakewall.dif";
+//      showTerrainInside = "0";
+//   };
+
+//   new Trigger() {
+//      position = "-2 12.5 8.4";
+//      rotation = "1 0 0 0";
+//      scale = "10 4 3.5";
+//      dataBlock = "HelpTrigger";
+//      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+//         text = "A secret special place just for us. Happy Valentine's Day!";
+//   };
+
+
+
+   new Item() {
+      position = "-1 10.5 -0.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.25 11.75 2.635";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.25 9.25 2.687";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.25 9.25 5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.25 11.75 5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "9 10.5 0.187";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "2 10.5 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.25 11.75 2.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "1 11.75 2.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.25 11.75 5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "1 11.75 5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // BALCONY
+
+
+
+   new InteriorInstance(balcony_door) {
+      position = "-8.5 -13 0";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(balcony_door_open) {
+      position = "-8.75 -13 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 4 0 0 0 -7";
+         object1 = "balcony_door";
+         Path1 = "door90_ccw_open150_delay";
+   };
+
+   new Trigger() {
+      position = "-20.5 13.5 0";
+      rotation = "1 0 0 0";
+      scale = "12 39.5 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "The balcony - not a bad view, huh?";
+   };
+
+
+
+   new Item() {
+      position = "-11 -11 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-12.9375 2.0625 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-12.9375 -2.0625 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-15 0 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-14 -1 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-14 1 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-15 -18.5 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-13 -20.5 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-16 -19.5 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-14 -21.5 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-15 -20.5 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-16.25 -21.75 4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // DRIVEWAY
+
+
+
+   new TSStatic() {
+      position = "4 17.77 -4.75";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.3333 0.5";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+
+   new Trigger() {
+      position = "-2 44 -13";
+      rotation = "1 0 0 0";
+      scale = "16 29.5 25";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Try out this basketball hoop - perfect for a game of HORSE!";
+   };
+   new Trigger() {
+      position = "14 44 -13";
+      rotation = "1 0 0 0";
+      scale = "15 29.5 25";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Hopscotch - show off your jumping skills!";
+   };
+
+
+
+   new Item() {
+      position = "6 24 -12.813";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 33 -12.813";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item() {
+      position = "16 16.25 -12.36";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "18 16.25 -12.5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20 16.25 -12.23";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22 16.25 -12.68";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "6 19 -5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 22 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6 28 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "1.75 31.25 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "10.25 31.25 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+   new Item() {
+      position = "19 37 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 35 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 33 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20 31 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "18 31 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 29 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20 27 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "18 27 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 25 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "19 23 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "19 14.8125 -12.75";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "10000";
+   };
+
+
+
+   // SIDE STAIRWAY
+
+
+
+   new InteriorInstance() {
+      position = "-5.25 13.5 -13";
+      rotation = "1 0 0 0";
+      scale = "1 0 1";
+      interiorFile = "~/data/interiors/meetmeinside_fakewall.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-5.25 14 -13";
+      rotation = "1 0 0 0";
+      scale = "1 0 1";
+      interiorFile = "~/data/interiors/meetmeinside_fakewall.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-8 16 -13";
+      rotation = "1 0 0 0";
+      scale = "5 2.25 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Huh? What's this hole?";
+   };
+   new Trigger() {
+      position = "-13.5 24.5 -13";
+      rotation = "1 0 0 0";
+      scale = "5 2 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Dammit, Sticky! So that's where all our cheese went!";
+   };
+
+
+
+   new Item() {
+      position = "-11 11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-12.9375 20 -9.375";
+      rotation = "-1 0 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-12.9375 26.9375 -6.625";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.5625 26.9375 -6.625";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.5625 20 -3.375";
+      rotation = "1 0 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-9.0625 20 -9.375";
+      rotation = "-1 0 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-8.1875 23.6875 -6.625";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.4375 20 -3.375";
+      rotation = "1 0 0 45";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-5.5 -11 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // BACKYARD
+
+
+
+   new Trigger() {
+      position = "-24 44 -13";
+      rotation = "1 0 0 0";
+      scale = "10 86 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Have some fun in our backyard playground!";
+   };
+
+
+
+   // BALANCE BEAM
+
+
+
+   new Trigger() {
+      position = "-32 14 -13";
+      rotation = "1 0 0 0";
+      scale = "8 28 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Can you make it across this balance beam?";
+   };
+
+
+
+   new Item() {
+      position = "-28.5 9 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 6.5 -10";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 3 -10";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 0 -10";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 -3 -10";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 -6.5 -10";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28.5 -9 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // SUMO RING
+
+
+
+   new Trigger() {
+      position = "-58 14 -13";
+      rotation = "1 0 0 0";
+      scale = "26 28 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Try to survive and knock out your opponents in this sumo ring! Use these checkpoints, in case of an accident.";
+   };
+   new StaticShape() {
+      position = "-43 -8 -13";
+      rotation = "0 0 1 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "checkPoint";
+   };
+   new StaticShape() {
+      position = "-51 0 -13";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "checkPoint";
+   };
+   new StaticShape() {
+      position = "-43 8 -13";
+      rotation = "0 0 1 180";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "checkPoint";
+   };
+   new StaticShape() {
+      position = "-35 0 -13";
+      rotation = "0 0 1 270";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "checkPoint";
+   };
+
+
+
+   new Item() {
+      position = "-38 -5 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-48 -5 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 5 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-48 5 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-43 0 -12.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-41 -2 -12.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-45 -2 -12.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-41 2 -12.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-45 2 -12.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // CLIMBING WALL
+
+
+
+   new Trigger() {
+      position = "-58 -14 -13";
+      rotation = "1 0 0 0";
+      scale = "34 4 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Can you reach the top of this climbing wall?";
+   };
+   new Trigger() {
+      position = "-45 -22 3";
+      rotation = "1 0 0 0";
+      scale = "14 4 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Congrats - you made it!";
+   };
+
+
+
+   new Item() {
+      position = "-42 -24 3.1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34 -24 2.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-34 -18.125 -11";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 -18.5 -9.5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-43 -18.875 -8";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-33 -19.25 -6.5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 -19.625 -5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34 -20 -3.5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-32 -20.375 -2";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-36 -20.75 -0.5";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34 -21.125 1";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 -24 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-31 -18.6875 -8.375";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-45 -19.4375 -5.375";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-39 -20.1875 -2.375";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 -26.5 -12.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "10000";
+   };
+
+
+
+   // BOUNCY CASTLE
+
+
+
+   new TSStatic() {
+      position = "-41.25 18.5 -8.5";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.54166 0.5833";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-41.25 19.5 -8.5";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.54166 0.5833";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-41.25 26.25 -9";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.54166 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-41.25 27.25 -9";
+      rotation = "0 0 1 90";
+      scale = "0.5 0.54166 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-42.25 20.75 -9";
+      rotation = "0 0 1 0";
+      scale = "0.5 0.375 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-43.25 20.75 -9";
+      rotation = "0 0 1 0";
+      scale = "0.5 0.375 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-32.5 20.75 -9";
+      rotation = "0 0 1 0";
+      scale = "0.5 0.375 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+   new TSStatic() {
+      position = "-33.5 20.75 -9";
+      rotation = "0 0 1 0";
+      scale = "0.5 0.375 0.6666";
+      shapeName = "~/data/shapes/Glass/6x3.dts";
+   };
+
+   new Trigger() {
+      position = "-58 18 -13";
+      rotation = "1 0 0 0";
+      scale = "34 4 12";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "Hop into the bouncy castle!";
+   };
+
+
+
+   new Item() {
+      position = "-38 28.5 -12.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-38 17 -12";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 19 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-40.5 21.5 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 25 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-35.5 21.5 -11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-40 24 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 21 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-36 24 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-42.875 23 -3.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 19.125 -3.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38 26.875 -3.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-33.125 23 -3.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // BACK HALL
+
+
+
+   new InteriorInstance(back_door) {
+      position = "-8.5 -13 -13";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/meetmeinside_door_ccw.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(back_door_open) {
+      position = "-8.75 -13 -6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "PathTrigger";
+      polyhedron = "0 0 0 1 0 0 0 4 0 0 0 -7";
+         object1 = "back_door";
+         Path1 = "door90_ccw_open150_delay";
+   };
+
+
+
+   new Item() {
+      position = "3 -7 -12.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7 -7 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -6.75 -10.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3 -6.75 -7.9";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7 -6.75 -8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   new Item() {
+      position = "-11 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-4 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -11 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -7 -13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3 -6.75 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7 -6.75 -10.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5 -6.75 -8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlue";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // ROOF
+
+
+
+   new Trigger() {
+      position = "-8.5 14.5 13";
+      rotation = "1 0 0 0";
+      scale = "24.5 41 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+         text = "It's King of the Hill time. Who can survive up here the longest?";
+   };
+
+
+
+   new Item() {
+      position = "1 11 13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13 11 13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-5 -23 13";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-5 -9 13.18";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-5 5 13.18";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+
+
+
+   // DOORS
+
+
+
+   new SimGroup(door0_cw) {
+      new StaticShape(door0_cw_open120_delay) {
+         position = "0 0 0";
+         rotation = "0 0 1 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door0_cw_open120";
+            timeToNext = "200";
+            usePosition = "0";
+      };
+      new StaticShape(door0_cw_open120) {
+         position = "0 0 0";
+         rotation = "0 0 1 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door0_cw_opened120";
+            timeToNext = "1000";
+            usePosition = "0";
+      };
+      new StaticShape(door0_cw_opened120) {
+         position = "0 0 0";
+         rotation = "0 0 1 120";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door0_cw_opened120";
+            timeToNext = "2000";
+            usePosition = "0";
+      };
+   };
+   new SimGroup(door180_ccw) {
+      new StaticShape(door180_ccw_open120_delay) {
+         position = "0 0 0";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door180_ccw_open120";
+            timeToNext = "200";
+            usePosition = "0";
+      };
+      new StaticShape(door180_ccw_open120) {
+         position = "0 0 0";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door180_ccw_opened120";
+            timeToNext = "1000";
+            usePosition = "0";
+      };
+      new StaticShape(door180_ccw_opened120) {
+         position = "0 0 0";
+         rotation = "0 0 1 60";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door180_ccw_opened120";
+            timeToNext = "2000";
+            usePosition = "0";
+      };
+   };
+   new SimGroup(door90_ccw) {
+      new StaticShape(door90_ccw_open150_delay) {
+         position = "0 0 0";
+         rotation = "0 0 1 90";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door90_ccw_open150";
+            timeToNext = "200";
+            usePosition = "0";
+      };
+      new StaticShape(door90_ccw_open150) {
+         position = "0 0 0";
+         rotation = "0 0 1 90";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door90_ccw_opened150";
+            timeToNext = "800";
+            usePosition = "0";
+      };
+      new StaticShape(door90_ccw_opened150) {
+         position = "0 0 0";
+         rotation = "0 0 -1 30";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door90_ccw_opened150a";
+            timeToNext = "200";
+            usePosition = "0";
+      };
+      new StaticShape(door90_ccw_opened150a) {
+         position = "0 0 0";
+         rotation = "0 0 -1 60";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "door90_ccw_opened150a";
+            timeToNext = "2000";
+            usePosition = "0";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
