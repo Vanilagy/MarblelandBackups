@@ -1,0 +1,430 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "CylinderKnot";
+         awesomeHint = "Embrace the corners of the platforms. In other words, edge-hits are required.";
+         awesomeTime = "48500";
+         customRadarRule = "0";
+         desc = "Test your skills! Try to reach the goal without falling off. How steady is your hand? Let\'s find out! Try and beat all four floors.";
+         game = "Custom";
+         gameMode = "null";
+         generalHint = "SPOILER ALERT - SPOILER ALERT ::: Jump around the second floor to figure out where to go on the third floor.";
+         hideRadar = "1";
+         level = "1000";
+         name = "The Maze v1.1";
+         platinumTime = "120000";
+         startHelpText = "Floor 1";
+         trivia = "This level is based on the famous scary maze game. Floor 4 is based on a hoax of someone completing the game, which has no level 4.";
+         type = "Custom";
+         ultimateHint = "Cut corners so hard that you skip as much as possible.";
+         ultimateTime = "60000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "0";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.000000 0.000000 0.000000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies_pq/Blender3/blender3.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/TheMazev11-CK.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "3.51566 -76.8479 27.4037";
+         rotation = "1 4.77787e-005 -0.000181464 29.5019";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new Trigger(Bounds) {
+      position = "-75 75 -90.25";
+      rotation = "1 0 0 0";
+      scale = "150 150 300";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 -52 4.00225";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_MBG";
+   };
+   new StaticShape(EndPoint) {
+      position = "46 -50 112.002";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "EndPad_MBG";
+   };
+   new Trigger() {
+      position = "42 58 4";
+      rotation = "1 0 0 0";
+      scale = "16 12 6";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "-90";
+         centerDestPoint = "1";
+         delay = "1500";
+         destination = "floor2";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(floor2) {
+      position = "51.5 52.5 41";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "46 58 40";
+      rotation = "1 0 0 0";
+      scale = "12 12 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "1";
+         extended = "0";
+         persistTime = "5000";
+         text = "Floor 2";
+   };
+   new Trigger() {
+      position = "-58 -50 40";
+      rotation = "1 0 0 0";
+      scale = "16 8 6";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "90";
+         centerDestPoint = "1";
+         delay = "1500";
+         destination = "floor3";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger() {
+      position = "-58 -50 76";
+      rotation = "1 0 0 0";
+      scale = "8 8 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "1";
+         extended = "0";
+         persistTime = "5000";
+         text = "Floor 3";
+   };
+   new Trigger(floor3) {
+      position = "-54.5 -53.5 77";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "0 -2 76";
+      rotation = "1 0 0 0";
+      scale = "8 2 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Jumping is disabled on the tightrope. Be careful.";
+   };
+   new Trigger() {
+      position = "5.75 2.5 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.95";
+         noEmitters = "1";
+         value0 = "0.95";
+   };
+   new Trigger() {
+      position = "5.75 6.5 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.9";
+         noEmitters = "1";
+         value0 = "0.9";
+   };
+   new Trigger() {
+      position = "5.75 10.5 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.85";
+         noEmitters = "1";
+         value0 = "0.85";
+   };
+   new Trigger() {
+      position = "5.75 14.5 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.8";
+         noEmitters = "1";
+         value0 = "0.8";
+   };
+   new Trigger() {
+      position = "5.75 18.5 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.8";
+         noEmitters = "1";
+         value0 = "0.8";
+   };
+   new Trigger() {
+      position = "1.75 15.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.75";
+         noEmitters = "1";
+         value0 = "0.75";
+   };
+   new Trigger() {
+      position = "-2.25 15.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.7";
+         noEmitters = "1";
+         value0 = "0.7";
+   };
+   new Trigger() {
+      position = "-6.25 15.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.65";
+         noEmitters = "1";
+         value0 = "0.65";
+   };
+   new Trigger() {
+      position = "-10.25 15.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.6";
+         noEmitters = "1";
+         value0 = "0.6";
+   };
+   new Trigger() {
+      position = "-10 19.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.55";
+         noEmitters = "1";
+         value0 = "0.55";
+   };
+   new Trigger() {
+      position = "-10 23.75 76.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 6";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "0.5";
+         noEmitters = "1";
+         value0 = "0.5";
+   };
+   new Trigger() {
+      position = "-10 63.75 70.25";
+      rotation = "1 0 0 0";
+      scale = "30 40 12";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "timeScale";
+         megaValue0 = "3";
+         noEmitters = "1";
+         value0 = "3";
+   };
+   new Trigger() {
+      position = "-75 75 0";
+      rotation = "1 0 0 0";
+      scale = "150 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-75 75 36";
+      rotation = "1 0 0 0";
+      scale = "150 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-75 75 72";
+      rotation = "1 0 0 0";
+      scale = "75 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-28.25 63 74";
+      rotation = "1 0 0 0";
+      scale = "50 64 8";
+      dataBlock = "MarblePhysModTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         marbleAttribute0 = "jumpImpulse";
+         megaValue0 = "7.5";
+         noEmitters = "1";
+         origValue = "7.5";
+         value0 = "0";
+   };
+   new Trigger() {
+      position = "0.5 -4.5 41";
+      rotation = "1 0 0 0";
+      scale = "8 6 35";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "180";
+         centerDestPoint = "1";
+         delay = "1500";
+         destination = "floor4";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(floor4) {
+      position = "-0.5 48.5 113";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-10 58 112";
+      rotation = "1 0 0 0";
+      scale = "20 20 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "1";
+         extended = "0";
+         persistTime = "5000";
+         text = "Floor 4";
+   };
+   new Trigger() {
+      position = "9 75 72";
+      rotation = "1 0 0 0";
+      scale = "75 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-32.5 -11 72";
+      rotation = "1 0 0 0";
+      scale = "75 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-32.5 146 72";
+      rotation = "1 0 0 0";
+      scale = "75 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-75 75 108";
+      rotation = "1 0 0 0";
+      scale = "150 150 2";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "46 -50.25 121.25";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger() {
+      position = "-10 -2 112";
+      rotation = "1 0 0 0";
+      scale = "8 8 6";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         extended = "0";
+         persistTime = "5000";
+         text = "Good news! Jumping is allowed.";
+   };
+};
+//--- OBJECT WRITE END ---
