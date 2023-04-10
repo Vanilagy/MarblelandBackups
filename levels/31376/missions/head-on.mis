@@ -1,0 +1,417 @@
+function MPupdateCollisionSpecial() {
+
+   cancel($MP::Schedule::CollisionSpecial);
+
+   if ($Server::Dedicated && getRealPlayerCount() == 0)
+      return;
+
+   if (!$Server::Hosting || $Server::_Dedicated || $Server::ServerType $= "SinglePlayer")
+      return;
+
+   //A-Game: no running outside of the mission
+   if (missionInfo.marbleCollisions !$= "1")
+      return;
+
+
+   %count = ClientGroup.getCount();
+   for (%i = 0; %i < %count; %i ++) {
+      %client = ClientGroup.getObject(%i);
+      if (!isObject(%client.player))
+         continue;
+      %player = %client.player;
+      if (isObject(%player)) {
+         %datablock1 = %client.player.getDatablock();
+         %pos_p = %client.player.getPosition();
+         for (%j = 0; %j < %count; %j ++) {
+            if (%j == %i)
+               continue;
+            %clientJ = ClientGroup.getObject(%j);
+            if (!isObject(%clientJ.player))
+               continue;
+
+            %datablock2 = %clientJ.player.getDatablock();
+            %pos_o = %clientJ.player.getPosition();
+
+            %mega1 = %client.isMegaMarble();
+            %mega2 = %clientJ.isMegaMarble();
+
+            %dist = VectorDist(%pos_p, %pos_o);
+            %d2 = %dist - ((%client.player.getCollisionRadius() - %clientJ.player.getCollisionRadius()) / 2);
+
+            //A-Game: the first big change to this code
+            //A-Game: this is so non-mega collisions use the regular marble size
+            if (%mega1) {
+               %dist -= %datablock1.impactRadius[%mega1];
+            } else if (!%mega1) {
+               %dist -= 0.27;
+            }
+            //A-Game: Did you know that collisions ingame use the wrong marble size? The radius is too large for normal vs mega collisions! This could be fixed here, but it would make the Mega Marble too weak and would feel off I guess.
+            if (%mega2 || %mega1) {
+               %dist -= %datablock1.impactRadius[%mega2];
+            } else if (!%mega2) {
+               %dist -= 0.27;
+            }
+            
+            if (%dist < 0) {
+
+               if (%client.lastCollision == %clientJ)
+                  continue;
+               if (%clientJ.lastCollision == %client)
+                  continue;
+               if (%client.lastColTime[%clientJ] !$= "" && %client.lastColTime[%clientJ] + 1000 > getRealTime())
+                  continue;
+               if (%clientJ.lastColTime[%client] !$= "" && %clientJ.lastColTime[%client] + 1000 > getRealTime())
+                  continue;
+
+               //code disabling regular marble collisions was removed
+
+               if ((%mega1 == %mega2 && VectorLen(%client.player.getVelocity()) < VectorLen(%clientJ.player.getVelocity())) || (%mega2 && !%mega1))
+                  continue;
+
+               %skip = false;
+               if (%client.noCol) {
+                  %client.noCol --;
+                  %skip = true;
+               }
+               if (%clientJ.noCol) {
+                  %clientJ.noCol --;
+                  %skip = true;
+               }
+               if (%skip)
+                  continue;
+
+               %client.lastCollision = %clientJ;
+               %clientJ.lastCollision = %client;
+               %client.lastColTime[%clientJ] = getRealTime();
+               %clientJ.lastColTime[%client] = getRealTime();
+
+               //A-Game: here's where all the numbers are changed
+               //A-Game: regular marble collision is supposed to be weaker than mega marble collision
+               //A-Game: values taken from marble.cs
+               if (%mega1) {
+                  %maximum  = %datablock1.impactMaximum[%mega1];
+               } else if (!%mega1) {
+                  %maximum = 25;
+               }
+               if (%mega2) {
+                  %maximum2 = %datablock2.impactMaximum[%mega2];
+               } else if (!%mega2) {
+                  %maximum2 = 25;
+               }
+
+               if (%mega1) {
+                  %multiplier  = %datablock1.impactMultiplier[%mega1];
+               } else if (!%mega1) {
+                  %multiplier = 4;
+               }
+               if (%mega2) {
+                  %multiplier2 = %datablock2.impactMultiplier[%mega2];
+               } else if (!%mega2) {
+                  %multiplier2 = 4;
+               }
+
+               if (%mega1) {
+                  %reduction  = %datablock1.impactReduction[%mega1];
+               } else if (!%mega1) {
+                  %reduction = 0.25;
+               }
+               if (%mega2) {
+                  %reduction2 = %datablock2.impactReduction[%mega2];
+               } else if (!%mega2) {
+                  %reduction2 = 0.25;
+               }
+
+
+               if (%mega1) {
+                  %bSpeed = VectorLen(%client.player.getVelocity()) + (VectorLen(%clientJ.player.getVelocity()) * %datablock1.impactBounceBack[%mega1]);
+               } else if (!%mega1) {
+                  %bSpeed = VectorLen(%client.player.getVelocity()) + (VectorLen(%clientJ.player.getVelocity()) * 0.5);
+               }
+
+               %source  = VectorSub(%pos_o, %pos_p);
+               %source2 = VectorSub(%pos_p, %pos_o);
+
+               %affect = %source;
+               %affect2 = %source2;
+
+               %affection  = min(%bSpeed * %multiplier,  %maximum);
+               %affection2 = min(%bSpeed * %multiplier2, %maximum2);
+
+               if ($MP::TeamMode && isObject(%clientJ.team) && isObject(%client.team)) {
+                  if (%clientJ.team.getId() == %client.team.getId()) {
+                     %affection  /= $MP::CollisionTeamDampen;
+                     %affection2 /= $MP::CollisionTeamDampen;
+                  }
+               }
+               
+               %affect  = VectorScale(%affect,  %affection);
+               %affect2 = VectorScale(%affect2, %reduction2);
+
+               echo("Impulse to " @ %clientJ.namebase @ ": (" @ %source @ ") (" @ %affect @ ")");
+               echo("Impulse to " @ %client.namebase @ ": (" @ %source2 @ ") (" @ %affect2 @ ")");
+
+               if (!%client.disableCollision)
+                  commandToClient(%clientJ,'applyImpulse',%source,%affect);
+               if (!%clientJ.disableCollision)
+                  commandToClient(%client,'applyImpulse',%source2,%affect2);
+
+               //A-Game: Only allow points if the game is started 
+               if ($Game::State $= "Go") {
+                  Mode::callback("onCollision", "", new ScriptObject() {
+                     client1 = %client;
+                     client2 = %clientJ;
+                     source1 = %source;
+                     source2 = %source2;
+                     affect1 = %affect;
+                     affect2 = %affect2;
+                     _delete = true;
+                  });
+               }
+
+               if (%mega1 || %mega2) {
+                  %sfx = eval("return MegaMarble.bounce" @ getRandom(1, 4) @ ";");
+                  %sfx2 = eval("return MegaMarble.bounce" @ getRandom(1, 4) @ ";");
+                  %client.play2d(%sfx);
+                  %clientJ.play2d(%sfx);
+               }
+            } else {
+               %client.lastCollision = "";
+            }
+         }
+      }
+   }
+   $MP::Schedule::CollisionSpecial = schedule($MP::Collision::Delta, 0, "MPupdateCollisionSpecial");
+}
+
+
+function serverCbOnMissionReset() {
+   cancel($MP::Schedule::Collision);
+   MPupdateCollisionSpecial();
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         Time = "210000";
+         artist = "A-Game";
+         blast = "1";
+         customRadarRule = "0";
+         desc = "Marble collisions are back! Every collision gives you points, regardless if you are mega or not!";
+         game = "Platinum";
+         gameMode = "mega";
+         level = "1000";
+         marbleCollisions = "1";
+         music = "Seaside Revisited.ogg";
+         name = "Head-On";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/Beginner/Beginner_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "0.800000 0.800000 0.800000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/multiplayer/interiors/head-on.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "-1.47771 -32.5111 32.5276";
+         rotation = "0.99986 -0.00574887 0.0157266 40.165";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new Trigger() {
+      position = "-19 -16.2929 9.75";
+      rotation = "0 0 1 45";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-40 -38 -5.25";
+      rotation = "1 0 0 0";
+      scale = "76 76 69";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-2 0 0.375503";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         showHelpOnPickup = "0";
+         timeout = "10000";
+   };
+   new Item() {
+      position = "-2 0 5.937";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13 15 9.73422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13 -15 9.73422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-17 -15 9.73422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-17 15 9.73422";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-18.2929 17 9.75";
+      rotation = "0 0 1 135";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "15 16.2929 9.75";
+      rotation = "0 0 1 225";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "14.2929 -17 9.75";
+      rotation = "0 0 -1 45";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "-2.5 -17.5 9.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "-1.5 17.75 10";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "-19.5 0.499998 10";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Trigger() {
+      position = "15.5 -0.500002 9.75";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+};
+//--- OBJECT WRITE END ---
