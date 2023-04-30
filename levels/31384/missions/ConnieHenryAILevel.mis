@@ -1,0 +1,470 @@
+
+//--------------------------------------------------------------------------
+// NOT FOR THE OFFICIAL GAME
+//--------------------------------------------------------------------------
+// Random Level Generator Trigger
+// Written by Connie in one day, started on the 28th of April and finished
+// on the 29th of April 2023.
+//
+//                      ✧･ﾟ  ╱|、
+//                          (˚ˎ 。7  
+//                          |、˜〵          
+//                          じしˍ,)ノ
+//--------------------------------------------------------------------------
+// This code has been released under the CC-by 4.0 License.
+// Read the following link:
+// http://creativecommons.org/licenses/by/4.0/
+//--------------------------------------------------------------------------
+
+
+datablock TriggerData(HenryLevelGeneratorTrigger) {
+	customField[0, "field"  ] = "README";
+	customField[0, "type"   ] = "boolean";
+	customField[0, "name"   ] = "Hover over me & read";
+	customField[0, "desc"   ] = "When hitting Apply on the trigger, only one of the 3 checkboxes may be checked, otherwise it won't work. Check this checkbox to begin messing with the trigger. -Connie";
+	customField[0, "default"] = "0";
+	customField[1, "field"  ] = "GenerateOnApply";
+	customField[1, "type"   ] = "boolean";
+	customField[1, "name"   ] = "Generate on Apply?";
+	customField[1, "desc"   ] = "Generate a new Level when you apply settings on Trigger.";
+	customField[1, "default"] = "0";
+	customField[2, "field"  ] = "GenerateOnAdd";
+	customField[2, "type"   ] = "boolean";
+	customField[2, "name"   ] = "Generate on Add?";
+	customField[2, "desc"   ] = "Generate a new Level when a player loads the level.";
+	customField[2, "default"] = "0";
+	customField[3, "field"  ] = "ClearSlate";
+	customField[3, "type"   ] = "boolean";
+	customField[3, "name"   ] = "Clear Slate?";
+	customField[3, "desc"   ] = "When you have this checked and press apply, everything placed by the interior will be cleared";
+	customField[3, "default"] = "0";
+
+	tickPeriodMS = 100;
+};
+
+function HenryLevelGeneratorTrigger::onAdd(%this,%trigger,%obj) {
+	if (%trigger.GenerateOnAdd && !%trigger.GenerateonApply && !%trigger.ClearSlate && %trigger.README) {
+		%trigger.GenerateonApply = 1;
+		%trigger.GenerateonAdd = 0;
+		HenrylevelGeneratorTrigger::onInspectApply(%this,%trigger,%obj);
+		%trigger.GenerateonApply = 0;
+		%trigger.GenerateonAdd = 1;
+	} else {
+		return;
+	}
+}
+
+function HenryLevelGeneratorTrigger::onInspectApply(%this,%trigger,%obj) {
+   //This is where all the fun takes place. ~Connie
+
+    if (%trigger.GenerateonApply && !%trigger.GenerateonAdd && !%trigger.ClearSlate && %trigger.README) {
+		%trigger.grassplaced = 0;
+		if (isObject(%trigger.startPadRandom)) {
+			%trigger.startPadRandom.getID().delete();
+			%trigger.startPadPlatform.getId().delete();
+		}
+
+		if (isObject(%trigger.endPadRandom)) {
+			%trigger.endPadRandom.getID().delete();
+			%trigger.endPadPlatform.getId().delete();
+         %trigger.endPadSign.getID().delete();
+		}
+
+		//Basically, once you've hit apply on the inspect apply thing, it will generate a new thing. ~Connie
+		%pos = %trigger.getTransform();
+		%scale = %trigger.getScale();
+		%x = getWord(%pos, 0);
+		%y = getWord(%pos, 1);
+		%z = getWord(%pos, 2);
+		%sX = getWord(%scale, 0);
+		%sY = getWord(%scale, 1);
+		%sZ = getWord(%scale, 2);
+		//This is so we can get the boundaries of the trigger. ~Connie
+
+		%startpadRandomPosZ = getRandom(%z, %z + %sz);
+		%endpadRandomPosZ = getRandom(%z, %z + %sz);
+
+		%trigger.startPadRandom = new StaticShape(StartPoint) {
+			position = getRandom(%x, %x + %sx) SPC getRandom(%y, %y - %sy) SPC %startpadRandomPosZ;
+			rotation = "0 0 1" SPC getRandom(0, 360);
+			scale = "1 1 1";
+			datablock = "StartPad";
+		};
+
+		%startpadPlatZ = %startpadRandomPosZ - 0.35;
+
+		%trigger.startPadPlatform = new InteriorInstance() {
+			position = getWords(%trigger.startPadRandom.position, 0, 1) SPC %startpadPlatZ;
+			rotation = "0 0 1" SPC getRandom(0, 360);
+			scale = "1 1 1";
+			interiorFile = "~/data/interiors_mbg/addon/smallplatform.dif";
+		};
+
+		%trigger.startPadPlatform.inspectPostApply();
+
+		%trigger.endPadRandom = new StaticShape(EndPoint) {
+			position = getRandom(%x, %x + %sx) SPC getRandom(%y, %y - %sy) SPC %endpadRandomPosZ;
+			rotation = "0 0 1" SPC getRandom(0, 360);
+			scale = "1 1 1";
+			datablock = "EndPad";
+		};
+
+		%endpadPlatZ = %endpadRandomPosZ - 0.35;
+
+		%trigger.endPadPlatform = new InteriorInstance() {
+			position = getWords(%trigger.endPadRandom.position, 0, 1) SPC %endpadPlatZ;
+			rotation = "0 0 1" SPC getRandom(0, 360);
+			scale = "1 1 1";
+			interiorFile = "~/data/interiors_mbg/addon/smallplatform.dif";
+		};
+
+      %trigger.endPadPlatform.inspectPostApply();
+
+      %trigger.endPadSign = new StaticShape() {
+         position = getWords(%trigger.endPadRandom.position, 0, 1) SPC (%endpadRandomPosZ + 10);
+         rotation = "0 0 1" SPC getRandom(0, 360);
+         scale = getRandom(1, 2) SPC getRandom(1, 2) SPC getRandom(1, 4);
+         dataBlock = "SignFinish";
+      };
+
+      %trigger.endPadSign.inspectPostApply();
+
+    	if (%trigger.gemstoplace != "") {
+	    	for (%c = 0; %c < %trigger.gemstoplace; %c++) {
+			   %trigger.gem[%c].getID().delete();
+				%trigger.gemplatform[%c].getID().delete();
+				%trigger.gemPowerup[%c].getID().delete();
+	    	}	
+		}
+
+		%trigger.gemstoplace = getRandom(0, 190);
+
+		for (%i = 0; %i < %trigger.gemstoplace; %i++) {
+
+        	%gemZpos = getRandom(%z, %z + %sz);
+
+			%trigger.gem[%i] = new Item() {
+			   position = getRandom(%x, %x + %sx) SPC getRandom(%y, %y - %sy) SPC %gemZpos;
+			   rotation = "0 0 1" SPC getRandom(0, 360);		
+				scale = getRandom(1, 3) SPC getRandom(1, 3) SPC getRandom(2, 4);
+				datablock = "GemItem";
+        	   collideable = "0";
+        	   static = "1";
+        	   rotate = getRandom(0, 1);
+			};
+
+			MissionGroup.add(%trigger.gem[%i]);
+
+       	%interiortoadd = getRandom(1, 9);
+			switch(%interiortoadd) {
+				case 1:
+				%interiorchosen = "~/data/interiors_mbg/addon/battlements.dif";
+				case 2:
+				%interiorchosen = "~/data/interiors_mbg/addon/smallplatform.dif";
+				case 3:
+				%interiorchosen = "~/data/interiors_mbp/battlecube.dif";
+				case 4:
+				%interiorchosen = "~/data/interiors_mbp/blue_6x6.dif";
+				case 5:
+				%interiorchosen = "~/data/interiors_mbp/CrashCourse.dif";
+				case 6:
+				%trigger.grassplaced++;
+				if (%trigger.grassplaced <= 2) {
+					%interiorchosen = "~/data/interiors_mbp/mbp_grass_100x100.dif";
+				} else {
+					%interiorchosen = "~/data/interiors_mbp/green_3x3.dif";
+				}
+				case 7:
+				%interiorchosen = "~/data/interiors_mbg/parts/tubes/tube_long.dif";
+				case 8:
+				%interiorchosen = "~/data/interiors_mbg/parts/tubes/tube_turn.dif";
+				case 9:
+				%interiorchosen = "~/data/interiors_mbg/parts/tubes/tube_lintersect.dif";
+				default:    //If it somehow gets here. ~Connie
+				%interiorchosen = "~/data/interiors_mbg/addon/smallplatform.dif";
+			}
+
+			%axis = getRandom(1, 3);
+
+			switch(%axis) {
+				case 1:
+				%axischosen = "0 0 1";
+				case 2: 
+				%axischosen = "0 1 0";
+				case 3: 
+				%axischosen = "1 0 0";
+			}
+	
+		    %trigger.gemplatform[%i] = new InteriorInstance() {
+			    position = getWords(%trigger.gem[%i].position, 0);
+			    rotation = %axischosen SPC getRandom(0, 360);
+			    scale = getRandom(1, 3) SPC getRandom(1, 3) SPC 1;
+			    interiorFile = %interiorchosen;
+		    };
+
+			%trigger.gemplatform[%i].inspectPostApply();
+
+			%shouldaddPowerup = getRandom(0, 4);
+
+			if (%shouldaddPowerup > 2) {
+
+    	        %powerupZpos = %gemZpos + 0.5;
+
+				%poweruptoAdd = getRandom(1, 8);
+				switch(%poweruptoAdd) {
+					case 1:
+					%powerupchosen = "SuperJumpItem";
+					case 2:
+					%powerupchosen = "SuperSpeedItem";
+					case 3:
+					%powerupchosen = "HelicopterItem";
+					case 4:
+					%powerupchosen = "SuperBounceItem";
+					case 5:
+					%powerupchosen = "ShockAbsorberItem";
+					case 6:
+					%powerupchosen = "TimeTravelItem";
+					case 7:
+					%powerupchosen = "MegaMarbleItem";
+					case 8:
+					%powerupchosen = "RandomPowerupItem";
+					default:    //If it somehow gets here. ~Connie
+					%powerupchosen = "SuperJumpItem";
+				}
+
+             %trigger.gemPowerup[%i] = new Item() {
+               position = getWords(%trigger.gem[%i].position, 0, 1) SPC %powerupZpos;
+               rotation = "0 0 1" SPC getRandom(0, 360);		
+               scale = getRandom(0.1, 2) SPC getRandom(0.1, 2) SPC 1;
+               datablock = %powerupchosen;
+               timeBonus = getRandom(1, 100000);
+               collideable = "0";
+               static = "1";
+               rotate = getRandom(0, 1);
+            };
+			}
+		}
+
+		if (%trigger.hurricanes != "") {
+			for (%t = 0; %t < %trigger.hurricanes; %t++) {
+			    %trigger.hurricanes[%t].getID().delete();
+			}
+
+			%trigger.hurricanes = "";
+		}
+
+		%trigger.hurricanes = getRandom(0, 50);
+		for (%i = 0; %i < %trigger.hurricanes; %i++) {
+			%trigger.hurricanes[%i] = new StaticShape() {
+			    position = getRandom(%x, %x + %sx) SPC getRandom(%y, %y - %sy) SPC getRandom(%z, %z + %sz);
+			    rotation = "1 0 0 0";		
+				scale = "1 1 1";
+				datablock = "Tornado";
+			};
+		}
+
+ 	   %trigger.antigravone.getID().delete();
+	   %trigger.antigravtwo.getID().delete();
+
+		%trigger.antigravone = new Item() {
+			position = (%x + (%sx / 2)) SPC (%y - (%sy / 2)) SPC (%z - 15);
+			rotation = "1 0 0 0";		
+			scale = "1500 1500 15";
+			datablock = "AntiGravityItem";
+  	        collideable = "0";
+  	        static = "1";
+ 	        rotate = getRandom(0, 1);
+		};
+
+		%trigger.antigravtwo = new Item() {
+			position = (%x + (%sx / 2)) SPC (%y - (%sy / 2)) SPC (%z + %sz + 15);
+			rotation = "1 0 0 180";		
+			scale = "1500 1500 15";
+			datablock = "AntiGravityItem";
+	      collideable = "0";
+  	      static = "1";
+  	      rotate = getRandom(0, 1);
+		};
+
+		%trigger.EasterEgg.getID().delete();
+
+		%trigger.EasterEgg = new Item() {
+			position = getRandom(%x, %x + %sx) SPC getRandom(%y, %y - %sy) SPC getRandom(%z, %z + %sz);
+			rotation = "1 0 0 0";
+			scale = getRandom(1, 15) SPC getRandom(1, 30) SPC getRandom(1, 5);
+			datablock = "EasterEgg";
+			collideable = getRandom(0, 1);
+ 	       static = getRandom(0, 1);
+			rotate = getRandom(0, 1);
+		};
+
+		%skyboxtoapply = getRandom(1, 6);
+
+		switch(%skyboxtoapply) {
+			case 1:
+			%skyboxchosen = "~/data/skies/sky_day.dml";
+			case 2:
+			%skyboxchosen = "~/data/skies/Beginner/Beginner_sky.dml";
+			case 3:
+			%skyboxchosen = "~/data/skies/Intermediate/Intermediate_sky.dml";
+			case 4:
+			%skyboxchosen = "~/data/skies/Advanced/Advanced_sky.dml";
+			case 5:
+			%skyboxchosen = "~/data/skies/Expert/Expert_sky.dml";
+			case 6:
+			%skyboxchosen = "~/data/skies/OldSkies/Old_sky.dml";
+			default:
+			%skyboxchosen = "~/data/skies/sky_day.dml";
+		}
+	
+		%sky = Sky.getID();
+		%newsky = new Sky(Sky) {
+			position = "0 0 0";
+			rotation = "1 0 0 0";
+			scale = "1 1 1";
+			materialList = %skyboxchosen; 
+
+			cloudHeightPer[0] = %sky.cloudheightper0;
+			cloudHeightPer[1] = %sky.cloudheightper1;
+			cloudHeightPer[2] = %sky.cloudheightper2;
+			cloudSpeed1 = %sky.cloudspeed1;
+			cloudSpeed2 = %sky.cloudspeed2;
+			cloudSpeed3 = %sky.cloudspeed3;
+			visibleDistance = %sky.visibledistance;
+			useSkyTextures = %sky.useskytextures;
+			renderBottomTexture = %sky.renderbottomtexture;
+			SkySolidColor = %sky.skysolidcolor;
+			fogDistance = %sky.fogdistance;
+			fogColor = %sky.fogcolor;
+			fogVolume1 = %sky.fogvolume1;
+			fogVolume2 = %sky.fogvolume2;
+		   fogVolume3 = %sky.fogvolume3;
+		   windVelocity = %sky.windvelocity;
+		   windEffectPrecipitation = %sky.windEffectPrecipitation;
+		   noRenderBans = %sky.norenderbans;
+		   fogVolumeColor1 = %sky.fogvolumecolor1;
+		   fogVolumeColor2 = %sky.fogvolumecolor2;
+		   fogVolumeColor3 = %sky.fogvolumecolor3;
+	    };
+	    %sky.delete();
+       MissionGroup.add(%newsky);
+	}
+
+	if (!%trigger.GenerateonApply && !%trigger.GenerateonAdd && %trigger.ClearSlate && %trigger.README) {
+      //This will clean whatever the trigger has placed. ~Connie
+		%trigger.startPadRandom.getID().delete();
+		%trigger.startPadPlatform.getId().delete();
+		%trigger.endPadRandom.getID().delete();
+		%trigger.endPadPlatform.getId().delete();
+
+    	if (%trigger.gemstoplace != "") {
+	    	for (%c = 0; %c < %trigger.gemstoplace; %c++) {
+			    %trigger.gem[%c].getID().delete();
+				%trigger.gemplatform[%c].getID().delete();
+				%trigger.gemPowerup[%c].getID().delete();
+	    	}	
+		}
+
+		if (%trigger.hurricanes != "") {
+			for (%t = 0; %t < %trigger.hurricanes; %t++) {
+			    %trigger.hurricanes[%t].getID().delete();
+			}
+
+			%trigger.hurricanes = "";
+		}
+
+ 	   %trigger.antigravone.getID().delete();
+		%trigger.antigravtwo.getID().delete();
+
+      %trigger.EasterEgg.getID().delete();
+      %trigger.endPadSign.getID().delete();
+	}
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Henry A.I, coded by Connie";
+         desc = "Henry is back... just not as a human, but as an... AI? Whatever, who cares, he\'s back baby! This thing will generate a new level every time you select this level in the Level Select Screen! Have fun! (It is not guaranteed that any levels generated by Henry AI will be possible, you have been warned.)";
+         game = "Platinum";
+         level = "1000";
+         name = "H.E.N.R.Y. A.I.";
+         type = "Custom";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume2 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume3 = "-1 -1.73483e+009 -1.73483e+009";
+      materialList = "~/data/skies/Bonus/Bonus_Sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1734829824.000000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Trigger() {
+      position = "-284.799 -41.5826 314.925";
+      rotation = "1 0 0 0";
+      scale = "240.698 247.058 190.837";
+      dataBlock = "HenryLevelGeneratorTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ClearSlate = "0";
+         GenerateOnAdd = "1";
+         GenerateonApply = "0";
+         README = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "40.0738 -326.099 491.694";
+         rotation = "0.401599 0.168162 -0.900244 49.8891";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
