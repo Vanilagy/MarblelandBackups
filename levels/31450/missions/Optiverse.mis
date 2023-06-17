@@ -1,0 +1,1197 @@
+//--- Particle ---
+datablock ParticleData(CyanOptiverseParticle) {
+	textureName = "~/data/particles/idcard.png";
+	dragCoefficient = 0.25;
+	gravityCoefficient = 2;
+	inheritedVelFactor = 0.25;
+
+	lifeTimeMS = 6000;
+	lifetimeVarianceMS = 0;
+
+	spinSpeed = 5;
+	spinRandomMin = 0;
+	spinRandomMax = 2;
+
+	useInvAlpha = true;
+
+	colors[0] = "1 1 1 1.0";
+	colors[1] = "0 1 1 0.9";
+	colors[2] = "0 0 1 0.5";
+
+	sizes[0] = 3;
+	sizes[1] = 2;
+	sizes[2] = 1;
+
+	times[0] = 0;
+	times[1] = 0.75;
+	times[2] = 1.0;
+};
+
+//--- Emitter ---
+datablock ParticleEmitterData(CyanOptiverseEmitter) {
+	className = "ParticleEmitterData";
+	ejectionPeriodMS = 5;
+	periodVarianceMS = 0;
+	ejectionVelocity = 30;
+	velocityVariance = 20;
+	thetaMin = 90;
+	thetaMax = 90;
+	phiReferenceVel = 0;
+	phiVariance = 360;
+	lifetimeMS = 0;
+	particles = "CyanOptiverseParticle";
+	noHide = true;
+};
+
+// --Magic Mirror Start--
+datablock AudioProfile(GetMirrorSfx) {
+	filename    = "~/data/sound/SummerArmy/getmirror.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+datablock AudioProfile(UseMirrorSfx) {
+	filename    = "~/data/sound/SummerArmy/usemirror.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+datablock AudioProfile(MirrorWarnSfx) {
+	filename    = "~/data/sound/SummerArmy/mirrorwarning.wav";
+	description = Audio2d;
+	preload = true;
+};
+
+//--- Particle ---
+datablock ParticleData(MagicMirrorUseParticle) {
+   dragCoefficient = "2.5";
+   windCoefficient = "1.5";
+   gravityCoefficient = "0";
+   inheritedVelFactor = "0";
+   constantAcceleration = "0";
+   lifetimeMS = "1500";
+   lifetimeVarianceMS = "421";
+   spinSpeed = "0";
+   spinRandomMin = "0";
+   spinRandomMax = "0";
+   useInvAlpha = "0";
+   animateTexture = "0";
+   framesPerSec = "1";
+   textureName = "platinum/data/particles/orb";
+   animTexName[0] = "platinum/data/particles/orb";
+   colors[0] = "1 0.8 0 1";
+   colors[1] = "1 0.8 0 0.667";
+   colors[2] = "1 0.9 0 0.333";
+   colors[3] = "1 1 1 1";
+   sizes[0] = "0.94";
+   sizes[1] = "0.49";
+   sizes[2] = "0.17";
+   sizes[3] = "0.04";
+   times[0] = "0";
+   times[1] = "0.33";
+   times[2] = "0.66";
+   times[3] = "1";
+      dragCoeffiecient = "1";
+};
+
+//--- Emitter ---
+datablock ParticleEmitterData(MagicMirrorUseEmitter) {
+   className = "ParticleEmitterData";
+   ejectionPeriodMS = "2";
+   periodVarianceMS = "1";
+   ejectionVelocity = "7";
+   velocityVariance = "2";
+   ejectionOffset = "0";
+   thetaMin = "65.29412";
+   thetaMax = "155.2941";
+   phiReferenceVel = "0";
+   phiVariance = "360";
+   overrideAdvance = "0";
+   orientParticles = "0";
+   orientOnVelocity = "1";
+   particles = "MagicMirrorUseParticle";
+   lifetimeMS = "166";
+   lifetimeVarianceMS = "0";
+   useEmitterSizes = "0";
+   useEmitterColors = "0";
+      newVarianceMS = "1";
+      oldVarianceMS = "0";
+};
+
+datablock ItemData(MagicMirrorItem) {
+	// Mission editor category
+	superCategory = "SummerArmy";
+	category = "PowerUps";
+	className = "PowerUp";
+	powerUpId = 2832;
+
+	activeAudio = UseMirrorSfx;
+	pickupAudio = GetMirrorSfx;
+
+	// Basic Item properties
+	shapeFile = "~/data/shapes_summerarmy/Gameplay/Powerups/Mirror.dts";
+	mass = 1;
+	friction = 1;
+	elasticity = 0.3;
+	emap = false;
+
+	// Dynamic properties defined by the scripts
+	pickupName = "a Magic Mirror PowerUp!";
+	useName= "Magic Mirror PowerUp!";
+	maxInventory = 1;
+	coopClient = 1;
+};
+
+function MagicMirrorItem::onUse(%this, %obj, %user) {
+	if (%user.MirrorWarnSound !$= "") {  
+	    alxStop(%user.MirrorWarnSound);  
+	    %user.MirrorWarnSound = "";      
+	}
+	%i = 1;
+
+	while (isObject(%obj.Object[%i])) {
+		if (isObject(%obj.Path[%i]))
+			%path = %obj.Path[%i];
+		%obj.Object[%i].MoveOnPath(%path, %obj.InitialPosition[%i]);
+		%i ++;
+		%user.client.play2d(UseMirrorSfx);
+		}
+	%user.MirrorWarnSound = alxPlay(MirrorWarnSfx);
+	%pos = VectorAdd(%user.getPosition(), "0 0 0");
+	spawnEmitter(1000, MagicMirrorUseEmitter, %pos);
+	return true;
+}
+// --Magic Mirror End--
+
+new MaterialProperty(BannedMaterial)
+{
+friction = -30220;
+restitution = 0;
+force = 0;
+};
+addMaterialMapping( "sa_numbers_composite" , BannedMaterial);
+addMaterialMapping( "sa_numbers_nonsquare" , BannedMaterial);
+addMaterialMapping( "sa_danger_trim" , BannedMaterial);
+
+// @include "~/data/missions/custom/OptiverseMessage.txt"
+// @include "~/data/particles/idcard.png"
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "SummerArmy";
+         awesomeHint = "Doing \"Neos\" can be hard, but vital for this Awesome Time, as otherwise you\'ll have to wait until the walls disappear in certain sections. At the very end you\'ll have to do three neos!";
+         awesomeTime = "90000";
+         customRadarRule = "47";
+         desc = "In Terraria, magic mirrors are completely useless since you can just quit and reload the game to return home. But in PQ magic mirrors turned out to be pretty useful!";
+         eggHint = "An interior error that will never be fixed.";
+         game = "PlatinumQuest";
+         gameMode = "null";
+         generalHint = "When you activate a Magic Mirror, all the yellow platforms will be active for 5 seconds. A timeout warning sound will also play, telling you when the platforms will disappear. Thankfully, there is no Par Time in this level, so don\'t worry about having to restart the level.";
+         level = "1000";
+         music = "Optiversal.ogg";
+         name = "Opitenata Duka";
+         platinumTime = "150000";
+         radar = "1";
+         startHelpText = "Use the Magic Mirror and see the platforms appear!";
+         trivia = "This level\'s name translates to \"Universe of Hidden Platforms\". Note that the language used throughout the level is actually my own conlang, a language that is not seen elsewhere in the entire universe. This level is also my first level that is uploaded on the newer version of Marbleland that supports manually flagging dependencies. Also I composed the level\'s music myself, making this level my first level with a custom music.\n\nAlso if you want, try and beat this level without using the Magic Mirror... it is IMPOSSIBLE!";
+         type = "Custom";
+         ultimateHint = "This level can rather be frustrating to speedrun, due to some areas (like the areas with yellow walls) requiring you to waste time. In the section with a lot of platforms in different shapes, try to take the right path, as the left path has harder-to-reach Time Travels.";
+         ultimateTime = "120000";
+   };
+   new SimGroup(MissionData) {
+
+      new MissionArea(MissionArea) {
+         area = "-360 -648 720 1296";
+         flightCeiling = "300";
+         flightCeilingRange = "20";
+            locked = "true";
+      };
+      new Sky(Sky) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         cloudHeightPer[0] = "0";
+         cloudHeightPer[1] = "0";
+         cloudHeightPer[2] = "0";
+         cloudSpeed1 = "0.0001";
+         cloudSpeed2 = "0.0002";
+         cloudSpeed3 = "0.0003";
+         visibleDistance = "500";
+         useSkyTextures = "1";
+         renderBottomTexture = "1";
+         SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+         fogDistance = "300";
+         fogColor = "0.600000 0.600000 0.600000 1.000000";
+         fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+         fogVolume2 = "-1 1.07208e-014 8.756e-014";
+         fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+         materialList = "~/data/skies_pq/Optiverse/sky_day.dml";
+         windVelocity = "1 0 0";
+         windEffectPrecipitation = "0";
+         noRenderBans = "1";
+         fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+         fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+         fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+            notedSkybox = "platinum/data/skies_pq/Optiverse/sky_day.dml";
+      };
+   };
+   new SimGroup(HelpBubbleGroup) {
+
+      new StaticShape() {
+         position = "-26 124 59";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "3500";
+            text = "You may skip the last challenge using a teleporter. It will take a long time, though.";
+            triggerRadius = "5";
+      };
+      new StaticShape() {
+         position = "44 12 26.5";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = "Time it right! Magic mirrors have a timeout warning for a reason.";
+            triggerRadius = "3";
+      };
+   };
+   new SimGroup(SceneryGroup) {
+
+      new StaticShape() {
+         position = "-30 2 31.9963";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "Metal_Start_Fence_Tall";
+      };
+      new StaticShape() {
+         position = "-28 0 31.9963";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 1";
+         dataBlock = "Metal_End_Fence_Tall";
+      };
+      new StaticShape() {
+         position = "-24 108 49.9963";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "Metal_Start_Fence_Tall";
+      };
+      new StaticShape() {
+         position = "-26 106 49.9963";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 1";
+         dataBlock = "Metal_End_Fence_Tall";
+      };
+   };
+   new Item() {
+      position = "-25 29 1.99967";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noParticles = "0";
+   };
+   new Item() {
+      position = "12 64 28";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.000000 1.000000 1.000000 1.000000";
+      ambient = "0.000000 0.500000 1.000000 1.000000";
+         notedambient = "0.000000 0.500000 1.000000 1.000000";
+         notedcolor = "1.000000 1.000000 1.000000 1.000000";
+         noteddirection = "0.638261 0.459006 -0.61801";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(px) {
+         position = "130613 130613 130613";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "Next Node Object Name";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(pn) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "5000";
+            nextNode = "px";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath1) {
+         position = "28.0192 -5.47876 19.7312";
+         rotation = "0.456615 0.153691 -0.876289 42.0242";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "1000";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath2) {
+         position = "36.8765 -23.8396 22.0672";
+         rotation = "0.700368 0.0525738 -0.711844 12.0394";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath3) {
+         position = "30.3563 -29.9826 23.0779";
+         rotation = "0.592149 -0.0593534 0.803639 14.219";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "800";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath4) {
+         position = "73.9721 14.5146 59.7687";
+         rotation = "0.243954 0.238564 -0.939986 92.2657";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "9000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath5) {
+         position = "76.0021 105.392 59.7687";
+         rotation = "0.243954 0.238564 -0.939986 92.2657";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "1000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath6) {
+         position = "6.24539 25.9956 72.2328";
+         rotation = "1 4.09782e-008 -1.61461e-007 28.4814";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath7";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "9000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath7) {
+         position = "104.458 25.9956 72.2328";
+         rotation = "1 4.09782e-008 -1.61461e-007 28.4814";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath8";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "1000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath8) {
+         position = "-59.2718 123.586 66.997";
+         rotation = "0.0450417 -0.0486781 0.997799 94.5701";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath9";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "7000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath9) {
+         position = "36.7291 118.936 62.8349";
+         rotation = "0.0231159 -0.0237631 0.99945 91.6136";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "5000";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance(pl) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/SummerArmy\'s Interiors/Optiverse.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-49.5 -17.5 0.75";
+      rotation = "1 0 0 0";
+      scale = "191 171 120";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance(pls) {
+      position = "11111 111111 111111";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/SummerArmy\'s Interiors/OptiverseHidden.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-1.5 1.5 2.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new Item() {
+      position = "-1 1 3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-1 27 2.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-27 27 2.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "25 27 2.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "1 43 6.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-28 12 32.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "44 12 24.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "44 44 26.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "44 48 26.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "20 60 28.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-24 100 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "25 97 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "25 73 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "84 70 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "84 74 38.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "84 78 40.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "124 74 38.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "124 70 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-26 120 50.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-24 126 56.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-18 124 56.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "2 124 56.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "22 124 56.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "42 124 56.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "-26 130 46";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-26 136 36";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new TSStatic() {
+      position = "-1 79 7";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.25";
+      shapeName = "~/data/shapes_pq/Gameplay/LightBeam/lightbeam.dts";
+   };
+   new TSStatic() {
+      position = "-16 64 25";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.25";
+      shapeName = "~/data/shapes_pq/Gameplay/LightBeam/lightbeam.dts";
+   };
+   new TSStatic() {
+      position = "124 78 43";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.25";
+      shapeName = "~/data/shapes_pq/Gameplay/LightBeam/lightbeam.dts";
+   };
+   new Trigger() {
+      position = "-1.5 79.5 7";
+      rotation = "1 0 0 0";
+      scale = "1 1 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "0";
+         centerDestPoint = "1";
+         delay = "0";
+         destination = "d2";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "1";
+         silent = "0";
+   };
+   new Trigger() {
+      position = "-16.5 64.5 25";
+      rotation = "1 0 0 0";
+      scale = "1 1 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "-90";
+         centerDestPoint = "1";
+         delay = "0";
+         destination = "d3";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "1";
+         silent = "0";
+   };
+   new Trigger() {
+      position = "123.5 78.5 43";
+      rotation = "1 0 0 0";
+      scale = "1 1 5";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "90";
+         centerDestPoint = "1";
+         delay = "0";
+         destination = "d1";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "1";
+         silent = "0";
+   };
+   new Trigger(D2) {
+      position = "42.5 3.5 25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(d3) {
+      position = "-22.5 2.5 33";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(d1) {
+      position = "-32.5 108.5 51";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(cp1) {
+      position = "42 8 24.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         add = "1 -1 3";
+         gravity = "0";
+         respawnPoint = "cp1";
+   };
+   new Trigger(cp2) {
+      position = "-28 8 32.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         add = "1 -1 3";
+         gravity = "0";
+         respawnPoint = "cp2";
+   };
+   new Trigger(cp3) {
+      position = "-28 114 50.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "CheckpointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         add = "1 -1 3";
+         gravity = "0";
+         respawnPoint = "cp3";
+   };
+   new Trigger() {
+      position = "37.625 54.375 26";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "180";
+         centerDestPoint = "1";
+         delay = "2000";
+         destination = "ssss";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(ssss) {
+      position = "56 124.375 66.5";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "56.25 115.625 66.4778";
+      rotation = "1 0 0 0";
+      scale = "0.25 0.25 0.25";
+      dataBlock = "NestEgg_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "blue";
+   };
+   new Item() {
+      position = "53 89 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "4 77 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "55 73 36.3702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MagicMirrorItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         Path1 = "pn";
+         object1 = "pls";
+   };
+   new Item() {
+      position = "25 29 1.99967";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noParticles = "0";
+   };
+   new Item() {
+      position = "59 101 36.175";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SundialItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "6000";
+   };
+   new Item() {
+      position = "53 63 36.175";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SundialItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "6000";
+   };
+   new Item() {
+      position = "-1 65 36.175";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SundialItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "6000";
+   };
+   new Item() {
+      position = "9 101 36.175";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SundialItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "6000";
+   };
+   new Item() {
+      position = "-26 130 35.9997";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemTurquoise_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noParticles = "0";
+   };
+   new Trigger() {
+      position = "-29 123 56.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         DisplayGemsMessage = "0";
+         cameraYaw = "270";
+         centerDestPoint = "1";
+         delay = "28320";
+         destination = "sssss";
+         inverseVelocity = "0";
+         keepAngular = "0";
+         keepCamera = "0";
+         keepVelocity = "0";
+         silent = "0";
+   };
+   new Trigger(sssss) {
+      position = "63.5 118.5 58.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "55 119 58.5";
+      rotation = "1 0 0 0";
+      scale = "2 2 1";
+      dataBlock = "FinishTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "2 -2 2.175";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SundialItem_PQ";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "2832";
+   };
+   new ParticleEmitterNode() {
+      position = "46.108 67.9551 146.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "FireWorkNode";
+      emitter = "CyanOptiverseEmitter";
+      velocity = "1";
+   };
+};
+//--- OBJECT WRITE END ---
