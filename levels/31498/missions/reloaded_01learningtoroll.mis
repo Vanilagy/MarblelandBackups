@@ -1,0 +1,206 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Nockess, org. by Alex Swanson";
+         customRadarRule = "0";
+         desc = "A very simple level to help you get used to rolling around. Follow the track around and roll on to the exit pad to finish the level.";
+         eastereggHint = "Get a running start and hit the edge.";
+         game = "Gold";
+         gameMode = "null";
+         generalHint = "Get comfortable with the basic controls. Eventually, your path to the finish should be a nice fluid motion.";
+         goldTime = "9250";
+         hideRadar = "1";
+         level = "1";
+         music = "Classic Vibe.ogg";
+         name = "MBGR 01: Learning to Roll";
+         startHelpText = "Use <func:bind moveforward>, <func:bind moveleft>, <func:bind movebackward>, and <func:bind moveright> to roll the marble around!";
+         trivia = "The level that started it all. Well, really that was my MBG Mashup level that I released in early 2019, but this was the first made for this whole project, to probably no one\'s surprise.";
+         type = "Beginner";
+         ultimateHint = "Use the nearest inside diagonal edge to gain some momentum towards the finish.";
+         ultimateTime = "4200";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "StartPad_MBG";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/reloaded_learningtoroll.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new StaticShape(EndSign) {
+      position = "22.4672 8.43532 504.46";
+      rotation = "0 0 1 160.519";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-13.4267 36.2154 473.302";
+      rotation = "1 0 0 0";
+      scale = "50 50 50";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "27.8874 23.868 500.519";
+      rotation = "-0.0993088 0.0943882 0.99057 87.6319";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "-0.600503 28.231 500.524";
+      rotation = "0 0 -1 8.02137";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new Trigger(movecamera) {
+      position = "-4 18 0";
+      rotation = "1 0 0 0";
+      scale = "8 4 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         persistTime = "5000";
+         text = "Alternatively, you can use <func:bind panUp>, <func:bind turnLeft>, <func:bind panDown>, <func:bind turnRight>, or the mouse to move the camera.";
+   };
+   new StaticShape() {
+      position = "52 28 6";
+      rotation = "0 0 1 30";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(gofinish) {
+      position = "48 14 0";
+      rotation = "1 0 0 0";
+      scale = "8 4 2";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         displayonce = "0";
+         persistTime = "5000";
+         text = "Roll to the end pad to finish the level!";
+   };
+   new StaticShape(EndPoint) {
+      position = "52 28 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad_MBG";
+   };
+   new StaticShape() {
+      position = "0 27.9 1.1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "27.9 24 1.1";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "55.9 4 1.1";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new StaticShape() {
+      position = "24 0.1 1.1";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new ScriptObject() {
+         Time = "0";
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "2201";
+         penaltyTime = "0";
+         powerup = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-9 39 -4";
+      rotation = "1 0 0 0";
+      scale = "70 50 20";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "-8.07798 -1.88508 6.96371";
+         rotation = "0.307046 -0.196108 0.93127 68.8867";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new Item() {
+      position = "0 8 -1.25";
+      rotation = "1 0 0 0";
+      scale = "0.9 0.9 0.9";
+      dataBlock = "EasterEgg_MBG";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+   };
+};
+//--- OBJECT WRITE END ---
