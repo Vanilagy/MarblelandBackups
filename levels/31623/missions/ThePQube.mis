@@ -1,0 +1,1439 @@
+// ----------------------------------------
+
+//    _ _ _
+//   /_/_/_/\     
+//  /_/_/_/\/\    
+// /_/_/_/\/\/\
+// \_\_\_\/\/\/
+//  \_\_\_\/\/
+//   \_\_\_\/
+
+// PQube Created by Keppy
+
+// -----------------Crash Prevention-----------------
+
+if(!$PQubeLoaded && DatablockGroup.getCount() > 1005) {
+  messageBoxOK("shit breaks", "Not enough datablock slots available. Too many custom marbles?", "");
+  return;
+}
+
+// -----------------Sounds-----------------
+
+datablock AudioProfile(changeViewSfx) {
+	filename    = "~/data/sound/MegaShrink.ogg";
+  description = Audio2d;
+};
+datablock AudioProfile(turnSfx1) {
+	filename    = "~/data/sound/custom/PQubeTurn1.wav";
+  description = Audio2d;
+};
+datablock AudioProfile(turnSfx2) {
+	filename    = "~/data/sound/custom/PQubeTurn2.wav";
+  description = Audio2d;
+};
+datablock AudioProfile(turnSfx3) {
+	filename    = "~/data/sound/custom/PQubeTurn3.wav";
+  description = Audio2d;
+};
+datablock AudioProfile(turnSfx4) {
+	filename    = "~/data/sound/custom/PQubeTurn4.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(rotationSfx1) {
+	filename    = "~/data/sound/custom/PQubeRotate1.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(rotationSfx2) {
+	filename    = "~/data/sound/custom/PQubeRotate2.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(rotationSfx3) {
+	filename    = "~/data/sound/custom/PQubeRotate3.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(crumpleSfx) {
+	filename    = "~/data/sound/custom/PQubeCrumple.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(cubeSmackSfx) {
+	filename    = "~/data/sound/custom/PQubeSmack.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(cubeHitSfx1) {
+	filename    = "~/data/sound/custom/PQubeHit1.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(cubeHitSfx2) {
+	filename    = "~/data/sound/custom/PQubeHit2.wav";
+	description = Audio2d;
+};
+datablock AudioProfile(cubeHitSfx3) {
+	filename    = "~/data/sound/custom/PQubeHit3.wav";
+	description = Audio2d;
+};
+
+// -----------------Shapes-----------------
+
+datablock StaticShapeData(pqubePreview) { 
+  shapeFile = "~/data/shapes/custom/pqube/cubepreview.dts"; 
+};
+datablock StaticShapeData(pqubeGrid) { 
+  shapeFile = "~/data/shapes/custom/pqube/grid.dts"; 
+};
+datablock StaticShapeData(pqubeBlock) { 
+  shapeFile = "~/data/shapes/custom/pqube/block.dts"; 
+};
+datablock StaticShapeData(pqubeSticker) { 
+  shapeFile = "~/data/shapes/custom/pqube/sticker.dts"; 
+};
+datablock StaticShapeData(pqubeProjection) { 
+  shapeFile = "~/data/shapes/custom/pqube/projection.dts"; 
+};
+
+// -----------------Default Prefs-----------------
+
+if(!$pref::PQube::SkipDefault) { 
+  $pref::PQube::SkipDefault = true;
+  $pref::PQube::Solves = 0;
+  $pref::PQube::Prime = "lshift";
+  $pref::PQube::Wide = "space";
+  $pref::PQube::Up = "w";
+  $pref::PQube::Left = "a";
+  $pref::PQube::Front = "s";
+  $pref::PQube::Right = "d";
+  $pref::PQube::Back = "e";
+  $pref::PQube::Down = "x";
+  $pref::PQube::Middle = "m";
+  $pref::PQube::RotateX = "up";
+  $pref::PQube::RotateY = "right";
+  $pref::PQube::RotateNegY = "left";
+  $pref::PQube::RotateZ = "down";
+  $pref::PQube::ToggleProjections = "slash";
+  $pref::PQube::Style0 = "f1";
+  $pref::PQube::Style1 = "f2"; 
+  $pref::PQube::Style2 = "f3";
+  $pref::PQube::Style3 = "f4";
+  $pref::PQube::Style4 = "f5";
+  $pref::PQube::ShowControls = "h";
+  $pref::PQube::ChangeView = "v";
+  $pref::PQube::Undo = "z";
+  $pref::PQube::Redo = "y";
+  $pref::PQube::Initialize = "i";
+  $pref::PQube::ShowProjections = 0;
+  $pref::PQube::Style = 1;
+  $pref::PQube::turnSpeed = 200;
+  $pref::PQube::View = 1;
+}
+
+// -----------------Controls-----------------
+
+new ActionMap(pqubeControl);
+
+pqubeControl.bindCmd(keyboard, $pref::PQube::Prime, "missionState.primeVal = 1;", "missionState.primeVal = 0;");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Wide, "missionState.wideVal = 1;", "missionState.wideVal = 0;");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Up, "moveControl(3);", ""); // U
+pqubeControl.bindCmd(keyboard, $pref::PQube::Left, "moveControl(4);", ""); // L
+pqubeControl.bindCmd(keyboard, $pref::PQube::Front, "moveControl(2);", ""); // F
+pqubeControl.bindCmd(keyboard, $pref::PQube::Right, "moveControl(1);", ""); // R
+pqubeControl.bindCmd(keyboard, $pref::PQube::Back, "moveControl(5);", ""); // B
+pqubeControl.bindCmd(keyboard, $pref::PQube::Down, "moveControl(6);", ""); // D
+pqubeControl.bindCmd(keyboard, $pref::PQube::Middle, "moveControl(37);", ""); // M
+pqubeControl.bindCmd(keyboard, $pref::PQube::RotateX, "moveControl(25);", ""); // x
+pqubeControl.bindCmd(keyboard, $pref::PQube::RotateY, "moveControl(26);", ""); // y
+pqubeControl.bindCmd(keyboard, $pref::PQube::RotateNegY, "moveControl(32);", ""); // y'
+pqubeControl.bindCmd(keyboard, $pref::PQube::RotateZ, "moveControl(27);", ""); // z
+pqubeControl.bindCmd(keyboard, $pref::PQube::ToggleProjections, "toggleProjections();", "");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Style0, "changeStyle(0);", ""); // alg.cubing.net
+pqubeControl.bindCmd(keyboard, $pref::PQube::Style1, "changeStyle(1);", ""); // pq
+pqubeControl.bindCmd(keyboard, $pref::PQube::Style2, "changeStyle(2);", ""); // mbp
+pqubeControl.bindCmd(keyboard, $pref::PQube::Style3, "changeStyle(3);", ""); // mbg
+pqubeControl.bindCmd(keyboard, $pref::PQube::Style4, "changeStyle(4);", ""); // mbu
+pqubeControl.bindCmd(keyboard, $pref::PQube::ChangeView, "changeView();", "");
+pqubeControl.bindCmd(keyboard, $pref::PQube::ShowControls, "showControls();", "");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Undo, "undoMove();", "");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Redo, "redoMove();", "");
+pqubeControl.bindCmd(keyboard, $pref::PQube::Initialize, "initCube();", "");
+
+pqubeControl.bind(mouse, "yaxis", "");
+pqubeControl.bind(mouse, "xaxis", "");
+
+// -----------------Callbacks-----------------
+
+function clientCbOnMissionLoaded() {
+  activatePackage(pqube);
+}
+
+function clientCbOnRespawn() {
+  pqubeOnRespawn();
+}
+
+function clientCbOnFrameAdvance() {
+  pqubeOnFrameAdvance();
+}
+
+function clientCbOnServerLeave() {
+  pqubeOnLeave();
+}
+
+// -----------------Functions-----------------
+
+package pqube {
+
+  // -----------------Init-----------------
+  
+  function initSolveData() {
+    missionState.coreRotation = "1 0 0 0";
+    missionState.undoMoves = "";
+    missionState.userMoves = "";
+    missionState.scrambleMoves = "";
+    missionState.nonScrambleMoves = "";
+    missionState.instability = 0;
+  }
+  
+  function pqubeOnRespawn() {
+    if(missionState.firstRespawn) {
+      changeStyle($pref::PQube::Style);
+      
+      missionInfo.startHelpText = "";
+
+      cubePreview.cancelMoving();
+      cubePreview.hide(true);
+      
+      if($Game::Record)
+        messageClient(localClientConnection, 'MsgCheckpoint', missionList.recordingMessage);
+      
+      missionState.firstRespawn = false;
+    }
+    
+    if(isObject(cubelet1path1))
+      animationInit();
+
+    initSolveData();
+    missionState.checkSolved = true;
+    $Editor::Opened = false;
+    
+    pqubeControl.push();
+    setView();
+    newScramble();
+  }
+  
+  function createCubelets() {
+    if(isObject(cubelet1))
+      return;
+    
+    %stickers = 0;
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      %cubeletPosition = getField(missionList.cubeletPositions, %i);
+      
+      new StaticShape(%cubelet) {
+        datablock = "pqubeBlock";
+        position = %cubeletPosition;
+        firstPosition = %cubeletPosition;
+      };
+      
+      %cubelet.isEdge = isEdge(%cubelet);
+      
+      %cubelet.setSkinName("skin" @ $pref::PQube::Style);
+      
+      %x = getWord(%cubeletPosition, 0);
+      %y = getWord(%cubeletPosition, 1);
+      %z = getWord(%cubeletPosition, 2);
+      
+      %color[0] = 0;
+      %color[1] = 0;
+      %color[2] = 0;
+      
+      if(%x == -2)
+        %color[0] = 3; // Orange
+        
+      else if (%x == 2)
+        %color[0] = 4; // Red
+      
+      if(%y == -2)
+        %color[1] = 2; // Green
+      
+      else if (%y == 2) 
+        %color[1] = 1; // Blue
+      
+      if(%z == -2)
+        %color[2] = 6; // Yellow
+      
+      else if (%z == 2)
+        %color[2] = 5; // White
+      
+      for(%j = 0; %j < 3; %j++) {
+        %color = %color[%j];
+        
+        if(!%color) 
+          continue;
+        
+        %stickers++;
+        
+        %sticker = "sticker" @ %stickers;
+        %projection = "projection" @ %stickers;
+        
+        %stickerRotation = getField(missionList.stickerRotations, %color);
+        
+        new StaticShape(%sticker) {
+          datablock = "pqubeSticker";
+          color = %color;
+          position = %cubeletPosition;
+          rotation = %stickerRotation;
+        };
+
+        new StaticShape(%projection) {
+          datablock = "pqubeProjection";
+          position = %cubeletPosition;
+          rotation = %stickerRotation;
+        };
+        
+        %projection.setFadeVal($pref::PQube::ShowProjections);
+        
+        %skin = "skin" @ $pref::PQube::Style @ %color;
+        
+        %sticker.setSkinName(%skin);
+        %projection.setSkinName(%skin);
+        %sticker.setParent(%cubelet);
+        %projection.setParent(%cubelet);
+      }
+    }
+  }
+  
+  function deleteCubelets() {
+    if(!isObject(cubelet1))
+      return;
+  
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      %cubelet.delete();
+    }
+    for(%i = 1; %i <= 54; %i++) {
+      %projection = "projection" @ %i;
+      %sticker = "sticker" @ %i;
+      %projection.delete();
+      %sticker.delete();
+    }
+  }
+  
+  function newScramble() {
+    cancelScramble();
+    deleteCubelets();
+    createCubelets();
+    onNextFrame("startScramble");
+  }
+  
+  // -----------------Scrambles-----------------
+  
+  function startScramble() {
+    missionState.scrambling = true;
+    RHNode1.timeToNext = 0;
+    randomTurnLoop();
+    missionState.cancelLoopSchedule = schedule(3000, 0, "cancelRandomTurnLoop");
+  }
+  
+  function cancelScramble() {
+    rotationHelper.cancelMoving();
+    missionState.scrambling = false;
+    cancel(missionState.cancelLoopSchedule);
+    cancel(missionState.randomTurnSchedule);
+  }
+  
+  function randomTurnLoop() {
+    %moveID = getRandom(1, 6);
+    doMove(%moveID);
+    missionState.scrambleMoves = missionState.scrambleMoves SPC %moveID;
+    missionState.randomTurnSchedule = schedule(50, 0, "randomTurnLoop");
+  }
+  
+  function cancelRandomTurnLoop() {
+    RHNode1.timeToNext = $pref::PQube::turnSpeed;
+    cancel(missionState.randomTurnSchedule);
+    missionState.scrambling = false;
+  }
+  
+  // -----------------Inspection-----------------
+  
+  function GameConnection::stateGo(%this) {
+    Parent::stateGo(%this);
+    if(missionState.checkSolved)
+      localClientConnection.incBonusTime(15000);
+  }
+  
+  function cancelInspection() {
+    %bonus = 15000 - $Time::BonusTime;
+    Time::reset();
+    $Time::TotalBonus = %bonus;
+    $Time::ElapsedTime = %bonus;
+    Time::start();
+  }
+
+  // -----------------Turns-----------------
+  
+  function updateCubeletRotations() {
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      if(!%cubelet.canMove)
+        continue;
+      
+      if(!rotationHelper._moving) 
+        %rotation = missionState.currentRotation;
+      else 
+        %rotation = rotationHelper.getRotation();
+      
+      %newRotation = RotMultiply(%rotation, %cubelet.lastRotation);
+      %newTransform = MatrixMultiply("0 0 0" SPC %newRotation, %cubelet.firstPosition SPC "1 0 0 0");
+      %cubelet.setTransform(%newTransform);
+    }
+  }
+  
+  function pqubeOnFrameAdvance() {
+    if(rotationHelper._moving)
+      updateCubeletRotations();
+  }
+  
+  function setMoveable(%cubelet) {
+    %cubelet.canMove = true;
+    %cubelet.lastRotation = %cubelet.getRotation();
+  }
+  
+  function moveControl(%moveID) {
+    if(!localClientConnection.playing)
+      return;
+    
+    if(isObject(cubelet1path1))
+      animationInit();
+    
+    if(missionState.primeVal)
+      %moveID = invMoveID(%moveID);
+    
+    %moveID += 12 * missionState.wideVal;
+    
+    if(%moveID > 45)
+      return;
+    
+    doMove(%moveID);
+    
+    missionState.userMoves = missionState.userMoves SPC %moveID;
+    missionState.instability = 0;
+    missionState.undoMoves = "";
+  }
+  
+  function doMove(%moveID) {
+    
+    // -----------------Start-----------------
+    
+    if(!%moveID) 
+      return;
+    
+    %isWide = (%moveID > 12 && %moveID <= 24);
+    %isEntireCube = (%moveID > 24 && %moveID < 36);
+    %centersMove = (%moveID > 12);
+    
+    if(rotationHelper._moving && !$Game::EasterEgg)
+      stopRotating();
+    
+    if(!%isEntireCube && $Time::BonusTime)
+      cancelInspection();
+    
+    // -----------------Find Cubelets-----------------
+    
+    %axis = getWord(missionList.faceAxis, %moveID);
+    
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      
+      if(%isEntireCube) {
+        setMoveable(%cubelet);
+        continue;
+      }
+      
+      %cubelet.canMove = false;
+      %cubeletPos = mRound(getWord(%cubelet.getWorldBoxCenter(), %axis));
+      %facePos = getWord(missionList.cubeletDirection, %moveID) * 2;  
+      
+      if(%isWide) {
+        if(%cubeletPos !$= %facePos) 
+          setMoveable(%cubelet);
+      }
+      else {
+        if(%cubeletPos $= %facePos)
+          setMoveable(%cubelet);
+      }
+    }
+    
+    // -----------------Move Helper-----------------
+    
+    %turnDirection = getWord(missionList.turnDirection, %moveID);
+    %rotationAxis = setWord("0 0 0", %axis, %turnDirection);
+    
+    missionState.currentRotation = %rotationAxis SPC $pi_2;
+    RHNode2.setTransform("0 0 0" SPC missionState.currentRotation);
+    
+    rotationHelper.moveOnPath(RHNode1);
+    missionState.moveSchedule = schedule(RHNode1.timeToNext, 0, "stopRotating");
+   
+    // -----------------Finish-----------------
+    
+    if(%centersMove) {
+      missionState.coreRotation = RotMultiply(
+        missionState.currentRotation, 
+        missionState.coreRotation
+      );
+    }
+    
+    if(%isEntireCube) 
+      %sound =  "rotationSfx" @ getRandom(1, 3);
+    else
+      %sound = "turnSfx" @ getRandom(1, 4);
+    
+    alxPlay(%sound);
+    
+    if(!missionState.scrambling) {
+      missionState.nonScrambleMoves = 
+        missionState.nonScrambleMoves SPC %moveID;
+    }
+  }
+  
+  function stopRotating() {
+    cancel(missionState.moveSchedule);
+    rotationHelper.cancelMoving();
+    updateCubeletRotations();
+    
+    if(!missionState.scrambling && missionState.checkSolved) {
+      solvedCheck();
+      eggCheck();
+    }
+  }
+  
+  // -----------------Undo/Redo-----------------
+  
+  function invMoveID(%moveID) {
+    if(%moveID < 1)
+      return 0;
+    if(%moveID % 12 > 6)
+      %moveID -= 6;
+    else
+      %moveID += 6;
+    return %moveID;
+  }
+  
+  function undoMove() {
+    %lastIndex = getWordCount(missionState.userMoves) - 1;
+    %move = getWord(missionState.userMoves, %lastIndex);
+    if(%move) {
+      doMove(invMoveID(%move));
+      missionState.undoMoves = missionState.undoMoves SPC %move;
+      missionState.userMoves = removeWord(missionState.userMoves, %lastIndex);
+    }
+  }
+  
+  function redoMove() {
+    %lastIndex = getWordCount(missionState.undoMoves) - 1;
+    %move = getWord(missionState.undoMoves, %lastIndex);
+    if(%move) {
+      doMove(%move);
+      missionState.userMoves = missionState.userMoves SPC %move;
+      missionState.undoMoves = removeWord(missionState.undoMoves, %lastIndex);
+    }
+  }
+  
+  // -----------------Cubelet Calculators-----------------
+  
+  function getRelAngle(%cubelet) {
+    %rotation = RotMultiply(
+      RotInverse(%cubelet.getRotation()), 
+      missionState.coreRotation
+    );
+    return getWord(%rotation, 3);
+  }
+  
+  function cubeletSolved(%cubelet) {
+    return getRelAngle(%cubelet) < 0.01; // Close enough
+  }
+  
+  function cubeletFlipped(%cubelet) {
+    return mAbs($pi - getRelAngle(%cubelet)) < 0.01;
+  }
+  
+  function isEdge(%cubelet) {
+    %zeroCount = 0;
+    for(%i = 0; %i <= 2; %i++) {
+      %posEntry = getWord(%cubelet.getWorldBoxCenter(), %i);
+      if(mRound(%posEntry) $= 0)
+        %zeroCount++;
+    }
+    return %zeroCount == 1;
+  }
+  
+  // -----------------End-----------------
+  
+  function correctCenters() {
+    for(%i = 20; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      %cubelet.setTransform("0 0 0" SPC missionState.coreRotation);
+    }
+  }
+  
+  function solvedCheck() {
+    if(!isObject(cubelet1))
+      return;
+    
+    for(%i = 1; %i <= 20; %i++) {
+      %cubelet = "cubelet" @ %i;
+      if(!cubeletSolved(%cubelet))
+        return;
+    }
+    
+    endGameSetup();
+    correctCenters();
+    spinCube();
+    schedule(2500, 0, "solveSummary");
+    $pref::PQube::Solves++;
+  }
+
+  function spinCube() {
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      setMoveable(%cubelet);
+    }
+    rotationHelper.moveOnPath(spinNode1);
+  }
+  
+  function GameConnection::stateEnd(%this) {
+    %this.playing = false;
+    %this.playPitchedSound("firewrks");
+  }
+  
+  // -----------------Summary-----------------
+  
+  function movesToAlgTurns(%moveList) {
+    %alg = "";
+    for(%i = 0; %i < getWordCount(%moveList); %i++) {
+      %move = getWord(%moveList, %i);
+      %turn = getWord(missionList.turns, %move);
+      %alg = %alg @ %turn @ "_";
+    }
+    return %alg;
+  }
+  
+  function copyAlgLink() {
+    %alg = "?alg=" @ movesToAlgTurns(missionState.nonScrambleMoves);
+    %setup = "&setup=" @ movesToAlgTurns(missionState.scrambleMoves);
+    %time = "_%2F%2F_" @ ($Time::CurrentTime / 1000) @ "s";
+    %link = "https://alg.cubing.net/" @ %alg @ %time @ %setup;
+    setClipboard(%link);
+  }
+  
+  function solveSummary() {
+    %message = "Copy alg.cubing.net link to clipboard?";
+    %title = "View your solve";
+    MessageBoxYesNo(%title, %message, "copyAlgLink();", "");
+  }
+
+  // -----------------Styles-----------------
+
+  function changeSky(%skybox) {
+    $prevTextureQuality = $pref::Video::TextureQuality;
+    
+    %material = "platinum/data/" @ %skybox;
+    
+    if(Sky.materialList $= %material)
+      return;
+    
+    $pref::Video::TextureQuality = 0;
+    Sky.delete();
+    new Sky(Sky) {
+      visibleDistance = "2000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      materialList = %material;
+      noRenderBans = "1";
+    };
+    schedule(200, 0, "eval", "$pref::Video::TextureQuality = $prevTextureQuality;");
+  }
+  
+  function changeSun(%color, %ambient) {
+    Sun.color = %color;
+    Sun.ambient = %ambient;
+    Sun.inspectPostApply();
+  }
+  
+  function changeStyle(%style, %nopref) {
+    %flag = 
+      !missionState.firstRespawn 
+      && %style $= $pref::PQube::style 
+      || !missionState.canChangeStyle;
+
+    if(%flag)
+      return;
+    
+    missionState.canChangeStyle = false;
+    schedule(200, 0, "eval", "missionState.canChangeStyle = true;");
+
+    if(!%noPref)
+      $pref::PQube::Style = %style;
+    
+    grid.hide(%style != 0);
+    gridPreview.hide(%style != 0);
+    astrolabe.hide(%style != 4);
+    
+    changeSky(getField(missionList.styleSky, %style));
+    
+    changeSun(
+      getField(missionList.styleSunColor, %style), 
+      getField(missionList.styleSunAmbient, %style)
+    );
+    
+    playMusic(getField(missionList.styleMusic, %style));
+    
+    if($pref::AutomaticAudio)
+      loadAudioPack(getField(missionList.styleAudioPacks, %style));
+
+    %skin = "skin" @ %style;
+    
+    if(isObject(cubelet1)) {
+      for(%i = 1; %i <= 26; %i++) {
+        %cubelet = "cubelet" @ %i;
+        %cubelet.setSkinName(%skin);
+      }
+      for(%i = 1; %i <= 54; %i++) {
+        %sticker = "sticker" @ %i;
+        %projection = "projection" @ %i;
+        %skin = "skin" @ %style @ %sticker.color;
+        %sticker.setSkinName(%skin);
+        %projection.setSkinName(%skin);
+      }
+    }
+  }
+  
+  // -----------------Views-----------------
+  
+  function updateGrid() {
+    %camera = localClientConnection.camera;
+    %gridOffset = MatrixForward(%camera.getTransform());
+    %gridPos = vectorAdd(%camera.position, vectorScale(%gridOffset, 30));
+    grid.setTransform(%gridPos SPC %camera.getRotation());
+  }
+  
+  function createViewNodes() {
+    if(isObject(view1Node1))
+      return;
+    
+    for(%i = 0; %i < getFieldCount(missionList.views); %i++) {
+      %node1 = "view" @ %i @ "Node1";
+      %node2 = "view" @ %i @ "Node2";
+      new StaticShape(%node1) {
+        dataBlock = "PathNode";
+            Smooth = "1";
+            nextNode = %node2;
+            placed = "1";
+            timeToNext = "1000";
+            usePosition = "1";
+            useRotation = "1";
+      };
+      new StaticShape(%node2) {
+        dataBlock = "PathNode";
+            nextNode = "";
+            placed = "1";
+            usePosition = "1";
+            useRotation = "1";
+      };
+      %view = getField(missionList.views, %i);
+      %node2.setTransform(%view);
+      %node1Offset = MatrixForward(%node2.getTransform());
+      %node1Pos = vectorSub(%node2.position, %node1Offset);
+      %node1.setTransform(%node1Pos SPC %node2.getRotation());
+    }
+  }
+  
+  function setView() {
+    localClientConnection.setToggleCamera(true);
+    %node1 = "view" @ $pref::PQube::View @ "Node1";
+    %observer = localClientConnection.camera;
+    %observer.cancelMoving();
+    %observer.moveOnPath(%node1);
+    updateGrid();
+  }
+  
+  function changeView() {
+    if(missionState.instability == -1)
+      return;
+    
+    $pref::PQube::View++;
+    
+    if($pref::PQube::View == 5)
+      $pref::PQube::View = 0;
+    
+    alxPlay(changeViewSfx);
+    setView();
+  }
+  
+  function toggleProjections() {
+    alxPlay(BubblePopSfx);
+    $pref::PQube::ShowProjections = !$pref::PQube::ShowProjections;
+    for(%i = 1; %i <= 54; %i++) {
+      %projection = "projection" @ %i;
+      %projection.setFadeVal($pref::PQube::ShowProjections);
+    }
+  }
+  
+  // -----------------Help-----------------
+  
+  function listMessageBox(%title, %list, %line_length, %sep) {
+    %new_list = "";
+    for(%i = 0; %i < getFieldCount(%list); %i += 2) {
+      %first = getField(%list, %i);
+      %last = getField(%list, %i + 1);
+      
+      %numspaces = (%line_length - strlen(%first) - strlen(%last));
+      %spaces = strrepeat(%sep, %numspaces, "");
+      
+      %line = %first @ %spaces @ %last;
+      %new_list = %new_list @ %line NL "";
+    }
+    %list_formatted = "<spush><font:Lucida Console:14>" @ %new_list @ "<spop>";
+    messageBoxOK(%title, %list_formatted, "");
+  }
+  
+  function showControls() {
+    listMessageBox("Help", missionList.controls, 26, ".");
+  }
+  
+  // -----------------Pause-----------------
+  
+  function moveCamera() {
+    %camera = localClientConnection.camera;
+    CameraNode.setTransform(vectorAdd("0 0 100", %camera.position) SPC %camera.getRotation());
+    %camera.moveOnPath(CameraNode);
+    updateGrid();
+  }
+  
+  function escapeFromGame(%val) {
+    input_escapeFromGame(%val);
+    
+    if(missionState.instability == -1)
+      return;
+    
+    $gamePaused = false;
+    moveCamera();
+    onNextFrame("pauseGame");
+    onNextFrame("onNextFrame", "setView");
+    
+    schedule(50, 0, "eval", "pqubeControl.push();");
+  }
+  
+  // -----------------Cube Init-----------------
+  
+  function initCube() {
+    if(missionState.instability == -1)
+      return;
+    
+    if(isObject(cubelet1path1)) {
+      animationInit();
+      return;
+    }
+
+    if(!missionState.scrambleMoves && !missionState.nonScrambleMoves) {
+      missionState.instability += 1;
+      
+      if(missionState.instability > 8)
+        explodeGame();
+      else
+        alxPlay(cubeSmackSfx);
+      
+      return;
+    }
+    
+    stopRotating();
+    
+    if(missionState.scrambling) {
+      cancelScramble();
+      RHNode1.timeToNext = $pref::PQube::turnSpeed;
+    }
+    
+    if($Game::State !$= "go")
+      setGameState("go");
+
+    Time::reset();
+    animateInit();
+    
+    $Editor::Opened = true;
+    missionState.checkSolved = false;
+    
+    initSolveData();
+  }
+  
+  function animateInit() {
+    alxStop(missionState.crumpleSfxHandle);
+    missionState.crumpleSfxHandle = alxPlay("crumpleSfx");
+    
+    %delays = "0";
+    for(%i = 2; %i <= 26; %i++) {
+      %delay += 50;
+      %delays = %delays SPC %delay;
+    }
+    
+    for(%i = 1; %i <= 26; %i++) {
+      %rand = getRandom(0, getWordCount(%delays) - 1);
+      
+      %delay = getWord(%delays, %rand);
+      %delays = removeWord(%delays, %rand);
+      
+      %delay += getRandom(-20, 20);
+      
+      %cubelet = "cubelet" @ %i;
+      
+      %node1 = %cubelet @ "path1";
+      %node2 = %cubelet @ "path2";
+      %node3 = %cubelet @ "path3";
+      
+      new StaticShape(%node1) {
+        rotation = %cubelet.rotation;
+        position = %cubelet.position;
+        dataBlock = "PathNode";
+          Smooth = "1";
+          nextNode = %node2;
+          timeToNext = "1500";
+      };
+      new StaticShape(%node2) {
+        position = vectorScale(%cubelet.firstPosition, 2.5);
+        dataBlock = "PathNode";
+          Smooth = "1";
+          nextNode = %node3;
+          delay = %delay;
+          timeToNext = "200";
+      };
+      new StaticShape(%node3) {
+        position = %cubelet.firstPosition;
+        dataBlock = "PathNode";
+          Smooth = "1";
+      };
+      
+      %cubelet.moveOnPath(%node1);
+      
+        missionState.soundSchedules = missionState.soundSchedules SPC
+      schedule(%delay + %node1.timeToNext, 0, "eval", "alxPlay(cubeHitSfx" @ getRandom(1, 3) @ ");");
+    }
+    
+    missionState.animationSchedule = schedule(3020, 0, "animationInit");
+  }
+  
+  function animationInit() {
+    cancel(missionState.animationSchedule);
+    alxStop(missionState.crumpleSfxHandle);
+    cancelAnimationSounds();
+    
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      %node1 = %cubelet @ "path1";
+      %node2 = %cubelet @ "path2";
+      %node3 = %cubelet @ "path3";
+      %cubelet.setTransform(%cubelet.firstPosition SPC "1 0 0 0");
+      %node1.delete();
+      %node2.delete();
+      %node3.delete();
+    }
+  }
+  
+  function cancelAnimationSounds() {
+    for(%i = 0; %i < getWordCount(missionState.soundSchedules); %i++) {
+      cancel(getWord(missionState.soundSchedules, %i));
+    }
+  }
+  
+  // -----------------Misc-----------------
+  
+  function EditorSaveMission() {}
+  
+  function toggleEditor(%make) {
+    Parent::toggleEditor(%make);
+    
+    if(RootGui.getContent() != EditorGui.getId())
+      pqubeControl.push();
+    else
+      localClientConnection.camera.cancelMoving();
+  }
+
+  // -----------------Secret-----------------
+  
+  function explodeGame() {
+    if(!localClientConnection.playing)
+      return;
+    
+    localClientConnection.playing = false;
+    Time::reset();
+    missionState.instability = -1;
+    pauseMusic();
+    
+    for(%i = 1; %i <= 26; %i++) {
+      %cubelet = "cubelet" @ %i;
+      %cubelet.hide(true);
+    }
+    for(%i = 1; %i <= 54; %i++) {
+      %sticker = "sticker" @ %i;
+      %projection = "projection" @ %i;
+      %sticker.hide(true);
+      %projection.hide(true);
+    }
+    ignoreThis.setDamageState("Destroyed");
+    onNextFrame("eval", "ignoreThis.setDamageState(Enabled);");
+  }
+  
+  function eggCheck() {
+    if($Game::EasterEgg)
+      return;
+    
+    if(!isObject(cubelet1) || cubelet1.scale $= "0 0 0")
+      return;
+    
+    for(%i = 1; %i <= 20; %i++) {
+      %cubelet = "cubelet" @ %i;
+      if(%cubelet.isEdge) {
+        if(!cubeletFlipped(%cubelet))
+          return;
+      }
+      else {
+        if(!cubeletSolved(%cubelet))
+          return;
+      }
+    }
+
+    schedule(1000, 0, "eggMessage");
+    commandToClient(localClientConnection, 'FoundEgg', $Time::ElapsedTime);
+  }
+  
+  function eggMessage() {
+    messageClient(localClientConnection, 'MsgCheckpoint', missionList.secretMessage);
+  }
+  
+  // -----------------Exit-----------------
+  
+  function pqubeOnLeave() {
+    deletePQubeShapes();
+    pqubeControl.pop();
+    deactivatePackage(pqube);
+  }
+  
+  function deletePQubeShapes() {
+    pqubePreview.delete();
+    pqubeGrid.delete();
+    pqubeBlock.delete();
+    pqubeSticker.delete();
+    pqubeProjection.delete();
+  }
+  
+  function GameConnection::onClientLeaveGame(%this) {
+    missionState.firstRespawn = true;
+    
+    cancelScramble();
+    cancel(missionState.animationSchedule);
+    cancelAnimationSounds();
+    
+    cubePreview.hide(false);
+    changeStyle(1, true);
+
+    Parent::onClientLeaveGame(%this);
+  }
+};
+
+// -----------------Marbleland-----------------
+
+// @include "~/data/shapes/custom/pqube/base.block.jpg"
+// @include "~/data/shapes/custom/pqube/base.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin0.block.jpg"
+// @include "~/data/shapes/custom/pqube/skin1.block.jpg"
+// @include "~/data/shapes/custom/pqube/skin2.block.jpg"
+// @include "~/data/shapes/custom/pqube/skin3.block.jpg"
+// @include "~/data/shapes/custom/pqube/skin4.block.jpg"
+// @include "~/data/shapes/custom/pqube/skin01.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin02.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin03.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin04.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin05.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin06.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin11.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin12.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin13.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin14.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin15.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin16.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin21.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin22.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin23.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin24.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin25.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin26.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin31.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin32.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin33.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin34.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin35.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin36.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin41.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin42.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin43.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin44.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin45.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/skin46.sticker.jpg"
+// @include "~/data/shapes/custom/pqube/transparent_grid.jpg"
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+  
+  new ScriptObject(MissionInfo) {
+    artist = "Keppy";
+    customRadarRule = "0";
+    desc = "Not your ordinary cube-themed level...";
+    eggHint = "Found by reaching a famous state.";
+    game = "PlatinumQuest";
+    generalHint = "- Control the cube with W, A, S, D, X, E and the arrow keys. Hold shift to change their direction, and hold space to perform wide turns." NL "- You can undo and redo your moves with z and y." NL "- Pressing v will cycle between different viewing angles. You can also press slash to toggle face projections, which allow you to see every side." NL "- The PQube has 5 different styles to choose from. Use f1-f5 to switch between them. These will change the current audio pack too, if you have automatic audio packs enabled." NL "- Replays are not supported, but when you finish the level, you'll recieve a prompt to copy a link to alg.cubing.net, where you can review your solve." NL "- Pressing i will initialize the cube and prevent the level from ending. Good for practice or just messing around." NL "- PQube's controls can be modified. Check mbpPrefs.cs for the $pref::PQube variables.";
+    level = "1000";
+    music = "Piece By Piece.ogg";
+    name = "The PQube";
+    radar = "0";
+    startHelpText = "Press " @ $pref::PQube::ShowControls @ " to view controls!";
+    trivia = "This wasn't originally going to have so many features...";
+    type = "Custom";
+    platinumTime = "120000";
+    ultimateTime = "60000";
+    awesomeTime = "30000";
+    cameraFov = "80";
+  };
+   
+  // Information about the current state of the level is stored here.
+  // Move IDs are stored as a space seperated list. Scramble and non scramble moves
+  // are stored for the alg.cubing.net link. User moves are stored for undo and redo.
+   
+  new ScriptObject(MissionState) {
+    canChangeStyle = true;
+    firstRespawn = true;
+    primeVal = 0;
+    wideVal = 0;
+    styleWait = false;
+    scrambling = true;
+    scrambleMoves = "";
+    randomTurnSchedule = "";
+    cancelLoopSchedule = "";
+    soundSchedules = "";
+    checkSolved = true;
+    nonScrambleMoves = "";
+    userMoves = "";
+    undoMoves = "";
+    moveSchedule = "";
+    currentRotation = "";
+    coreRotation = "1 0 0 0";
+    crumpleSfxHandle = "";
+    instability = 0;
+  };
+   
+  // Static information needed for the level is stored here.
+   
+  new ScriptObject(MissionList) {
+    
+    // -----------------Cubelets-----------------
+    
+    // Positions of cubelets 1 through 26. The last 6 are center pieces.
+    
+    cubeletPositions = "" TAB
+      "-2 2 2"   TAB
+      "0 2 2"    TAB
+      "2 2 2"    TAB
+      "-2 0 2"   TAB
+      "2 0 2"    TAB
+      "-2 -2 2"  TAB
+      "0 -2 2"   TAB 
+      "2 -2 2"   TAB
+      "-2 2 0"   TAB
+      "2 2 0"    TAB
+      "-2 -2 0"  TAB
+      "2 -2 0"   TAB
+      "-2 2 -2"  TAB
+      "0 2 -2"   TAB
+      "2 2 -2"   TAB
+      "-2 0 -2"  TAB
+      "2 0 -2"   TAB
+      "-2 -2 -2" TAB
+      "0 -2 -2"  TAB 
+      "2 -2 -2"  TAB
+      "0 -2 0"   TAB
+      "0 2 0"    TAB
+      "-2 0 0"   TAB
+      "2 0 0"    TAB
+      "0 0 2"    TAB
+      "0 0 -2";
+      
+    // The rotation associated with each color, for parenting stickers.
+    
+    stickerRotations = "" TAB
+      "1 0 0 90" TAB //blue
+      "-1 0 0 90" TAB //green
+      "0 1 0 90" TAB //orange
+      "0 -1 0 90" TAB //red
+      "1 0 0 0" TAB //white
+      "0 1 0 180"; //yellow
+    
+    // -----------------Turns-----------------
+    
+    // Letter corresponding to the move ID.
+    
+    // This originally only contained x y z R F U L B D M,
+    // but I expanded it to make every kind of turn have a unique ID.
+    
+    // I denote in this file "turn" as the string, and "move" as the number,
+    // not sure why. But this list is used to convert between the two.
+    
+    turns = "_" SPC
+      "R F U L B D" SPC 
+      "R- F- U- L- B- D-" SPC
+      "r f u l b d" SPC
+      "r- f- u- l- b- d-" SPC
+      "x y z _ _ _" SPC
+      "x- y- z- _ _ _" SPC
+      "M E S _ _ _" SPC
+      "M- E- S- _ _ _";
+      
+    // Which way to look for cubelets, positive or negative
+    
+    // Wide moves are reversed because they are the same as turning 
+    // the opposite side, but moving everything except for that side.
+    
+    // Full rotations will not look for cubelets but just set everything
+    // moveable in the doMove function.
+    
+    cubeletDirection = "_" SPC
+      "1 -1 1 -1 1 -1" SPC
+      "1 -1 1 -1 1 -1" SPC 
+      "-1 1 -1 1 -1 1" SPC
+      "-1 1 -1 1 -1 1" SPC 
+      "_ _ _ _ _ _" SPC
+      "_ _ _ _ _ _" SPC
+      "0 0 0 _ _ _" SPC
+      "0 0 0 _ _ _";
+      
+    // Which direction the turn goes, positive or negative.      
+    
+    turnDirection = "_" SPC
+      "1 -1 1 -1 1 -1" SPC
+      "-1 1 -1 1 -1 1" SPC 
+      "1 -1 1 -1 1 -1" SPC
+      "-1 1 -1 1 -1 1" SPC 
+      "1 1 -1 _ _ _" SPC
+      "-1 -1 1 _ _ _" SPC
+      "-1 -1 -1 _ _ _" SPC
+      "1 1 1 _ _ _";
+      
+    // Index of the axis of rotation, and 
+    // index of direction to look for cubelets (x, y, or z)
+    
+    faceAxis = "_" SPC
+      "0 1 2 0 1 2" SPC
+      "0 1 2 0 1 2" SPC
+      "0 1 2 0 1 2" SPC
+      "0 1 2 0 1 2" SPC
+      "0 2 1 _ _ _" SPC
+      "0 2 1 _ _ _" SPC 
+      "0 2 1 _ _ _" SPC
+      "0 2 1 _ _ _";
+      
+    // Upon a turn, the rotation helper will move on a path determined by the above two 
+    // lists and all of the cubelets that are set as moveable will have their inital 
+    // rotation composed with the rotation helper each frame.
+    // This could have been done with parenting, but I had some issues with stickers
+    // clipping into the cubelets. Treating each cubelet individually seems to keep 
+    // things synced better.
+    // If the user makes a turn during this animation, it is cancelled and 90 degrees 
+    // is added to the initial rotations.
+    // If the centers are moved, the core rotation is updated. The cube is solved when all
+    // of the cubelet rotations inversed and composed with it are (close to) 1 0 0 0.
+    
+    // -----------------Styles-----------------
+    
+    // The assets and info used for each PQube style.
+    
+    styleAudioPacks =
+      $pref::Audio::AudioPack TAB
+      $pref::Audio::AudioPack TAB
+      "mbp" TAB
+      "mbg" TAB
+      "mbu";
+    styleTexturePacks = 
+      "pqube_default" TAB
+      "pqube_pq" TAB
+      "pqube_mbp" TAB
+      "pqube_mbg" TAB
+      "pqube_mbu";
+    styleMusic = 
+      "" TAB
+      "Piece By Piece.ogg" TAB 
+      "Seaside Revisited.ogg" TAB 
+      "Classic Vibe.ogg" TAB
+      "Tim Trance.ogg";
+    styleSky = 
+      "skies/Cloudy/cloudy.dml" TAB
+      "skies_pq/Blender3/blender3.dml" TAB
+      "skies/Expert/Expert_Sky.dml" TAB
+      "skies/sky_day.dml" TAB
+      "skies_mbu/advanced/sky_advanced.dml"; 
+    styleSunColor = 
+      "1.000000 1.000000 1.000000 1.000000" TAB
+      "1.400000 1.200000 0.400000 1.000000" TAB
+      "0.800000 0.800000 0.800000 1.000000" TAB
+      "1.400000 1.200000 0.400000 1.000000" TAB
+      "1.400000 1.200000 0.400000 1.000000";
+    styleSunAmbient =
+      "0.900000 0.900000 0.900000 1.000000" TAB
+      "0.300000 0.300000 0.400000 1.000000" TAB
+      "0.200000 0.200000 0.300000 1.000000" TAB
+      "0.300000 0.300000 0.400000 1.000000" TAB
+      "0.300000 0.300000 0.400000 1.000000";
+    
+    // The transform of the second camera path node.
+    
+    views = 
+      "11 -11 9 0.545997 0.22616 -0.806684 0.948741783" TAB
+      "6.35655 -11.4249 6.35564 0.657537 0.176186 -0.732532 0.701332635" TAB
+      "0 -15 7 1 0 0 0.45" TAB
+      "-6.35655 -11.4249 6.35564 0.657537 -0.176186 0.732532 0.701332635" TAB
+      "-11 -11 9 0.545997 -0.22616 0.806684 0.948741783";
+      
+    // -----------------Controls-----------------
+    
+    // This list is iterated through when displayed so that
+    // everything can be formatted nicely.
+    
+    controls = 
+      "Up"                    TAB $pref::PQube::Up TAB
+      "Left"                  TAB $pref::PQube::Left TAB
+      "Front"                 TAB $pref::PQube::Front TAB
+      "Right"                 TAB $pref::PQube::Right TAB
+      "Back"                  TAB $pref::PQube::Back TAB
+      "Down"                  TAB $pref::PQube::Down TAB
+      "Middle"                TAB $pref::PQube::Middle TAB
+      "Rotate X"              TAB $pref::PQube::RotateX TAB
+      "Rotate Y"              TAB $pref::PQube::RotateY TAB
+      "Rotate Z"              TAB $pref::PQube::RotateZ TAB
+      "Hold Prime"            TAB $pref::PQube::Prime TAB
+      "Hold Wide"             TAB $pref::PQube::Wide TAB
+      "Undo"                  TAB $pref::PQube::Undo TAB
+      "Redo"                  TAB $pref::PQube::Redo TAB
+      "Toggle Projections"    TAB $pref::PQube::ToggleProjections TAB
+      "Change View"           TAB $pref::PQube::ChangeView TAB
+      "alg.cubing.net style"  TAB $pref::PQube::Style0 TAB
+      "PQ style"              TAB $pref::PQube::Style1 TAB
+      "MBP style"             TAB $pref::PQube::Style2 TAB
+      "MBG style"             TAB $pref::PQube::Style3 TAB
+      "MBU style"             TAB $pref::PQube::Style4 TAB
+      "Initialize Cube"       TAB $pref::PQube::Initialize TAB
+      "Show controls"         TAB $pref::PQube::ShowControls;
+      
+    // -----------------Messages-----------------
+ 
+    secretMessage = "You superflipped the cube; now flip it even more!";
+    recordingMessage = "Note: Replays are not supported, but you can review your solve online when you finish.";
+    
+  };
+  new Sun(Sun) {
+    color = "1.400000 1.200000 0.400000 1.000000";
+    ambient = "0.300000 0.300000 0.400000 1.000000";
+    direction = "-0.638261 0.459006 -0.61801";
+  };
+  new Sky(Sky) {
+    visibleDistance = "2000";
+    useSkyTextures = "1";
+    renderBottomTexture = "1";
+    materialList = "~/data/skies_pq/Blender3/blender3.dml";
+    noRenderBans = "1";
+  };
+  
+  new SimGroup(PathNodeGroup) {
+ 
+    new StaticShape(CameraPath1) {
+      position = "9 -9 207";
+      rotation = "0.545997 0.22616 -0.806684 54.3589";
+      dataBlock = "PathNode";
+    };
+    new StaticShape(RHNode1) {
+      rotation = "1 0 0 0";
+      dataBlock = "PathNode";
+        Smooth = "1";
+        nextNode = "RHNode2";
+        timeToNext = "200";
+        usePosition = "1";
+        useScale = "0";
+    };
+    new StaticShape(RHNode2) {
+      rotation = "1 0 0 90";
+      dataBlock = "PathNode";
+        Smooth = "1";
+        usePosition = "1";
+        useScale = "0";
+    };
+    new StaticShape(SpinNode1) {
+      position = "0 0 100";
+      rotation = "1 0 0 0";
+      dataBlock = "PathNode";
+        nextNode = "SpinNode2";
+        timeToNext = "10000";
+        usePosition = "0";
+        useScale = "0";
+    };
+    new StaticShape(SpinNode2) {
+      position = "0 0 0";
+      rotation = "0 0 1 180";
+      dataBlock = "PathNode";
+        nextNode = "SpinNode1";
+        timeToNext = "10000";
+        usePosition = "0";
+        useScale = "0";
+    };
+    new StaticShape(CameraNode) {
+      position = "0 0 0";
+      dataBlock = "PathNode";
+        useRotation = "0";
+    };  
+  };
+  new Marker(rotationHelper) {
+    scale = "0 0 0";
+  };
+  new StaticShape(ignoreThis) {
+    position = "0 0 0";
+    scale = "0 0 0";
+    dataBlock = "Nuke";
+      resettime = "Default";
+  };
+  new StaticShape(cubePreview) {
+    position = "0 0 200";
+    datablock = "pqubePreview";
+    path = "SpinNode1";
+  };
+  new StaticShape(grid) {
+    datablock = "pqubeGrid";
+  };
+  new StaticShape(gridPreview) {
+    position = "-9.1215 9.1215 191.404";
+    rotation = "0.545997 0.22616 -0.806684 54.3589";
+    datablock = "pqubeGrid";
+  };
+  new StaticShape(astrolabe) {
+    position = "0 0 -900";
+    scale = "1 1 1";
+    dataBlock = "astrolabe";
+  };
+  new Item(dummyEgg) {
+    scale = "0 0 0";
+    dataBlock = "easterEgg";
+    static = "1";
+  };
+};
+
+//--- OBJECT WRITE END ---
+
+activatePackage(pqube);
+
+createViewNodes();
+
+gridPreview.hide(true);
+astrolabe.hide(true);
+
+$PQubeLoaded = true;
