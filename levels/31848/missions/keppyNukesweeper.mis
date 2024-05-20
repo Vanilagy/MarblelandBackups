@@ -1,0 +1,635 @@
+// Created by Keppy
+
+// -----------------Sound-----------------
+
+datablock AudioProfile(cubeHitSfx1) {
+	filename    = "~/data/sound/custom/PQubeHit1.wav";
+	description = Audio2d;
+};
+
+datablock AudioProfile(cubeHitSfx2) {
+	filename    = "~/data/sound/custom/PQubeHit2.wav";
+	description = Audio2d;
+};
+
+datablock AudioProfile(cubeHitSfx3) {
+	filename    = "~/data/sound/custom/PQubeHit3.wav";
+	description = Audio2d;
+};
+
+datablock AudioProfile(selectSfx) {
+	filename    = "~/data/sound/buttonover.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+datablock AudioProfile(clickSfx) {
+	filename = "~/data/sound/ButtonPress.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+// -----------------Shapes-----------------
+
+datablock StaticShapeData(boxHighlight) {
+  shapeFile = "~/data/shapes/custom/nukesweeper/nukesweeperHighlight.dts";
+};
+
+datablock StaticShapeData(nukesweeperNumber) {
+  shapeFile = "~/data/shapes/custom/nukesweeper/nukesweeperNumber.dts";
+};
+
+// -----------------Controls-----------------
+
+new ActionMap(NukesweeperControl);
+NukesweeperControl.bindCmd(mouse, "button0", "clickBox(1);", "releaseBox();");
+NukesweeperControl.bindCmd(mouse, "button1", "clickBox(0);", "flagBox();");
+NukesweeperControl.bindCmd(keyboard, "n", "swapMinesNukes();", "");
+
+NukesweeperControl.bindCmd(keyboard, "x", "nukesweeperEgg(\"x\");", "");
+NukesweeperControl.bindCmd(keyboard, "y", "nukesweeperEgg(\"y\");", "");
+NukesweeperControl.bindCmd(keyboard, "z", "nukesweeperEgg(\"z\");", "");
+NukesweeperControl.bindCmd(keyboard, "lshift", "nukesweeperEgg(\"s\");", "");
+NukesweeperControl.bindCmd(keyboard, "rshift", "nukesweeperEgg(\"s\");", "");
+NukesweeperControl.bindCmd(keyboard, "enter", "nukesweeperEgg();", "");
+
+// -----------------Callbacks-----------------
+
+function clientCbOnRespawn() {
+  nukesweeperRespawn();
+}
+
+function clientCbOnFrameAdvance() {
+  if(isObject(localClientConnection.player))
+    selectBox();
+}
+
+function clientCbOnServerLeave() {
+  nukesweeperLeave();
+}
+
+// -----------------Level Functions-----------------
+
+package keppyNukesweeper {
+  
+  // -----------------Start-----------------
+  
+  function nukesweeperRespawn() {
+    cancelSchedules();
+    
+    missionState.init = true;
+    missionState.dead = false;
+    missionState.nukeBoxSchedules = 0;
+    missionState.boxes = 0;
+    missionState.delays = "";
+    $Cheats::Activated = false;
+    
+    localClientConnection.setToggleCamera(false);
+    localClientConnection.camera.cancelMoving();
+    
+    setFace("smiley");
+    highlight.setFadeVal(0);
+    egg.setScale("0 0 0");
+    schedule(100, 0, "setFlagCounter");
+    
+    StartPoint.hide(false);
+    EndSign.hide(true);
+    EndPoint.setScale("0 0 0");
+  
+    createBoard();
+    NukesweeperControl.push();
+  }
+  
+  function setFlagCounter() {
+    PlayGui.gemCount = missionState.nukes;
+    ClientMode_hunt.shouldUpdateGems();
+    Hunt_ShowGem.setModel("platinum/data/shapes/custom/nukesweeper/flag.dts", "");
+  }
+
+  function setFace(%type) {
+    missionState.currentFace.setTransform("0 0 -1");
+    %face = "face_" @ %type;
+    %face.setTransform("0 0 0");
+    missionState.currentFace = %face;
+  }
+  
+  // -----------------Utility-----------------
+  
+  function forBoardSize(%func) {
+    for(%x = 0; %x < 11; %x++) {
+      for(%y = 0; %y < 12; %y++) {
+        call (%func, %x, %y);
+      }
+    }  
+  }
+  
+  // -----------------Board Creation-----------------
+  
+  function swapMinesNukes() {
+    $pref::keppyNukesweeper::useNukes = !$pref::keppyNukesweeper::useNukes;
+    if($pref::keppyNukesweeper::useNukes)
+      %message = "The next board will use nukes!";
+    else
+      %message = "The next board will use mines!";
+    messageClient(localClientConnection, 'MsgCheckpoint', %message);
+  }
+  
+  function createBox(%x, %y) {
+    %box = new InteriorInstance() {
+      position = %x*2 SPC %y*2 SPC 0;
+      nuke = 0;
+      number = 0;
+      x = %x;
+      y = %y;
+      interiorFile = "~/data/interiors_mbp/custom/keppy/nukesweeperBox.dif";
+    };
+    missionState.box[%x, %y] = %box;
+    missionState.boxes++;
+    nukesweeperObjects.add(%box);
+  }
+  
+  function noteAdjacents(%x, %y) {
+    %adj = 0;
+    %box = missionState.box[%x, %y];
+    for(%i = -1; %i <= 1; %i++) {
+      for(%j = -1; %j <= 1; %j++) {
+        if(%i == 0 && %j == 0)
+          continue; 
+        %adjBox = missionState.box[%x+%i, %y+%j];
+        if(isObject(%adjBox)) {
+          %box.adjBox[%adj] = %adjBox;
+          %adj++;
+        }
+      }
+    }
+    %box.adj = %adj;
+  }
+  
+  function createBoard() {
+    nukesweeperObjects.clear();
+    forBoardSize("createBox");
+    forBoardSize("noteAdjacents");
+  }
+  
+  function createNumber(%x, %y) {
+    %box = missionState.box[%x, %y];
+    if(%box.nuke)
+      return;
+    %count = 0;
+    for(%i = 0; %i < %box.adj; %i++) {
+      if(%box.adjBox[%i].nuke)
+        %count++;
+    }
+    if(%count) {
+      %number = new StaticShape() {
+        position = %box.position;
+        dataBlock = nukesweeperNumber;
+      };
+      %number.setSkinName(%count);
+      %box.number = %number;
+      nukesweeperObjects.add(%number);
+    }
+  }
+  
+  function createNukes() {
+    %nukes = 0;
+    while(%nukes < missionState.nukes) {
+      %x = getRandom(0, 10);
+      %y = getRandom(0, 11);
+      
+      %box = missionState.box[%x, %y];
+      %userBox = missionState.selectedBox;
+      if(%box.nuke || %box == %userBox)
+        continue;
+      
+      %skip = false;
+      for(%i = 0; %i < %userBox.adj; %i++) {
+        if(%userBox.adjBox[%i] $= %box) {
+          %skip = true;
+          break;
+        }
+      }
+      if(%skip)
+        continue;
+      
+      if($pref::keppyNukesweeper::useNukes)
+        %dataBlock = "Nuke";
+      else
+        %dataBlock = "landMine";
+      
+      %nuke = new StaticShape() {
+        box = %box;
+        position = vectorAdd(%box.position, "1 1 -0.25");
+        scale = "3 3 3";
+        dataBlock = %dataBlock;
+        resetTime = 99999;
+      };
+      %highlight = new StaticShape() {
+        position = vectorAdd(%box.position, "0 0 -0.75");
+        dataBlock = boxHighlight;
+      };
+      
+      %highlight.setSkinName("dark");
+      %highlight.setFadeVal(0.3);
+      nukesweeperObjects.add(%highlight);
+      nukesweeperObjects.add(%nuke);
+      %box.nuke = %nuke;
+      %box.nukeHighlight = %highlight;
+      %nukes++;
+    }
+    forBoardSize("createNumber");
+    missionState.init = false;
+  }
+  
+  // -----------------Gameplay-----------------
+  
+  function selectBox() {
+    %pos = localClientConnection.player.getPosition();
+    %x = mRound(getWord(%pos, 0) / 2 - 0.5);
+    %y = mRound(getWord(%pos, 1) / 2 - 0.5);
+    %box = missionState.box[%x, %y];
+    if(%box == missionState.selectedBox || %box.activated && %box.flag $= "")
+      return;
+    
+    if(isObject(%box)) {
+      highlight.setTransform(%x*2 SPC %y*2 SPC 0);
+      missionState.selectedBox = %box;
+      localClientConnection.play3D(selectSfx, %box.getWorldBoxCenter());
+      highlight.setFadeVal(0.3);
+      if($Cheats::Activated) {
+        if(%box.nuke)
+          Hunt_ShowGem.setModel("platinum/data/shapes/hazards/Nuke/nuke.dts", "");
+        else
+          Hunt_ShowGem.setModel("platinum/data/shapes/custom/nukesweeper/flag.dts", "");
+      }
+    }
+    else {
+      missionState.selectedBox = "";
+      highlight.setFadeVal(0);
+    }
+  }
+  
+  function clickBox(%val) {
+    %box = missionState.selectedBox;
+    if(isObject(%box)) {
+      missionState.ignoreRelease = false;
+      highlight.setSkinName("dark");
+      localClientConnection.play3D(clickSfx, %box.getWorldBoxCenter());
+      if(%val)
+        setFace("o");
+    }
+    else
+      missionState.ignoreRelease = true;
+  }
+  
+  function releaseBox() {
+    if(missionState.ignoreRelease)
+      return;
+    highlight.setFadeVal(0);
+    highlight.setSkinName("");
+    setFace("smiley");
+    activateBox();
+  }
+  
+  function activateBox(%box) {
+    %selected = missionState.selectedBox;
+    if(%box $= "")
+      %box = %selected;
+      
+    if(!isObject(%box) || %box.activated)
+      return;
+    
+    if(%box.flag && %box == %selected) {
+      highlight.setFadeVal(0.3);
+      return;
+    }
+      
+    if(missionState.init)
+      createNukes();
+    
+    %box.activated = true;
+    if(%box.flag $= "") {
+      missionState.boxes--;
+      %dist = vectorDist(%box.getWorldBoxCenter(), %selected.getWorldBoxCenter());
+      %box.deleteSchedule = schedule(100*%dist, 0, "deleteBox", %box);
+      if(missionState.boxes == missionState.nukes && !%box.nuke)
+        nukeWin();
+    }
+    
+    if(%box.nuke) {
+      if(missionState.dead)
+        return;
+      nukeBox(%box);
+      setFace("dead");
+      missionState.dead = true;
+      missionState.deathSchedule = schedule(1500, 0, "nukeDeath", %box.nuke);
+    }
+    
+    if(%box.number || %box.nuke)
+      return;
+    
+    for(%i = 0; %i < %box.adj; %i++) {
+      %adjBox = %box.adjBox[%i];
+      if(!%adjBox.nuke) {
+        activateBox(%adjBox);
+      }
+    }
+  }
+  
+  function deleteBox(%box) {
+    localClientConnection.play3D("cubeHitSfx" @ getRandom(1, 3), %box.getWorldBoxCenter());
+    if(%box.flag !$= "") {
+      %box.nukeHighlight.setSkinName("red");
+      %box = %box.flag;
+    }
+    %obj[0] = %box;
+    %obj[1] = new StaticShape() {
+      position = vectorSub(%box.position, "0 0 0.76");
+      dataBlock = "PathNode";
+        Smooth = "1"; 
+        usePosition = "1";
+        useScale = "0";
+        useRotation = "0";
+    };
+    %obj[2] = new StaticShape() {
+      position = %box.position;
+      dataBlock = "PathNode";
+        Smooth = "1";
+        nextNode = %obj[1];
+        timeToNext = "200";
+        usePosition = "1";
+        useScale = "0";
+        useRotation = "0";
+    };
+    %box.moveOnPath(%obj[2]);
+    
+    for(%i = 0; %i < 3; %i++) {
+      %obj[%i].schedule(%obj[2].timeToNext+10, "delete");
+    }
+  }
+  
+  function flagBox() {
+    if(missionState.ignoreRelease)
+      return;
+    highlight.setSkinName("");
+    %box = missionState.selectedBox;
+    if(!isObject(%box) || %box.activated && %box.flag $= "")
+      return;
+    if(%box.flag) {
+      PlayGui.gemCount++;
+      %box.setScale("1 1 1");
+      %box.activated = false;
+      %box.flag.delete();
+      %box.flag = "";
+    }
+    else {
+      PlayGui.gemCount--;
+      %box.setScale("0 0 0");
+      %box.flag = new InteriorInstance() {
+        position = %box.position;
+        interiorFile = "~/data/interiors_mbp/custom/keppy/nukesweeperFlag.dif";
+      };
+      nukesweeperObjects.add(%box.flag);
+    }
+    if(PlayGui.gemCount >= 0)
+      ClientMode_hunt.shouldUpdateGems();
+  }
+  
+  function escapeFromGame(%val) {
+    input_escapeFromGame(%val);
+    $gamePaused = false;
+    NukesweeperControl.onNextFrame("push");
+  }
+  
+  function InBoundsTrigger::onLeaveTrigger(%this,%trigger,%obj) {
+    if(!missionState.dead) {
+      Parent::onLeaveTrigger(%this,%trigger,%obj);
+      NukesweeperControl.pop();
+    }
+  }
+  
+  // -----------------Mine Hits-----------------
+  
+  function nukeBox(%box) {
+    deleteBox(%box);
+    %box.nuke.schedule(300, "setDamageState", "Destroyed");
+  }
+  
+  function scheduleNuke(%x, %y) {
+    %box = missionState.box[%x, %y];
+    if(%box.nuke) {
+      %rand = getRandom(0, getWordCount(missionState.delays)-2);
+      missionState.nukeBoxSchedule[missionState.nukeBoxSchedules] = schedule(getWord(missionState.delays, %rand), 0, "nukeBox", %box);
+      missionState.delays = removeWord(missionState.delays, %rand);
+      missionState.nukeBoxSchedules++;
+    }
+  }
+  
+  function nukeDeath(%nuke) {
+    missionState.deathSchedule = "";
+    cutscenePath1.setTransform(getCameraTransform());
+    localClientConnection.setToggleCamera(true);
+    localClientConnection.camera.moveOnPath("cutscenePath1");
+
+    %offset = 1000;
+    for(%i = 0; %i < missionState.nukes; %i++) {
+      %delays = getRandom(200, 500)+%offset SPC %delays;
+      %offset += 200;
+    }
+    missionState.delays = %delays;
+    forBoardSize("scheduleNuke");
+  }
+  
+  // -----------------Secret-----------------
+  
+  function nukesweeperEgg(%key) {
+    missionState.eggInput = missionState.eggInput @ %key;
+    if(%key $= "") {
+      if(missionState.eggInput $= "xyzzys") {
+        egg.setScale("1 1 1.3");
+        localClientConnection.play2D(HelpDingSfx);
+      }
+      missionState.eggInput = "";
+    }
+  }
+  
+  function EasterEgg::onPickup(%this,%obj,%user,%amount) {
+    Parent::onPickup(%this,%obj,%user,%amount);
+    $Cheats::Activated = true;
+  }
+  
+  // -----------------End-----------------
+  
+  function nukeWin() {
+    setFace("glasses");
+    localClientConnection.playPitchedSound("gotalldiamonds");
+    StartPoint.hide(true);
+    EndPoint.setScale("1 1 1");
+    EndSign.hide(false);
+  }
+  
+  function nukesweeperLeave() {
+    boxHighlight.delete();
+    nukesweeperNumber.delete();
+    NukesweeperControl.pop();
+    deactivatePackage(keppyNukesweeper);
+  }
+  
+  function cancelSchedules() {
+    for(%i = 0; %i < missionState.nukeBoxSchedules; %i++) {
+      cancel(missionState.nukeBoxSchedule[%i]);
+    }
+    cancel(missionState.deathSchedule);
+  }
+};
+
+// -----------------Marbleland-----------------
+
+// @include "~/data/shapes/custom/nukesweeper/base.number.jpg"
+// @include "~/data/shapes/custom/nukesweeper/1.number.png"
+// @include "~/data/shapes/custom/nukesweeper/2.number.png"
+// @include "~/data/shapes/custom/nukesweeper/3.number.png"
+// @include "~/data/shapes/custom/nukesweeper/4.number.png"
+// @include "~/data/shapes/custom/nukesweeper/5.number.png"
+// @include "~/data/shapes/custom/nukesweeper/6.number.png"
+// @include "~/data/shapes/custom/nukesweeper/7.number.png"
+// @include "~/data/shapes/custom/nukesweeper/8.number.png"
+// @include "~/data/shapes/custom/nukesweeper/base.highlight.jpg"
+// @include "~/data/shapes/custom/nukesweeper/dark.highlight.jpg"
+// @include "~/data/shapes/custom/nukesweeper/red.highlight.jpg"
+// @include "~/data/shapes/custom/nukesweeper/flag.dts"
+// @include "~/data/shapes/custom/nukesweeper/mbp_not6.jpg"
+// @include "~/data/interiors_mbp/custom/keppy/nukesweeperBox.dif"
+// @include "~/data/interiors_mbp/custom/keppy/nukesweeperFlag.dif"
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+  new SimGroup(nukesweeperObjects);
+  
+  new ScriptObject(missionState) {
+    nukes = 20;
+    init = true;
+  };
+
+  new ScriptObject(MissionInfo) {
+    artist = "Keppy";
+    customRadarRule = "0";
+    desc = "After 17 years of player feedback, a new update for Nukesweeper has finally been released. New features include: a different skybox, a new face, and fancy pillars. Wow! Also includes real gameplay, as a bonus.";
+    eastereggHint = "...Cheat?";
+    game = "PlatinumQuest";
+    generalHint = "Use left mouse to activate tiles, and right mouse to place flags. Press N to swap between using mines and nukes, if you want.";
+    level = "1000";
+    music = "Seaside Revisited.ogg";
+    name = "Nukesweeper Reimagined";
+    type = "Custom";
+    platinumTime = "180000";
+    ultimateTime = "90000";
+    trivia = "I really suck at minesweeper, at the time of writing this. I needed help to beat this level...";
+	awesometime = "60000";
+  };
+  
+  new Sky(Sky) {
+    visibleDistance = "500";
+    useSkyTextures = "1";
+    renderBottomTexture = "1";
+    materialList = "~/data/skies/Intermediate/Intermediate_Sky.dml";
+    noRenderBans = "1";
+  };
+  
+  new StaticShape(EndPoint) {
+    position = "11 -5 0.5";
+    scale = "0 0 0";
+    dataBlock = "EndPad";
+  };
+  
+  new Sun() {
+    direction = "0.638261 0.459006 -0.61801";
+    color = "1.400000 1.200000 0.400000 1.000000";
+    ambient = "0.300000 0.300000 0.400000 1.000000";
+  };
+  
+  new InteriorInstance(board) {
+    interiorFile = "~/data/interiors_mbp/custom/keppy/nukesweeperBoard.dif";
+  };
+  
+  new InteriorInstance(face_smiley) {
+    position = "0 0 0";
+    interiorFile = "~/data/interiors_mbp/custom/keppy/face_smiley.dif";
+  };
+  
+  new InteriorInstance(face_dead) {
+    position = "0 0 -1";
+    interiorFile = "~/data/interiors_mbp/custom/keppy/face_dead.dif";
+  };
+  
+  new InteriorInstance(face_o) {
+    position = "0 0 -1";
+    interiorFile = "~/data/interiors_mbp/custom/keppy/face_o.dif";
+  };
+  
+  new InteriorInstance(face_glasses) {
+    position = "0 0 -1";
+    interiorFile = "~/data/interiors_mbp/custom/keppy/face_glasses.dif";
+  };
+  
+  new StaticShape(highlight) {
+    position = "0 0 0";
+    dataBlock = boxHighlight;
+  };
+  
+  new StaticShape(StartPoint) {
+    position = "11 -5 0.5";
+    dataBlock = "StartPad";
+  };
+  
+  new StaticShape(EndSign) {
+    position = "11 -5 7";
+    dataBlock = "SignFinish";
+  };
+  
+  new Trigger(Bounds) {
+    position = "-29 -31 -21";
+    scale = "78 90 100";
+    dataBlock = "InBoundsTrigger";
+    polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+  };
+  
+  new SimGroup(PathNodeGroup) {
+    new StaticShape(cutscenePath1) {
+      dataBlock = "PathNode";
+      nextNode = "cutscenePath2";
+      timeToNext = 1000;
+        Smooth = "1";
+        useScale = "0";
+    };
+    
+    new StaticShape(cutscenePath2) {
+      position = "11 -9 16";
+      rotation = "1 0 0 40";
+      dataBlock = "PathNode";
+        Smooth = "1";
+        useScale = "0";
+    };
+    
+    new StaticShape(CameraPath1) {
+      position = "28.6722 -9.53812 13.7829";
+      rotation = "0.585643 0.20421 -0.784423 47.932331";
+      dataBlock = "PathNode";
+        Smooth = "1";
+        useScale = "0";
+    };
+  };
+  
+  new Item(egg) {
+    position = "-1 25 -0.33639";
+    scale = "0 0 0";
+    collideable = 0;
+    static = 1;
+    rotate = 1;
+    dataBlock = "easterEgg";
+  };
+};
+//--- OBJECT WRITE END ---
+
+activatePackage(keppyNukesweeper);
