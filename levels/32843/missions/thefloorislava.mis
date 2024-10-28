@@ -1,0 +1,387 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Custom";
+         startHelpText = "There is a protection layer for you to some distance. Before it melts down grab all the gems.";
+         desc = "Escape from the lava floor below but collect the required objects before you can flee!";
+         goldTime = "40750";
+         artist = "abhishek839";
+         level = "3060";
+         name = "The Floor is lava with gems on the top.";
+         time = "0";
+         music = "Groove Police.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         powerUp = "0";
+         penaltyTime = "0";
+         pad = "1493";
+         bonusTime = "0";
+         time = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "25.2501 -0.0253081 82.35";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-69.8115 4.59886 80.2084";
+      rotation = "0 0 -1 89.9544";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new InteriorInstance() {
+      position = "24.3684 5.03 76.3079";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_heptagonpillar.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-133.772 38.0152 57.871";
+      rotation = "1 0 0 0";
+      scale = "188.736 73.1917 86.7494";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-17.412 14.078 81.6784";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "19.6768 15.1003 83.3784";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/edgewaarm.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.0732 15.1003 83.3784";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/edgewaarm.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.5098 13.956 69.6284";
+      rotation = "0 0 1 67.609";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/cool4_pyramid.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "22.5815 -2.72671 83.4809";
+      rotation = "0 0 1 217.334";
+      scale = "1 1 1";
+      dataBlock = "SignPlainDown";
+   };
+   new InteriorInstance() {
+      position = "10.3647 -9.02937 69.8784";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/cool4_pyramid.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-3.64411 9.8863 69.3784";
+      rotation = "1 0 0 0";
+      scale = "0.4 0.4 0.4";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/cool4_cylinder.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.35582 -1.05563 69.6284";
+      rotation = "0 0 1 45.2637";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/cool4_pyramid.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-47.6072 20.8029 74.6284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_heptagonpillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-18.0626 19.2032 75.6284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_heptagonpillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.5756 -10.7746 7.8784";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/skyscrape_2x2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.3229 3.9537 71.8784";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/advanced/trapdoor.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.6474 -8.58281 77.12";
+      rotation = "1 0 0 0";
+      scale = "0.4 0.4 0.82051";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/cool4_cylinder.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-70.5042 9.76379 74.1284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_heptagonpillar.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-38.9001 4.7936 67.6284";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm3_entrygate.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-17.4041 11.7483 81.8582";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-49.4381 14.9591 80.7359";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21.1062 -11.3693 77.9602";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-36.8573 -6.31123 82.911";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperBounceItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-70.6239 4.82504 87.6307";
+      rotation = "0 0 -1 107.143";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "-62.9458 -7.88478 70.1284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/patternwarm3_8sidepyr.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-63.5909 20.3516 70.1284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/patternwarm3_8sidepyr.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-3.33377 -8.19604 70.1284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/patternwarm3_8sidepyr.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "29.4746 19.9176 70.1284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/patternwarm3_8sidepyr.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "11.7521 -8.20336 72.9284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2.8724 -2.04859 72.5472";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "12.866 12.0037 72.4284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.51028 8.99322 72.5102";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-5.38337 11.5169 73.3514";
+      rotation = "0 0 -1 36.0963";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new StaticShape() {
+      position = "-19.6247 13.8486 83.1979";
+      rotation = "0 0 -1 89.3814";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new Item() {
+      position = "-17.9965 -11.3308 77.9284";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-18.3993 -13.0856 78.6615";
+      rotation = "0.266486 0.0377701 0.963099 195.37";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "-39.6115 -8.92395 83.6789";
+      rotation = "0 0 -1 107.716";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "-48.6755 18.1806 81.694";
+      rotation = "0 0 -1 40.68";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2015";
+         bonusTime = "0";
+         time = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3882";
+         bonusTime = "0";
+         time = "0";
+   };
+   new Trigger() {
+      position = "-77.0692 23.5256 70.8784";
+      rotation = "1 0 0 0";
+      scale = "65.4109 43.5623 0.962509";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-7.93299 14.0654 69.9284";
+      rotation = "1 0 0 0";
+      scale = "9.37342 10.0016 3.80019";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Hurry! The protection layer is about to melt! Go up on these towers !";
+   };
+   new Trigger() {
+      position = "-23.4727 20.5914 79.7283";
+      rotation = "1 0 0 0";
+      scale = "9.37342 11.4214 3.80019";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Oops! Now that the protection layer is melted, you need to stay in air to reach the finish!";
+   };
+   new Item() {
+      position = "-36.6432 -9.07469 82.8591";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
