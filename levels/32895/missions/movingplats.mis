@@ -1,0 +1,638 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         time = "0";
+         goldTime = "43000";
+         name = "Ride the Blue Squares";
+         desc = "Ride the square blue moving platforms to reach to the finish.";
+         artist = "abhishek839";
+         level = "3145";
+         startHelpText = "Go to the finish. Also grab all the gems floating in the air.";
+         type = "Custom";
+         music = "Beach Party.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         powerUp = "0";
+         penaltyTime = "0";
+         pad = "1493";
+         gemCount = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "31.9113 1.74467 81.33";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new InteriorInstance() {
+      position = "-62.7248 48.7929 81.3176";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/red_square_platform.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2059";
+         gemCount = "0";
+   };
+   new Trigger(Bounds) {
+      position = "-69.1835 27.847 74.8604";
+      rotation = "1 0 0 0";
+      scale = "124.148 70.5835 17.2178";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-57.858 45.5563 88.5476";
+      rotation = "0 0 1 17.7617";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "26.569 4.75724 77.9372";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_platformmm.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "6.5 3 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "22.25 3 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "22.25 3 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "6.5 3 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "3.5 3.5 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "3.5 3.5 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2524";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "2.4647 3.30272 77.9372";
+      rotation = "0 0 1 90.0002";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_platformmm.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2584";
+         gemCount = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "1.51713 -5.06496 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "1.51713 -21.315 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "1.51713 -21.315 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "1.51713 -5.06496 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-1.48287 -4.56496 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-1.48287 -4.56496 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-2.28541 -24.4473 77.9372";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_platformmm.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-6.55055 -26.2526 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-25.5506 -26.2526 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-25.5506 -26.2526 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-6.55055 -26.2526 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-9.55055 -25.7526 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-9.55055 -25.7526 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-37.342 -24.4953 77.9372";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/warm_platformmm.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-33.5824 -21.4238 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-33.5824 0.576214 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-33.5824 0.576214 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-33.5824 -21.4238 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-36.5824 -20.9238 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-36.5824 -20.9238 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-41.1611 7.2126 81.3176";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.768753";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/red_tshape.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2568";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-60.2285 3.66485 82.568";
+      rotation = "0 0 -1 89.3814";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new StaticShape() {
+      position = "-60.2097 5.41475 82.568";
+      rotation = "0 0 -1 89.3814";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-55.4884 -10.1421 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.4884 -26.3921 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.4884 -26.3921 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.4884 -10.1421 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-58.4884 -9.64209 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-58.4884 -9.64209 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-55.6933 19.993 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.6933 41.993 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.6933 41.993 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "6000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-55.6933 19.993 80.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "2000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-58.6933 20.493 81.5";
+         rotation = "1 0 0 0";
+         scale = "0.4 0.4 0.4";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/coolmovingplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-58.6933 20.493 81.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.4 0.4 0.4";
+            trackTime = "35207562";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-62.2248 -29.4571 81.3176";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/red_square_platform.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "-58.2325 45.8718 81.2976";
+      rotation = "0 0 1 0.574711";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-57.8108 -32.3226 81.2976";
+      rotation = "0 0 1 179.52";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "-57.5584 -33.0721 88.4698";
+      rotation = "0 0 1 17.7617";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger() {
+      position = "-63.1233 -13.9653 78.6152";
+      rotation = "1 0 0 0";
+      scale = "10.5602 10.6864 5.97506";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "You chose the right finish! Hooray!";
+   };
+   new Trigger() {
+      position = "-44.3104 10.2701 79.5676";
+      rotation = "1 0 0 0";
+      scale = "1 10.6864 5.97506";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Choose the right finish!";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3864";
+         gemCount = "0";
+   };
+   new Trigger() {
+      position = "-63.1233 33.2847 78.6152";
+      rotation = "1 0 0 0";
+      scale = "10.5602 10.6864 5.97506";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Oops! It is the wrong option. Bye Bye!";
+   };
+   new Item() {
+      position = "-0.569115 -14.8718 81.2441";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "12.4309 1.87816 81.2441";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-35.8191 -12.8718 81.2441";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "4946";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-57.6485 4.39083 81.3676";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-0.480954 3.1231 81.8122";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "6000";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "5678";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-2.6969 2.15714 82.5643";
+      rotation = "0 0 -1 87.0896";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new StaticShape() {
+      position = "-0.887467 -29.773 82.5048";
+      rotation = "0 0 1 177.044";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "-40.9973 -27.4603 82.5642";
+      rotation = "0 0 -1 89.9544";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+   new StaticShape() {
+      position = "-36.0313 7.01067 82.4906";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new Item() {
+      position = "-40.2919 -30.2829 81.8122";
+      rotation = "1 0 0 0";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "2000";
+   };
+   new StaticShape() {
+      position = "23.0589 -0.869857 82.4852";
+      rotation = "0 0 1 179.518";
+      scale = "1 1 1";
+      dataBlock = "SignPlainRight";
+   };
+};
+//--- OBJECT WRITE END ---
