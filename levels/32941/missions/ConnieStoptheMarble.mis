@@ -1,0 +1,440 @@
+package StopTheMarble {
+	function onFrameAdvance(%delta) {
+		Parent::onFrameAdvance(%delta);
+
+      if (isObject($MP::MyMarble) && !$Editor::Opened) {
+         if ($Game::State $= "Ready")
+         {
+            $MP::MyMarble.gamestarted = false;
+         }
+         else if ($Game::State $= "Go")
+         {
+            $MP::MyMarble.gamestarted = true;
+         }
+
+         if ($MP::MyMarble.gamestarted && VectorLen($MP::MyMarble.getVelocity()) < 0.03)
+         {
+            $MP::MyMarble.timetostop += 1;
+         }
+
+         if (VectorLen($MP::MyMarble.getVelocity()) >= 0.03)
+         {
+            $MP::MyMarble.timetostop = 0;
+         }
+
+         if ($MP::MyMarble.timetostop >= 3000)
+         {
+            endgamesetup();
+            $MP::MyMarble.timetostop = 0;
+            $MP::MyMarble.gamestarted = false;
+         }
+
+         switch ($MP::MyMarble.timetostop)
+         {
+            case 1000:
+            alxPlay(PuSuperStopVoiceSfx);
+            addHelpLine("Close...");
+            case 2000:
+            alxPlay(PuSuperStopVoiceSfx);
+            addHelpLine("Just keep still....");
+         }
+      }
+	}
+};
+
+function clientCbOnMissionEnded() {
+	deactivatePackage(StopTheMarble);
+}
+
+function clientCbOnMissionLoaded() {
+   activatePackage(StopTheMarble);
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Connie";
+         desc = "Find a spot in the level where you can sit your marble still for a little bit. Thus, stop the marble.";
+         game = "Gold";
+         gameMode = "null";
+         music = "Classic Vibe.ogg";
+         name = "Stop the Marble!... but, actually";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(r4) {
+         position = "88.6037 -114.724 47";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "r1";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "0";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(R3) {
+         position = "78.2473 -107.826 47";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "r4";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "0";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(R2) {
+         position = "69.3894 -109.088 47";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "r3";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "0";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(R1) {
+         position = "61.1037 -99.4741 47";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "r2";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "5000";
+            usePosition = "0";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath1) {
+         position = "38.8746 -12.178 27.405";
+         rotation = "0.54351 0.253373 -0.80025 60.4454";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/GoldTemplate.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "10.5343 10.4396 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_MBG";
+   };
+   new InteriorInstance() {
+      position = "0 21 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/GoldTemplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21 21 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/GoldTemplate.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/GoldTemplate.dif";
+      showTerrainInside = "0";
+   };
+   new TSStatic() {
+      position = "10.5011 10.4885 3.67862e-006";
+      rotation = "1 0 0 0";
+      scale = "20.9953 20.9883 21.5724";
+      shapeName = "~/data/shapes/colmesh.dts";
+   };
+   new StaticShape() {
+      position = "13.5 8.25 0.565502";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "3.27636 15.6713 0.565499";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-3.20911 -1.18414 0.565501";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "9.14927 -4.22935 0.585487";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "11.757 26.0854 0.678257";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "24.3271 23.4732 0.678257";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "25.7742 9.8881 0.565502";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-5.80033 22.6817 0.5655";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-5.73644 9.33737 0.565501";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "22.5321 -4.83858 0.585487";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-9.99132 -10.6657 0.565501";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "31.4487 31.7288 0.565504";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "30.3635 -10.2484 0.565503";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-10.1727 31.6647 0.565505";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "33.63 0.463329 0.565504";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "38.2433 19.0518 0.565504";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "0.218997 -17.1976 0.565504";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-15.3289 9.6463 0.56551";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-2.16234 40.238 0.565504";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "6.32416 35.2414 0.565501";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "20.1937 33.8414 0.565502";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "20.4772 -15.7063 0.565507";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new TSStatic(s3) {
+      position = "60.0015 10.5483 6.02922";
+      rotation = "1 0 0 0";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r4";
+   };
+   new TSStatic(s5) {
+      position = "9.74307 59.4359 6.02922";
+      rotation = "0 0 1 90.0002";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r2";
+   };
+   new TSStatic(s4) {
+      position = "44.596 45.3389 6.02922";
+      rotation = "0 0 1 180";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r3";
+   };
+   new TSStatic(s7) {
+      position = "-39.4138 8.91394 6.02922";
+      rotation = "0 0 1 90.0002";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r2";
+   };
+   new TSStatic(s8) {
+      position = "-24.0084 -25.8768 6.02922";
+      rotation = "1 0 0 0";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r1";
+   };
+   new TSStatic(s2) {
+      position = "45.4942 -25.0039 6.02921";
+      rotation = "0 0 1 90.0002";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r2";
+   };
+   new TSStatic(s1) {
+      position = "10.7035 -40.4093 6.02921";
+      rotation = "1 0 0 0";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r1";
+   };
+   new TSStatic(s6) {
+      position = "-25.0774 44.3966 6.02922";
+      rotation = "1 0 0 0";
+      scale = "75 75 75";
+      shapeName = "~/data/shapes/items/superstop.dts";
+         Path = "r1";
+   };
+};
+//--- OBJECT WRITE END ---
