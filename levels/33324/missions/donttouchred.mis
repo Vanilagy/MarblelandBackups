@@ -1,0 +1,455 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         startHelpText = "If you atleast go near the red tiles, it spells game over!";
+         music = "Seaside Revisited.ogg";
+         name = "Avoid the Red";
+         desc = "Don\'t touch the red tiles whatever happens..";
+         type = "custom";
+         artist = "abhishek839";
+         goldTime = "21000";
+         level = "3565";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Expert/Expert_Sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5773503 0.5773503 -0.5773503";
+      color = "0.350000 0.350000 0.350000 1.000000";
+      ambient = "0.100000 0.100000 0.200000 1.000000";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "34.93267 -24.84459 498.6273";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "64.95158 9.36063 498.6273";
+         rotation = "0 0 1 89.99998";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new Trigger(Bounds) {
+      position = "9.91625 -46.8449 494.1345";
+      rotation = "1 0 0 0";
+      scale = "76.07882 81.12128 71.36554";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "65.34104 8.972577 505.319";
+      rotation = "0 0 1 56.2501";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "31.9557 -26.78424 497.5";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors_mbp/avoidred.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "238.7621 -5.692625 988.25";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "GAME OVER";
+   };
+   new Trigger(lose) {
+      position = "240 -7.25 989.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DestinationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "30.97565 -18.83384 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "38.99719 -22.83266 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "35.03802 -16.89786 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "37.04644 -14.87391 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "37.03914 -8.862426 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "31.0512 -12.88338 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "34.98996 -4.868658 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "31.05368 -6.852056 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "28.97716 -2.837395 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "31.75 -21.24753 498.25";
+      rotation = "1 0 0 0";
+      scale = "1 7.063431 2.636597";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "So in order to win, stay away from these..";
+   };
+   new Trigger() {
+      position = "31.14491 -21.09101 498.5";
+      rotation = "1 0 0 0";
+      scale = "7.154861 1 2.448334";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "So in order to win, stay away from these..";
+   };
+   new Trigger() {
+      position = "38.96522 -26.79344 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.969822 1.98642 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "However, you can step on these green tiles :)";
+   };
+   new Trigger() {
+      position = "57.03611 15.17164 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 6.045686 0.5359802";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "33.02122 -0.8754318 498.5";
+      rotation = "1 0 0 0";
+      scale = "5.915699 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "33.00215 9.179165 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 2.032396 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "32.99996 3.141801 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "33.02441 7.134789 498.5";
+      rotation = "1 0 0 0";
+      scale = "5.879059 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "32.99096 11.21811 498.5";
+      rotation = "1 0 0 0";
+      scale = "5.937641 2.032396 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "41.02862 11.12915 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "43.00357 7.14179 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "43.01759 13.1332 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "46.99464 5.184417 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "47.00729 11.11919 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "50.99066 13.18688 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "51.02546 5.130726 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "50.99926 9.157755 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "52.9838 7.176982 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "57.00439 9.167198 498.5";
+      rotation = "1 0 0 0";
+      scale = "3.896587 5.814433 1";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "58.98752 13.09762 498.5";
+      rotation = "1 0 0 0";
+      scale = "1.882061 1.857561 0.5261841";
+      dataBlock = "TeleportTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         delay = "0";
+         destination = "lose";
+   };
+   new Trigger() {
+      position = "28.94533 15.26646 498.5721";
+      rotation = "1 0 0 0";
+      scale = "1.969822 1.98642 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Step on these green tiles and nothing happens :)";
+   };
+   new Item() {
+      position = "31.15408 -11.03414 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "39 -4.75 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "35.90165 8.144327 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "47.10379 13.20289 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "51.89867 6.236719 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "33.8223 0.2321953 498.675";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "40 -28 499.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "7000";
+   };
+   new Item() {
+      position = "30.09229 14.23039 499.125";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "7000";
+   };
+   new StaticShape() {
+      position = "28.87771 -20.55416 499.6689";
+      rotation = "0.4772461 0.2550934 -0.8409302 64.88161";
+      scale = "1 1 1";
+      dataBlock = "SignCautionDanger";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/Pianoforte.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---
