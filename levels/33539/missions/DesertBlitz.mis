@@ -1,0 +1,1727 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Intermediate";
+	     level = "17";
+	     name = "Desert Blitz";
+         artist = "Aayrl";
+         desc = "Can you defeat the Desert Blitz?";
+         startHelpText = "Try not to get hung up on the corners.";
+         goldTime = "120000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "City of the Sand Garden.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Day/day_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         rotation = "1 0 0 0";
+         locked = "true";
+         scale = "1 1 1";
+         position = "0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "-430.654 -393.477 465.195";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "-352.325 -378.444 521.23";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new StaticShape(EndSign) {
+      position = "-352.826 -378.238 535.66";
+      rotation = "0 0 1 131.253";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-309.274 -353.404 479.502";
+      rotation = "1 0 0 0";
+      scale = "75 40 15";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "-137.37 -345.792 505.091";
+      rotation = "0 0 1 25.2101";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-460.885 -234.257 465.173";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         powerUp = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         time = "0";
+         Pad = "1807";
+   };
+   new InteriorInstance() {
+      position = "-366.243 -280.221 585.238";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/DesertBlitz.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         powerUp = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         time = "0";
+         Pad = "1807";
+   };
+   new InteriorInstance() {
+      position = "-422.035 -306.974 465.173";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-432.153 -264.735 465.173";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-478.144 -288.162 465.173";
+      rotation = "0 0 -1 19.4806";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-455.347 -295.01 465.173";
+      rotation = "0 0 -1 61.8794";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-478.23 -322.35 465.173";
+      rotation = "0 0 1 233.949";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-384.894 -326.072 465.173";
+      rotation = "0 0 -1 30.3668";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-414.4 -336.269 465.173";
+      rotation = "0 0 -1 36.0963";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-444.222 -320.747 465.173";
+      rotation = "0 0 -1 41.253";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-393.779 -298.5 465.173";
+      rotation = "0 0 -1 21.1995";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-384.916 -269.682 465.173";
+      rotation = "0 0 -1 24.0643";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-387.676 -240.411 465.173";
+      rotation = "0 0 -1 28.0749";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-410.903 -280.309 465.173";
+      rotation = "0 0 -1 29.7938";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-413.56 -243.679 465.173";
+      rotation = "0 0 1 53.2851";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-442.376 -180.373 465.173";
+      rotation = "0 0 1 134.645";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-468.726 -261.071 465.173";
+      rotation = "0 0 1 13.751";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-497.816 -240.55 465.173";
+      rotation = "0 0 1 111.154";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-520.05 -218.49 465.173";
+      rotation = "0 0 -1 8.59438";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-488.314 -217.428 465.173";
+      rotation = "0 0 1 211.994";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-442.778 -207.95 465.173";
+      rotation = "0 0 1 33.2315";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-471.865 -196.948 465.173";
+      rotation = "0 0 -1 38.9611";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-503.985 -200.534 465.173";
+      rotation = "0 0 -1 37.2423";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-524.491 -181.578 465.173";
+      rotation = "0 0 -1 116.883";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-526.371 -242.154 465.173";
+      rotation = "0 0 1 198.426";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-494.435 -173.655 465.173";
+      rotation = "0 0 1 28.0749";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-464.896 -174.671 465.173";
+      rotation = "0 0 -1 26.929";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-422.69 -375.751 465.173";
+      rotation = "0 0 -1 29.2209";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-438.065 -352.624 465.173";
+      rotation = "0 0 -1 29.2208";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         powerUp = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         time = "0";
+         Pad = "3316";
+   };
+   new Item() {
+      position = "-237.576 -174.077 505.634";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         pickUpCheckpoint = "0";
+   };
+   new InteriorInstance() {
+      position = "-245.369 -241.601 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-227.868 -261.022 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-200.57 -252.518 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-224.436 -242.757 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-243.008 -336.696 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-201.417 -277.138 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-213.974 -264.857 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-217.237 -288.367 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-189.201 -308.725 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-212.693 -316.261 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-206.556 -298.196 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-195.349 -334.713 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-224.316 -337.969 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-235.591 -318.471 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-193.082 -233.571 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-333.708 -278.859 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-258.796 -229.388 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-283.119 -233.876 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-305.926 -238.256 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-326.585 -237.73 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-346.709 -248.885 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-329.734 -256.076 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-318.874 -284.32 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-264.789 -335.165 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-311.994 -257.028 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-345.594 -296.396 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-318.307 -315.178 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-337.953 -320.764 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-326.998 -337.545 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-303.246 -325.895 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-286.391 -333.48 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-346.313 -267.132 468.951";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-208.402 -239.267 468.951";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-332.143 -305.749 468.951";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-210.717 -329.202 468.951";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-190.738 -289.341 468.951";
+      rotation = "1 0 0 0";
+      scale = "1.2 1.2 1.2";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-347.341 -332.271 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-189.404 -264.714 469.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/palmtree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-443.495 -373.907 465.12";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-377.378 -305.914 465.12";
+      rotation = "0 0 1 143.812";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-421.534 -355.173 465.12";
+      rotation = "0 0 -1 37.2422";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-428.254 -321.064 465.12";
+      rotation = "0 0 1 16.6158";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-406.131 -311.952 465.12";
+      rotation = "0 0 -1 72.1927";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-458.353 -276.211 465.12";
+      rotation = "0 0 1 42.9718";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-456.327 -333.387 465.12";
+      rotation = "0 0 1 107.716";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-460.907 -310.931 465.12";
+      rotation = "0 0 1 64.7442";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-490.13 -306.815 465.12";
+      rotation = "0 0 1 63.0254";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-443.22 -304.805 465.12";
+      rotation = "0 0 1 236.814";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-425.471 -287.778 465.12";
+      rotation = "0 0 1 157.563";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-403.697 -277.344 465.12";
+      rotation = "0 0 -1 65.3172";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-380.533 -278.736 465.12";
+      rotation = "0 0 1 230.329";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-407.022 -255.534 465.12";
+      rotation = "0 0 -1 95.111";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-454.263 -164.503 465.12";
+      rotation = "0 0 1 119.748";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-376.294 -233.269 465.12";
+      rotation = "0 0 -1 57.8687";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-428.256 -239.228 465.12";
+      rotation = "0 0 1 228.793";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-459.657 -248.39 465.12";
+      rotation = "0 0 1 166.158";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-488.22 -256.721 465.12";
+      rotation = "0 0 1 69.3279";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-516.161 -241.581 465.12";
+      rotation = "0 0 1 68.182";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-499.474 -220.37 465.12";
+      rotation = "0 0 -1 114.592";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-514.173 -201.623 465.12";
+      rotation = "0 0 -1 52.1391";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-534.092 -196.347 465.12";
+      rotation = "0 0 1 118.029";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-527.464 -170.683 465.12";
+      rotation = "0 0 1 60.1606";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-497.299 -185.117 465.12";
+      rotation = "0 0 -1 46.9825";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-482.248 -204.393 465.12";
+      rotation = "0 0 1 76.7763";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-463.414 -216.89 465.12";
+      rotation = "0 0 1 72.1927";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-445.621 -191.827 465.12";
+      rotation = "0 0 1 78.4952";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-440.171 -244.033 465.173";
+      rotation = "0 0 -1 73.9115";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-136.068 -146.218 504.86";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-140.815 -189.038 504.86";
+      rotation = "0 0 1 135.791";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-244.485 -192.199 504.86";
+      rotation = "0 0 1 123.186";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-236.711 -169.113 504.86";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-131.84 -263.154 504.86";
+      rotation = "0 0 1 67.609";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-188.53 -229.059 481.871";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-200.773 -123.874 465.515";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-177.464 -132.65 505.091";
+      rotation = "0 0 1 78.4952";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-186.687 -140.898 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-157.987 -132.872 505.091";
+      rotation = "0 0 1 113.055";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-166.99 -139.579 505.091";
+      rotation = "0 0 1 239.679";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-152.983 -140.883 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-148.375 -133.412 505.091";
+      rotation = "0 0 1 74.4845";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-137.974 -164.777 505.091";
+      rotation = "0 0 1 50.4203";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-137.351 -136.64 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.89 -155.629 505.091";
+      rotation = "0 0 -1 37.2423";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.308 -187.434 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-133.288 -170.394 505.091";
+      rotation = "0 0 1 48.1285";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-134.811 -177.954 505.091";
+      rotation = "0 0 1 96.8299";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-235.559 -200.424 505.091";
+      rotation = "0 0 1 67.0361";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-132.886 -201.829 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-149.883 -202.02 505.091";
+      rotation = "0 0 1 63.5983";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-140.281 -211.701 505.091";
+      rotation = "0 0 1 54.431";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.972 -216.077 505.091";
+      rotation = "0 0 1 21.1994";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-136.425 -226.682 505.091";
+      rotation = "0 0 1 25.7831";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-159.168 -196.919 505.091";
+      rotation = "0 0 1 67.036";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-174.555 -204.777 505.091";
+      rotation = "0 0 1 39.5341";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-188.492 -198.234 505.091";
+      rotation = "0 0 1 155.272";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-195.972 -203.947 505.091";
+      rotation = "0 0 1 76.7763";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-207.165 -196.838 505.091";
+      rotation = "0 0 1 32.6586";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-218.078 -204.648 504.891";
+      rotation = "0 0 1 92.8192";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-225.51 -192.889 505.091";
+      rotation = "0 0 -1 107.143";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-229.809 -175.731 505.091";
+      rotation = "0 0 1 61.8794";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-246.436 -179.265 505.091";
+      rotation = "0 0 -1 100.268";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-131.541 -335.783 505.091";
+      rotation = "0 0 1 59.5876";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-131.701 -233.108 505.091";
+      rotation = "0 0 1 70.4738";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-136.867 -242.701 505.091";
+      rotation = "0 0 -1 34.9504";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-132.158 -252.763 505.091";
+      rotation = "0 0 -1 76.2034";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-138.059 -270.742 505.091";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.162 -276.36 505.091";
+      rotation = "0 0 1 92.2462";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-137.237 -284.504 505.091";
+      rotation = "0 0 1 161.574";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-128.9 -293.715 505.091";
+      rotation = "0 0 -1 71.0468";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-138.089 -297.738 505.091";
+      rotation = "0 0 1 9.74027";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.558 -305.955 505.091";
+      rotation = "0 0 1 151.834";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-137.189 -313.067 505.091";
+      rotation = "0 0 1 219.625";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.933 -320.089 505.091";
+      rotation = "0 0 1 17.7617";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-139.078 -327.944 505.091";
+      rotation = "0 0 1 110.008";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-249.197 -363.113 463.905";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-283.727 -386.468 464.394";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-283.63 -374.028 462.43";
+      rotation = "-0.280299 -0.171853 -0.944404 65.9831";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-276.825 -362.781 463.32";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-272.393 -370.942 464.106";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-268.495 -382.741 463.672";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-252.872 -379.631 462.791";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-254.333 -366.46 464.297";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-259.1 -373.304 462.712";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-265.666 -364.03 462.984";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-261.649 -387.256 463.435";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-246.88 -389.919 462.467";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-296.467 -382.917 464.323";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-291.405 -372.833 464.085";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-297.84 -365.722 463.877";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-285.726 -365.203 463.425";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-287.204 -380.195 463.721";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-301.055 -373.59 463.765";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-301.508 -388.355 463.201";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-273.427 -386.167 463.742";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-261.802 -380.483 463.498";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-248.595 -373.134 463.099";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-277.042 -392.686 461.19";
+      rotation = "0.798613 0.116617 -0.590438 27.7828";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-269.191 -375.621 463.851";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-264.159 -368.551 464.006";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-258.164 -362.84 463.845";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-254.371 -387.712 463.096";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-275.295 -379.49 462.743";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-293.485 -394.319 464.988";
+      rotation = "1 0 0 24.0642";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-295.374 -382.38 462.218";
+      rotation = "0.721386 -0.688348 0.0760251 17.409";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-301.32 -376.348 461.286";
+      rotation = "0.781333 -0.610403 -0.130103 30.5172";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-248.674 -389.35 461.287";
+      rotation = "0.489701 0.865621 0.104376 27.6656";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-253.681 -378.238 460.521";
+      rotation = "1 0 0 17.1887";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-259.31 -373.209 462.718";
+      rotation = "-0.657928 0.74853 0.082672 19.0587";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-288.172 -367.849 460.659";
+      rotation = "0 -1 0 17.7617";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-291.833 -363.077 460.344";
+      rotation = "-1 0 0 13.751";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-278.915 -370.82 460.645";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 3";
+      interiorFile = "~/data/interiors/fubargame/sandspike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-319.403 -366.08 505.204";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-387.596 -410.314 505.204";
+      rotation = "0 0 -1 60.1606";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-318.436 -391.841 505.204";
+      rotation = "0 0 1 64.7442";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-311.388 -411.271 505.204";
+      rotation = "0 0 1 37.2423";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-338.082 -371.293 505.204";
+      rotation = "0 0 1 46.4096";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-350.262 -364.972 505.204";
+      rotation = "0 0 -1 48.1285";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-361.413 -374.021 505.204";
+      rotation = "0 0 -1 9.74027";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-374.207 -365.94 505.204";
+      rotation = "0 0 1 52.1391";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-385.635 -368.222 505.204";
+      rotation = "0 0 -1 37.2423";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-380.823 -380.427 505.204";
+      rotation = "0 0 1 79.0682";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-392.658 -392.728 505.204";
+      rotation = "0 0 1 29.7938";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-389.291 -424.434 505.204";
+      rotation = "0 0 1 44.6907";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-311.67 -445.311 505.204";
+      rotation = "0 0 1 103.705";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-391.105 -440.092 505.204";
+      rotation = "0 0 1 71.6197";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-316.195 -426.555 505.204";
+      rotation = "0 0 1 36.0963";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-335.217 -392.97 520.624";
+      rotation = "0 0 1 37.2423";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-332.614 -449.658 505.03";
+      rotation = "0 0 1 21.7724";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-354.046 -446.653 505.61";
+      rotation = "0 0 1 45.2637";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-374.515 -450.087 505.184";
+      rotation = "0 0 1 111.154";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-372.896 -435.02 510.178";
+      rotation = "0 0 1 19.4805";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-360.206 -432.612 510.075";
+      rotation = "0 0 1 68.7549";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-346.021 -434.54 509.062";
+      rotation = "0 0 1 50.9932";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-329.795 -425.809 512.895";
+      rotation = "0 0 1 70.4738";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-327.927 -409.922 519.49";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-347.558 -411.868 518.185";
+      rotation = "0 0 1 79.6411";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-339.613 -422.023 514.43";
+      rotation = "0 0 1 150.688";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-369.493 -420.096 514.927";
+      rotation = "0 0 1 88.8085";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-355.193 -418.5 515.636";
+      rotation = "0 0 1 164.439";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-379.514 -403.694 519.998";
+      rotation = "0 0 1 62.4524";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-364.211 -398.341 520.308";
+      rotation = "0 0 1 67.0361";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-363.971 -382.489 520.198";
+      rotation = "0 0 1 213.14";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-349.325 -397.321 519.327";
+      rotation = "0 0 1 67.0361";
+      scale = "0.5 0.5 0.5";
+      interiorFile = "~/data/interiors/fubargame/cactus.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-198.325 -132.352 487.345";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-270.48 -330.524 469.291";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-316.645 -284.227 469.312";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-223.817 -284.162 469.357";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-378.778 -288.442 465.354";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-529.745 -209.95 465.369";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

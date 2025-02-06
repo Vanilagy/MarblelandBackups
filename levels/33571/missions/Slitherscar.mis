@@ -1,0 +1,519 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Intermediate";
+	     level = "10";
+	     name = "Slitherscar";
+         artist = "Aayrl";
+         desc = "Find the gems in the swamps of Slitherscar.";
+         startHelpText = "";
+         goldTime = "35000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "Jungle Jam 2.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 8.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume2 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume3 = "-1 -1.73483e+009 -1.73483e+009";
+      materialList = "~/data/skies/Intermediate/Slitherscar/scar_sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1734829824.000000";
+   };
+   new Sun() {
+      direction = "-0.494649 -0.442593 0.747953";
+      color = "1.000000 11.000000 1.000000 1.000000";
+      ambient = "0.700000 1.000000 0.700000 1.000000";
+   };
+   new SimGroup(CheckPoints) {
+   };
+   new Trigger(Bounds) {
+      position = "-146.443 47.3558 -48.6412";
+      rotation = "1 0 0 0";
+      scale = "200 200 100";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "-47.9862 -49.7563 -29.0285";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new ScriptObject() {
+         Pad = "1693";
+         penaltyTime = "0";
+         bonusTime = "0";
+         time = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "-47.6594 27.2884 -10.3849";
+      rotation = "-1.62134e-008 -0.37092 0.928665 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-47.8832 -125.603 -11.5896";
+      rotation = "1.68205e-008 0.384808 0.922997 180";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new ScriptObject() {
+         Pad = "1671";
+         penaltyTime = "0";
+         bonusTime = "0";
+         time = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-47.5807 -128.721 -5.85921";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "-43.3588 -19.1058 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-89.4553 -59.9183 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.5509 -40.2982 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-73.2903 -31.1169 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-103.098 -56.463 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-83.1542 -43.5664 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-95.8618 -45.807 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-61.5554 -14.888 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-98.997 -30.8374 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-86.3562 -19.6526 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-75.1511 -2.62814 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.235 -13.4045 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-59.8329 2.47635 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-37.362 -0.296747 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-26.319 -16.7981 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-20.4125 -3.01827 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         Pad = "1671";
+         penaltyTime = "0";
+         bonusTime = "0";
+         time = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-45.1824 -40.8774 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0.47262 -31.9619 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-16.5215 -32.6178 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.7689 -40.0036 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-48.8129 -78.0455 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-99.9546 -73.1782 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-89.0871 -85.1066 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-78.1791 -74.1876 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.696 -62.3523 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.4335 -51.3789 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-73.7712 -96.0281 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-56.7231 -100.51 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-35.2727 -104.746 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.4546 -95.1126 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.3013 -81.5691 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-1.87718 -68.4908 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.59994 -51.0226 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.2194 -81.6281 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.7179 -87.7433 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-14.8038 -49.0928 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.7584 -65.591 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-33.3484 -71.7393 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-29.105 -54.8903 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-46.9857 -56.4165 -29.4436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/slitherscar_tree.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-51.4256 -31.8149 -29.2151";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemGreen";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-76.7977 -2.50566 -29.1447";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlack";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-76.8291 -78.6427 -28.8788";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlack";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "1.30601 -69.6532 -28.9446";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlack";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-16.4153 -4.47501 -29.078";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemBlack";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-143 51.4324 -5.4087";
+      rotation = "1 0 0 0";
+      scale = "200 200 3";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         Pad = "3271";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-86.2293 -20.82 -6.8851";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

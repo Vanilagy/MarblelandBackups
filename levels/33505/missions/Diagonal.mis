@@ -1,0 +1,223 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Tutorial";
+	     level = "21";
+	     name = "Learning: Diagonal Movement";
+         artist = "Aayrl";
+         desc = "Learn how to accelerate your marble diagonally!";
+         startHelpText = "Turn the camera 45 Degrees so the center of the path is on the far right or far left of the screen. \nThen hold down <func:bind moveforward> and either <func:bind moveleft> or <func:bind moveright> to move diagonally!";
+         goldTime = "16500";
+	     xpbonus = "35";
+         xpmult = "0";
+         music = "13 Syncopated Echoes.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Tutorial/Tutorial/day_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "5.83669 -7.05502 491.353";
+         rotation = "0 0 -1 90";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "-70.1346 1.42083 525.35";
+         rotation = "0 0 -1 90";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         PowerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         Pad = "1808";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "-71.9765 1.2679 533.06";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-114.885 67.3911 489.902";
+      rotation = "1 0 0 0";
+      scale = "150 150 65";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "5.80982 -6.82828 491.131";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/L2Diagonal.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-34.7026 -2.54281 491.174";
+      rotation = "1 0 0 0";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Moving Diagonally doubles your speed!";
+   };
+   new Trigger() {
+      position = "-71.1639 -2.52758 491.201";
+      rotation = "1 0 0 0";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Jumping before running into a steep slope will allow you to bounce up it!";
+   };
+   new Trigger() {
+      position = "-87.3783 -24.7948 509.601";
+      rotation = "0 0 -1 90";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Now race to the finish!";
+   };
+   new Trigger() {
+      position = "-63.8851 -3.09825 525.2";
+      rotation = "0 0 -1 90";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Congratulations, you\'ve completed all the Tutorial Levels!";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         PowerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         Pad = "1710";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-96.884 5.14043 467.142";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         PowerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         Pad = "2430";
+         gemCount = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.7585 -33.3269 466.289";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/tutorial_ambient.dif";
+      showTerrainInside = "0";
+   };
+};
+//--- OBJECT WRITE END ---

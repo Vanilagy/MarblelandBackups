@@ -1,0 +1,349 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Tutorial";
+	     level = "12";
+	     name = "Learning: Bumpers";
+         artist = "Aayrl";
+         desc = "Learn about the Bumper Hazard!";
+         startHelpText = "Be cautious around these bumpers!";
+         goldTime = "7000";
+	     xpbonus = "10";
+         xpmult = "0";
+         music = "06 Tropical Waves.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Tutorial/Tutorial/day_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "0.0682294 0.50582 499.353";
+         rotation = "0 0 -1 89.9544";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "-7.9651 16.4437 507.36";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         PowerUp = "0";
+         bonusTime = "0";
+         Pad = "1808";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "-8.28515 15.2314 512.26";
+      rotation = "0 0 1 7.54017";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-35.5088 47.8712 497.902";
+      rotation = "1 0 0 0";
+      scale = "70 70 40";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         PowerUp = "0";
+         bonusTime = "0";
+         Pad = "1692";
+         time = "0";
+         gemCount = "0";
+   };
+   new Trigger() {
+      position = "-12.2233 5.18515 499.201";
+      rotation = "1 0 0 0";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Some ground bumpers you\'ll want to avoid, or they\'ll knock you off the level!";
+   };
+   new Trigger() {
+      position = "3.58343 27.7514 499.201";
+      rotation = "0 0 -1 90";
+      scale = "9 9 1";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Some bumpers you can jump on to get an extra height boost!";
+   };
+   new InteriorInstance() {
+      position = "-7.8813 0.594739 498.877";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/L2Bumper.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-9.84943 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-10.0688 6.60595 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-5.84943 6.72384 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-5.84943 10.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-10.0494 10.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-5.84943 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-5.84943 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-9.84943 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "10.1506 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-1.84943 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "2.15057 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-1.84943 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "2.15057 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "6.15057 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "10.1506 18.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "6.15057 14.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-7.84943 8.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "8.15057 16.3238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "4.15057 16.3238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "0.15057 16.3238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-3.87279 16.3224 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-7.84943 16.3238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-7.84943 12.5238 499.37";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "3.05973 32.6395 498.9";
+      rotation = "0.0697724 -0.0697724 -0.99512 90.2803";
+      scale = "2 2 2";
+      dataBlock = "TriangleBumper";
+   };
+   new StaticShape() {
+      position = "-7.92532 27.5494 502.9";
+      rotation = "-0.059964 2.62111e-009 0.998201 180";
+      scale = "2 2 2";
+      dataBlock = "TriangleBumper";
+   };
+   new Item() {
+      position = "-12.5855 20.8669 497.487";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new InteriorInstance() {
+      position = "17.35 -2.99214 485.716";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/tutorial_ambient.dif";
+      showTerrainInside = "0";
+   };
+};
+//--- OBJECT WRITE END ---

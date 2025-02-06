@@ -1,0 +1,1126 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Intermediate";
+	     level = "13";
+	     name = "Vexatious";
+         artist = "Aayrl";
+         desc = "Manuever your way through this frozen path...but be cautious of the dangers that lie ahead.";
+         startHelpText = "If you can\'t beat \'em, freeze \'em.";
+         goldTime = "65000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "MainTitle.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Cloud/cloud_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5732009 0.2753569 -0.7717638";
+      color = "0.850000 0.820000 0.730000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         scale = "1 1 1";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "0.412306 -2.29264 489.73";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+            locked = "true";
+      };
+      new StaticShape(EndPoint) {
+         position = "-58.5682 14.8416 465.88";
+         rotation = "1 0 0 0";
+         scale = "0.5 0.5 0.5";
+         dataBlock = "EndPad";
+            locked = "true";
+      };
+   };
+   new ScriptObject() {
+         Pad = "1808";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "-58.3486 13.8832 471.059";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+         locked = "true";
+   };
+   new Trigger(Bounds) {
+      position = "-155.122 60.0583 460.102";
+      rotation = "1 0 0 0";
+      scale = "220 220 100";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         Pad = "1719";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         Pad = "1748";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "0.553343 -12.0599 489.357";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Vexatious.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new ScriptObject() {
+         Pad = "2289";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-58.6549 23.316 503.395";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "25.89 -6.7768 487.234";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "55.2237 21.5616 505.245";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.94634 38.5933 505.613";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "30.5614 30.6385 505.883";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "78.132 -134.153 505.878";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "71.4939 -1.83898 505.563";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "80.9798 -27.2889 505.944";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "85.8598 -54.6065 506.03";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "83.4926 -79.594 505.382";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "80.0905 -108.565 506.236";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-147.71 -6.33467 503.292";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.4693 51.5021 504.761";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-53.2833 57.8076 505.091";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-75.6708 46.88 505.4";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-96.472 29.637 506.437";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-122.677 12.5388 503.633";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-151.936 -86.1848 504.704";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-163.047 -30.0757 505.196";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-167.108 -59.7748 505.439";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "61.3995 -149.507 505.189";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-133.449 -111.257 506.306";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-119.899 -137.957 505.64";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-102.946 -161.56 504.706";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.0388 -167.647 505.103";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-47.7493 -162.969 504.32";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.6088 -161.831 505.316";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.1904 -159.004 505.906";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37.1823 -154.225 506.202";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         Pad = "1748";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "98.9133 -115.189 505.323";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "101.761 -8.32525 505.388";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "92.2752 17.1247 505.008";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "106.641 -35.6428 505.475";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "104.274 -60.6303 504.826";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "100.872 -89.6013 505.681";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-28.4988 78.2444 505.083";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "80.3317 37.5095 503.553";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "55.6694 46.5864 504.191";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "27.0543 54.5412 503.921";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-2.36133 67.45 503.069";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-53.4205 83.7296 505.604";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-75.808 72.802 505.913";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-96.6092 55.559 506.95";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-122.814 38.4608 504.146";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-147.847 19.5873 503.805";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "94.3195 -151.136 504.319";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-173.02 -3.96312 501.644";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-181.884 -38.4767 503.548";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-189.649 -60.7318 504.563";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-174.477 -87.1418 503.828";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-155.99 -112.214 505.43";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-142.44 -138.914 504.764";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-125.487 -162.517 503.83";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-90.7707 -180.346 505.341";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.8635 -186.433 505.738";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-35.574 -181.755 504.955";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-5.43353 -180.617 505.951";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "22.3657 -177.79 506.541";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "49.3576 -173.011 506.837";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "73.5748 -168.293 505.824";
+      rotation = "1 0 0 0";
+      scale = "7 7 30";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-8.37308 -128.997 484.373";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-46.896 -134.684 483.566";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-38.0497 -130.151 484.313";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.1608 -137.339 484.482";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.7674 -133.977 484.049";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.5875 -138.967 484.371";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.6464 -129.545 484.327";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-13.441 -134.074 484.466";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "2.71063 -135.842 484.431";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-4.95657 -138.153 484.109";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.13883 -128.833 484.477";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.1696 -133.958 484.132";
+      rotation = "1 0 0 0";
+      scale = "1 1 4";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         Pad = "1748";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-118.962 -13.7392 484.579";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.3424 -40.607 486.617";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.9006 -62.6818 486.625";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "49.3982 -43.3595 487.143";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "40.6733 -120.519 479.624";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "32.5603 -76.4848 486.134";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.88552 -93.6637 486.067";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.0613 -3.7713 485.661";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.2089 -41.3473 485.793";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.63377 12.1703 486.461";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-38.4519 24.8231 486.685";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "56.8019 -90.3815 485.987";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "5.68114 -118.793 486.083";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-66.1519 -144.822 486.222";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-56.8173 -26.1868 487.222";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-87.2684 -2.75124 487.081";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-99.5085 -50.1705 486.502";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-131.316 -49.5213 486.464";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-106.136 -88.1074 487.173";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.6076 -82.2259 486.797";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-70.5709 -67.4826 485.671";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-102.799 -117.79 484.385";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.7797 -116.592 485.155";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-70.727 -91.2831 486.215";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-48.7181 -118.719 485.72";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-20.767 -113.762 484.818";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-49.1019 -93.6698 486.218";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.4971 -63.0786 485.911";
+      rotation = "1 0 0 0";
+      scale = "4 4 20";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-11.2576 -79.2818 489.881";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-83.5751 -39.9233 490.021";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-90.4816 -87.5647 477.917";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-130.253 -36.0281 477.879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-100.511 -133.001 477.421";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "33.4001 -99.4828 527.433";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.2567 -133.477 477.342";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-58.5504 4.24699 466.041";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "33.4638 -111.507 517.474";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "32.9657 -103.643 477.44";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "45.4204 -99.5163 487.488";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "33.3187 -87.5007 497.511";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.475 -99.4307 507.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "29.6921 -28.8704 503.58";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0.434851 -42.9152 500.116";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-105.385 -35.9979 478.356";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-90.4653 -143.935 477.797";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-90.4222 -122.974 477.939";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-17.8119 -127.933 477.695";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "33.4627 -98.7033 477.831";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-2.57569 -138.082 477.826";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "34.0952 -107.682 475.981";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         Pad = "1767";
+         penaltyTime = "0";
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "58.4482 -144.268 534.911";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-90.5458 -84.5771 477.688";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "checkpoint";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

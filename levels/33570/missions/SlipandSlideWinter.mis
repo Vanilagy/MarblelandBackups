@@ -1,0 +1,388 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         xpbonus = "0";
+         name = "Slip and Slide; Winter";
+         music = "MainTitle.ogg";
+         type = "Beginner";
+         level = "4";
+         goldTime = "10000";
+         
+         desc = "Slide down the icy path!";
+         artist = "Aayrl";
+         startHelpText = "Don\'t fall off!";
+         xpmult = "0";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Cloud/cloud_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569861149077900047473967104.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160049016675429178998259712.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5732009 0.2753569 -0.7717638";
+      color = "0.850000 0.820000 0.730000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         scale = "1 1 1";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "47.7874 -2.64862 512.61";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "23.8 -118.6 508.6";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new ScriptObject() {
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         Pad = "1808";
+         penaltyTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "23.8 -120 519.2";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-3 5 504.2";
+      rotation = "1 0 0 0";
+      scale = "100 130 60";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         Pad = "1736";
+         penaltyTime = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         Pad = "1719";
+         penaltyTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "47.9008 -2.6351 512.358";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/SlipandSlideWinter.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         bonusTime = "0";
+         PowerUp = "0";
+         Pad = "1772";
+         penaltyTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "47.7954 -0.4406 509.252";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "66.80639 -49.40182 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "27.7997 -42.25418 509.183";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.90617 -7.378815 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.296858 -14.96458 508.5829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.512442 -83.12456 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "24.60858 -95.39623 508.7829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "33.76825 -70.13049 508.2189";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "53.58332 -71.28379 508.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "47.35938 -97.26969 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "82.0134 -101.7243 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "92.31814 -65.37553 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "71.83147 -9.740616 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "61.23647 -27.38179 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "91.55201 -37.44391 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "62.50392 8.495029 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "37.16675 17.56857 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "6.925707 -49.85872 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "5.505533 -132.9448 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.431307 -110.8748 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "51.71255 -132.0614 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "32.0359 -129.5895 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "59.29688 -111.6554 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new InteriorInstance() {
+      position = "100.8982 -88.99677 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21.47102 -24.03503 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.776842 -68.64845 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-14.56498 -123.4899 509.9829";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "22.74423 -144.8035 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "47.209 -48.57746 509.983";
+      rotation = "1 0 0 0";
+      scale = "3 3 15";
+      interiorFile = "~/data/interiors/fubargame/VexatiousSpike.dif";
+      showTerrainInside = "0";
+   };
+};
+//--- OBJECT WRITE END ---

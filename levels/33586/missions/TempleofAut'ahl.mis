@@ -1,0 +1,1545 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Advanced";
+         artist = "Aayrl";
+         startHelpText = "Welcome to the Temple.";
+         goldTime = "70000";
+         desc = "Find all the gems using your common sense..then see if you can find the finish!";
+         music = "Crawling In Grass.ogg";
+         level = "3";
+         xpmult = "0";
+         
+         xpbonus = "0";
+         name = "The Temple of Aut\'ahl";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Day/day_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569861149077900047473967104.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160049016675429178998259712.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5445079 0.439467 -0.7144089";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "268.585 100.543 450.98";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "247.985 100.544 383.58";
+         rotation = "1 0 0 180";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1808";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "247.704 98.1705 378.619";
+      rotation = "4.360682e-08 0.9976065 -0.06914823 180";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "181.575 317.074 320.702";
+      rotation = "1 0 0 0";
+      scale = "150 220 200";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "264.577 249.118 467.485";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/TheTempleofAut\'ahl.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1719";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "268.574 288.118 467.985";
+      rotation = "1 0 0 0";
+      scale = "1 1 0";
+      interiorFile = "~/data/interiors/fubargame/Templetrapdoor.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "248.158 288.132 384.026";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "268.836 287.876 491.363";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "268.504 204.773 459.697";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "290.571 253.108 467.005";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "268.669 253.129 469.605";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "268.571 275.108 467.005";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "246.67 253.099 467.005";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "279.336 185.039 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 73.35 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 173.95 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 162.95 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 151.95 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 140.95 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 129.75 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 118.55 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 107.55 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 96.15 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "280.006 84.55 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "255.24 184.973 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 73.2835 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 84.4836 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 96.0835 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 107.484 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 118.484 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 129.684 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 140.884 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 151.884 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 162.884 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "255.91 173.884 450.637";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "290.9 95.6139 450.776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "303.158 174.819 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "292.902 184.839 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "313.463 162.832 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "313.919 184.916 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "293.023 163.02 450.583";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "301.906 152.121 450.707";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "312.211 140.134 450.707";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "291.771 140.322 450.707";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "302.287 130.111 450.652";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "312.592 118.124 450.652";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "292.152 118.312 450.652";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "301.035 107.413 450.776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "311.34 95.4258 450.776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "191.044 297.009 450.447";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "291.409 73.8101 450.873";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "301.544 85.6092 450.873";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "311.849 73.622 450.873";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "221.8 73.8263 450.879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "231.935 85.6254 450.879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "242.24 73.6382 450.879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "241.731 95.442 450.783";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "221.291 95.6301 450.783";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "231.426 107.429 450.783";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "222.543 118.328 450.659";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "242.983 118.14 450.659";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "232.678 130.127 450.659";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "222.162 140.338 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "242.602 140.15 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "232.297 152.137 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "243.854 162.848 450.59";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "223.414 163.036 450.59";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "233.549 174.835 450.59";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "223.293 184.855 450.59";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "244.31 184.932 450.59";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "188.076 73.2478 450.827";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "198.211 85.0469 450.827";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "208.516 73.0597 450.827";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "208.007 94.8635 450.73";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "187.567 95.0516 450.73";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "197.702 106.851 450.73";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "188.819 117.75 450.606";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "209.259 117.562 450.606";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "198.954 129.549 450.606";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "188.438 139.76 450.661";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "208.878 139.572 450.661";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "198.573 151.559 450.661";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "210.13 162.27 450.537";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "189.69 162.458 450.537";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "199.825 174.257 450.537";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "182.828 183.918 450.461";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "210.586 184.354 450.537";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "155.041 73.3141 450.762";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "165.176 85.1132 450.762";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "175.481 73.126 450.762";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "174.972 94.9298 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "154.532 95.1179 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "164.667 106.917 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "155.785 117.816 450.541";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "176.225 117.628 450.541";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "165.919 129.615 450.541";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "155.403 139.826 450.596";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "175.843 139.638 450.596";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "165.538 151.625 450.596";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "177.096 162.336 450.472";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "156.656 162.524 450.472";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "166.79 174.323 450.472";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "156.535 184.343 450.472";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "379.722 184.564 450.424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "324.043 73.6018 450.905";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "334.178 85.4009 450.905";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "344.483 73.4137 450.905";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "343.974 95.2175 450.808";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "323.534 95.4056 450.808";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "333.669 107.205 450.808";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "324.786 118.104 450.684";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "345.226 117.916 450.684";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "334.921 129.903 450.684";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "324.405 140.114 450.739";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "344.845 139.926 450.739";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "334.54 151.913 450.739";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "346.097 162.624 450.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "325.657 162.812 450.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "335.792 174.611 450.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "325.536 184.631 450.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "346.553 184.708 450.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "357.212 73.4586 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "367.347 85.2577 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "377.652 73.2705 450.714";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "377.143 95.0743 450.617";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "356.703 95.2624 450.617";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "366.838 107.061 450.617";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "357.955 117.96 450.493";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "378.395 117.772 450.493";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "368.09 129.759 450.493";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "357.574 139.97 450.548";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "378.014 139.782 450.548";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "367.709 151.769 450.548";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "379.266 162.48 450.424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "358.826 162.668 450.424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "368.961 174.467 450.424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "358.705 184.487 450.424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "370.142 219.519 450.816";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "338.283 198.97 450.831";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "348.418 210.769 450.831";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "358.723 198.781 450.831";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "358.214 220.585 450.734";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "337.774 220.773 450.734";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "347.909 232.573 450.734";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "339.026 243.471 450.61";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "359.466 243.284 450.61";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "349.161 255.271 450.61";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "338.645 265.482 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "359.085 265.294 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "348.78 277.281 450.665";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "339.776 309.999 450.541";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "339.897 288.18 450.541";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "370.651 197.715 450.913";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "167.185 217.992 450.397";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "179.295 196 450.737";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "189.43 207.799 450.737";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "199.735 195.812 450.737";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "199.226 217.616 450.64";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "178.786 217.804 450.64";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "188.921 229.603 450.64";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "180.038 240.502 450.516";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "200.478 240.314 450.516";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "190.173 252.301 450.516";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "179.657 262.512 450.571";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "200.097 262.324 450.571";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "189.792 274.311 450.571";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "201.349 285.022 450.447";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "201.805 307.106 450.447";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "168.437 240.69 450.273";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "157.389 208.175 450.494";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "167.694 196.188 450.494";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "212.166 331.672 450.79";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "328.157 322.543 450.631";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "316.165 332.449 450.631";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "202.037 321.618 450.341";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "238.932 322.443 450.341";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "306.367 321.615 450.534";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "294.375 331.522 450.534";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "283.649 322.431 450.41";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "226.941 332.35 450.341";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "271.657 332.337 450.41";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "261.65 321.627 450.465";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "217.12 321.903 450.341";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "249.659 331.534 450.465";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/pinetreetest.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "257.992 288.142 413.881";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "270.074 253.277 367.412";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "247.943 253.274 364.812";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1746";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "248.028 204.803 374.472";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "226.203 253.279 367.412";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "247.819 275.019 367.412";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "260.8 237.6 356.4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

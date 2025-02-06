@@ -1,0 +1,915 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Professional";
+         artist = "Aayrl";
+         startHelpText = "You\'ll need to aim for the rocks very carefully.";
+         goldTime = "60000";
+         desc = "Can you survive the Gravity Vortex?";
+         music = "Galactic Drive.ogg";
+         level = "1";
+         xpmult = "0";
+         
+         xpbonus = "0";
+         name = "Gravity Vortex";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569861149077900047473967104.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160049016675429178998259712.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5445079 0.439467 -0.7144089";
+      color = "5.000000 5.000000 5.000000 5.000000";
+      ambient = "1.000000 1.000000 1.000000 1.000000";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "-0.0349326 0.0354023 499.4";
+         rotation = "0 0 -1 89.99999";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "-7.33224 25.8647 350.35";
+         rotation = "0 0 1 45.4006";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1808";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndSign) {
+      position = "-0.43369 32.5926 350.466";
+      rotation = "0.837544 -0.320872 0.442223 94.66581";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-243.304 245.678 268.102";
+      rotation = "1 0 0 0";
+      scale = "400 400 600";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1725";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1719";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.0162003 0.128344 499.153";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-106.016 0.128344 499.153";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-7.15025 0.334778 497.784";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-36.2196 0.225786 538.795";
+      rotation = "0 1 0 180";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1758";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-105.75 -7.2646 512.003";
+      rotation = "1 0 0 180";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-105.75 -7.06522 497.784";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-105.75 -7.06522 487.784";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-105.559 0.128344 479.374";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-98.919 0.42639 480.437";
+      rotation = "0 -1 0 89.99999";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "3.78379 0.128344 478.157";
+      rotation = "0 1 0 89.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "4.87499 6.86684 478.129";
+      rotation = "1 0 0 89.99999";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "3.5838 135.528 478.761";
+      rotation = "-1 0 0 89.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-3.3137 136.99 479.238";
+      rotation = "-1 0 0 89.99999";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "0.246635 37.04 495.617";
+      rotation = "1 0 0 89.99999";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.7548 16.183 480.909";
+      rotation = "-0.1404569 0.7607945 -0.6336116 134.652";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "0.47746 35.8895 488.813";
+      rotation = "1 0 0 180";
+      scale = "2 2 2";
+      dataBlock = "AntiGravityItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-7.3497 25.9363 350.119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GravityVortexPlatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0.427246 -16.2416 478.392";
+      rotation = "-0.0168144 0.7451174 -0.6667214 146.593";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-105.763 -0.0319623 499.603";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-105.246 0.422779 479.017";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.13379 0.124489 478.84";
+      rotation = "0 1 0 89.99999";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "3.6805 134.86 479.549";
+      rotation = "-1 0 0 89.99999";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0.0905372 37.5032 496.27";
+      rotation = "1 0 0 89.99999";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "2.27236 17.0998 506.821";
+      rotation = "-0.9562109 0.198813 -0.214789 114.658";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1838";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "11.2043 143.59 490.719";
+      rotation = "0.315786 0.126129 0.9404099 191.945";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.7732 150.239 493.04";
+      rotation = "0.287577 0.503185 0.814926 213.549";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.5374 151.375 489.397";
+      rotation = "0.2618761 0.3619272 0.8946674 198.726";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21.2362 138.696 484.858";
+      rotation = "0.233943 0.297549 0.9256 183.491";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "25.5166 135.915 476.495";
+      rotation = "0.218458 0.376541 0.9002739 196.117";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.2059 130.725 468.108";
+      rotation = "0.182103 0.3968549 0.8996359 193.047";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.9562 129.23 461.216";
+      rotation = "-0.120131 0.4295141 0.8950343 174.096";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.204804 132.712 457.108";
+      rotation = "0.262817 0.25802 0.9297059 205.939";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.894 151.668 480.092";
+      rotation = "0.3578941 0.2452621 0.9009763 190.569";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-15.341 147.627 469.446";
+      rotation = "0.09554324 0.3897142 0.9159664 201.813";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.62964 -16.4397 495.308";
+      rotation = "-0.8892381 0.3397941 -0.306261 119.455";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.7588 -14.2606 500.892";
+      rotation = "0.9821886 0.04865498 0.1814889 216.727";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.2039 -6.40961 508.708";
+      rotation = "0.9453781 -0.105919 0.308288 225.631";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-5.08462 -15.4419 487.333";
+      rotation = "0.8822612 -0.2097701 0.4214401 225.396";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.344 -9.71245 482.436";
+      rotation = "0.9306142 -0.08363102 0.356319 225.042";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-16.038 -0.451963 486.643";
+      rotation = "0.9146619 -0.0634447 0.3992099 223.141";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-15.5537 9.32298 492.928";
+      rotation = "0.7247539 0.0630074 0.6861209 219.099";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.2073 17.7644 499.411";
+      rotation = "0.9531508 -0.139352 0.2684859 238.857";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.991 3.06032 507.674";
+      rotation = "0.9176151 -0.281548 0.280559 227.149";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.0166 13.7731 509.104";
+      rotation = "0.9106247 0.03319299 0.4118989 231.642";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1725";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-5.44517 -10.8178 487.031";
+      rotation = "0.3534548 -0.5113328 0.7833316 233.752";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7.30898 0.267416 491.048";
+      rotation = "0.152187 -0.5971603 0.7875524 227.4";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9.8429 -20.9582 471.46";
+      rotation = "0.0008051493 -0.5944242 0.8041513 220.594";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.0015 -20.1003 468.087";
+      rotation = "0.1169981 -0.5738951 0.8105282 230.405";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "23.6106 -10.4621 464.719";
+      rotation = "0.08654512 -0.5420451 0.8358811 232.476";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "25.3704 0.982196 465.826";
+      rotation = "0.217019 0.349876 -0.911312 111.743";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "24.1634 11.6008 472.099";
+      rotation = "0.139248 -0.7000929 0.7003428 229.121";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.122025 6.51034 492.311";
+      rotation = "0.09702533 -0.6636512 0.7417232 211.547";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "7.42789 15.3269 489.701";
+      rotation = "-0.08733326 0.5715369 -0.8159158 114.701";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-10.5765 139.458 462.943";
+      rotation = "0.2997269 0.179665 0.9369548 209.161";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "6.05463 26.8564 503.198";
+      rotation = "-0.4913841 0.29455 -0.8196231 72.35959";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-96.0909 -10.9432 481.766";
+      rotation = "-0.281458 0.136237 0.9498531 141.842";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-98.6773 -19.8132 503.444";
+      rotation = "-0.9170961 -0.01834451 -0.398244 83.22559";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-88.9229 -13.4463 501.758";
+      rotation = "-0.9410214 -0.3381771 -0.0107257 108.871";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-85.7439 -1.99268 500.664";
+      rotation = "-0.9403998 -0.2456059 -0.2352149 100.523";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-109.773 -25.4536 501.435";
+      rotation = "-0.8973648 -0.166652 -0.4086119 103.044";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-118.658 -25.2248 497.313";
+      rotation = "-0.9188719 -0.281803 -0.276155 103.14";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-125.117 -16.0903 496.74";
+      rotation = "-0.8995169 -0.308925 -0.308925 106.853";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-126.57 -4.66431 495.121";
+      rotation = "0.6916328 0.4763079 0.5429319 233.701";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-122.215 6.4987 491.96";
+      rotation = "-0.9409471 -0.239369 -0.239418 86.25099";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-90.4378 4.07364 494.886";
+      rotation = "-0.9541734 -0.04296651 -0.2961541 95.46666";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-98.3518 12.3503 491.658";
+      rotation = "-0.8499059 -0.4349749 -0.297417 101.794";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-109.785 12.17 492.641";
+      rotation = "-0.9581626 -0.1743559 -0.2269899 77.43584";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.577 -9.62877 512.09";
+      rotation = "-0.2735649 0.1915239 0.9425927 124.488";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-120.803 -16.5085 504.849";
+      rotation = "-0.4098401 0.3230831 0.8530232 168.834";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-119.22 -22.7179 494.778";
+      rotation = "-0.4129152 0.2845722 0.8651704 145.697";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-108.242 0.25265 516.692";
+      rotation = "-0.445304 0.297666 0.8444521 128.673";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-102.137 7.75363 515.124";
+      rotation = "-0.4596989 0.279148 0.8430619 144.356";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-93.197 7.31401 508.389";
+      rotation = "-0.5028619 0.284031 0.8163678 143.364";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-87.9122 3.92539 498.597";
+      rotation = "0.7750723 -0.1943691 -0.6012352 226.105";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-88.1722 -1.2931 487.36";
+      rotation = "-0.355056 0.180937 0.917168 143.808";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.864 -18.9493 487.095";
+      rotation = "-0.2957802 0.3094721 0.9037373 132.275";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-105.991 -16.334 479.612";
+      rotation = "-0.5461379 0.184053 0.8172258 149.212";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-24.3101 38.3024 359.453";
+      rotation = "0.7152652 0.6208692 0.3208071 236.975";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.4386 47.4702 354.56";
+      rotation = "0.6056499 0.7270058 0.3234979 207.411";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-8.53462 48.5652 349.929";
+      rotation = "0.8110051 0.514627 0.278262 222.173";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.3983 25.0271 360.623";
+      rotation = "0.7011781 0.646428 0.300799 227.448";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-20.7986 14.6649 359";
+      rotation = "0.5631609 0.6708177 0.4825489 175.627";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-12.1659 8.76974 353.899";
+      rotation = "0.694552 0.6588939 0.288888 205.02";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-3.12463 8.25994 347.306";
+      rotation = "0.7060891 0.654045 0.27141 210.131";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.95609 15.0292 347.113";
+      rotation = "0.7583067 0.5487177 0.3519658 208.627";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.06148 48.4035 349.596";
+      rotation = "0.7230528 0.6461159 0.2443949 214.72";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "7.11295 38.8463 345.784";
+      rotation = "0.6588392 0.7492452 0.06754741 213.491";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "7.24307 27.1958 347.452";
+      rotation = "0.7820657 0.4847438 0.3916589 230.422";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "7.86453 48.9516 475.422";
+      rotation = "-0.646201 0.258101 -0.7181979 58.15969";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.0061 51.3719 481.925";
+      rotation = "-0.6481091 -0.281978 -0.70742 67.7604";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.9845 46.9745 492.571";
+      rotation = "-0.6423757 0.2123159 -0.7363936 79.37016";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-1.39757 40.7479 469.587";
+      rotation = "-0.6887842 0.09974345 -0.7180721 62.08778";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7.72277 30.915 473.695";
+      rotation = "-0.3662901 -0.4845631 -0.7943742 94.32129";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-8.74127 21.6007 480.587";
+      rotation = "-0.6763659 -0.151671 -0.720781 77.48861";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-5.15097 15.101 488.974";
+      rotation = "-0.7036523 -0.08847812 -0.7050142 74.85667";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-1.33167 18.4876 497.337";
+      rotation = "-0.5764081 0.008931212 -0.8171132 82.03278";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.0758 44.7805 501.876";
+      rotation = "-0.7358538 -0.01798261 -0.6769017 73.57194";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.9718 34.1796 505.519";
+      rotation = "-0.9080527 -0.120181 -0.401244 74.57423";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GVortexRock3.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "5.4 -3.4 482.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

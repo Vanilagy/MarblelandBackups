@@ -1,0 +1,743 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Advanced";
+         artist = "Aayrl";
+         goldTime = "60000";
+         desc = "Not another tornado!";
+         music = "Crawling In Grass.ogg";
+         level = "7";
+         xpmult = "0";
+         
+         xpbonus = "0";
+         name = "Kansas";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.35";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Cloud_Night/cloud_sky_night.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 0.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.5445079 0.439467 -0.7144089";
+      color = "0.200000 0.200000 0.200000 1.000000";
+      ambient = "0.200000 0.200000 0.200000 1.000000";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         locked = "true";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "-12.8 -7.6 100";
+         rotation = "0 0 1 89.95439";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "190.463 -5.39516 100";
+         rotation = "0 0 1 89.95439";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new Trigger(Bounds) {
+      position = "-26.2322 105.063 80.4";
+      rotation = "1 0 0 0";
+      scale = "225 225 225";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "42.2462 42.8849 100.55";
+      rotation = "1 0 0 0";
+      scale = "5 5 1";
+      interiorFile = "~/data/interiors/fubargame/kansas-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1886";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1744";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "190.819 -5.64329 112.378";
+      rotation = "0 0 1 89.95439";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new StaticShape() {
+      position = "88.7321 -7.82759 99.489";
+      rotation = "1 0 0 0";
+      scale = "9 9 13";
+      dataBlock = "Tornado";
+   };
+   new InteriorInstance() {
+      position = "56.0257 76.6003 112.628";
+      rotation = "-0.166357 0.3745321 0.9121683 220.468";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/HouseKansas.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.3927 -34.0545 136.642";
+      rotation = "0.05949922 -0.6132532 0.7876424 147.99";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/HouseKansas.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "154.431 -61.901 127.367";
+      rotation = "0.6184859 -0.7471318 0.2434529 55.56502";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/HouseKansas.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "88.7321 -7.22759 99.489";
+      rotation = "1 0 0 0";
+      scale = "9 9 13";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "88.7321 -7.6276 99.489";
+      rotation = "1 0 0 0";
+      scale = "9 9 13";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "88.7516 -8.64132 99.7442";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new Item() {
+      position = "55.985 80.5185 110.818";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "55.7726 82.8457 112.418";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "47.6321 -36.754 130.902";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "32.9712 -37.7471 125.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "147.53 -47.9244 127.418";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "157.298 -53.8863 119.618";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "178.951 26.2728 236.01";
+      rotation = "-0.152972 -0.8651852 0.4775501 40.6333";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "160.634 67.2346 155.962";
+      rotation = "0.7736124 -0.3207712 -0.5464702 131.154";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "92.1647 99.1617 163.251";
+      rotation = "1 0 0 74.48449";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.7985 51.682 148.175";
+      rotation = "0.4185811 0.5988982 0.6827232 91.34317";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-7.62552 -13.6033 176.259";
+      rotation = "0.304782 0.4807769 0.8221689 75.26842";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "31.1888 -87.0216 149.597";
+      rotation = "0.7722342 0.5529301 0.312926 72.47259";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "62.2926 -77.9059 116.705";
+      rotation = "0.8245 -0.188708 0.533469 46.4418";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "125.779 -88.5766 143.582";
+      rotation = "-0.2638329 -0.8841216 0.3856438 75.46574";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "179.819 -30.6982 149.42";
+      rotation = "0.8088153 -0.5671171 -0.155551 234.828";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "180.52 8.66564 142.009";
+      rotation = "-0.301358 -0.155284 0.9407818 128.275";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "116.185 44.3968 204.136";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "45.3637 42.0988 248.704";
+      rotation = "-0.5918189 0.222762 0.7746789 51.82861";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "44.0122 -19.0884 249.919";
+      rotation = "-0.4871361 0.8026761 0.3441071 82.69819";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "63.2632 -74.9624 266.408";
+      rotation = "-0.159174 -0.6233751 0.7655502 36.8912";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "122.66 -92.0019 286.152";
+      rotation = "-0.4709671 0.8708833 0.140543 37.82859";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "183.863 -49.9658 308.564";
+      rotation = "-0.4500881 0.8357412 0.314575 79.81059";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "184.554 53.792 167.18";
+      rotation = "-0.137276 0.2161641 -0.9666584 116.9099";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "217.399 -70.9307 110.194";
+      rotation = "-0.2143131 -0.8757614 0.4325643 58.99667";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "135.689 -112.307 117.958";
+      rotation = "0.1963059 0.8199108 0.5377829 47.99781";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.4479 -121.04 132.594";
+      rotation = "-0.719838 0.612915 0.325835 37.3989";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.3517 -61.4435 143.897";
+      rotation = "0.2389639 0.3687459 -0.8982888 71.61501";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.7874 47.1377 111.105";
+      rotation = "0.5060161 0.7977562 -0.327922 78.17629";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "144.531 101.362 134.859";
+      rotation = "0 1 0 58.44169";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "220.914 68.2692 130.094";
+      rotation = "0.610275 0.702668 0.365817 80.9334";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasStoneDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "129.779 70.8496 133.904";
+      rotation = "-0.2745431 -0.9370844 0.2156361 107.292";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "179.553 82.4795 165.576";
+      rotation = "-0.2773501 -0.7258152 -0.6294992 62.51768";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "195.001 16.8521 149.628";
+      rotation = "-0.3916329 0.836359 0.383572 99.00961";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "197.582 -39.8093 120.287";
+      rotation = "-0.422379 0.8825501 -0.206643 58.00309";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "218.307 17.5762 114.509";
+      rotation = "-0.2044201 0.8808342 0.4270171 177.429";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "199.032 108.588 152.242";
+      rotation = "0.9489312 -0.158342 0.2728691 237.679";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "93.92 138.146 184.927";
+      rotation = "-0.0458556 0.9661319 0.253942 107.179";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "45.0354 102.464 171.987";
+      rotation = "-0.8707291 0.401659 -0.283727 78.10199";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "23.8887 12.6671 138.649";
+      rotation = "0.3916849 0.647068 -0.6541299 58.00511";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-28.1172 -43.7518 173.721";
+      rotation = "0.5349578 -0.1802529 0.8254266 44.41162";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "7.45519 -100.687 170.75";
+      rotation = "-0.707379 0.6364669 -0.307449 68.65681";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "85.4806 -176.491 225.503";
+      rotation = "-0.6372488 0.3995229 0.6590109 87.14362";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "185.331 -91.4859 290.036";
+      rotation = "0.6026708 0.2548049 0.7562158 58.41832";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "169.887 -21.7691 301.236";
+      rotation = "-0.82572 0.3346 0.454125 83.4859";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "101.397 49.9027 312.243";
+      rotation = "0.3332761 -0.659161 0.6741171 225.022";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "28.3282 48.6986 336.631";
+      rotation = "-0.2793331 0.2329011 -0.9315204 83.66157";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-10.1582 -46.9821 312.121";
+      rotation = "-0.3750102 -0.5723872 -0.7292053 83.87737";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.7949 -3.01321 271.692";
+      rotation = "-0.1493651 0.9882904 -0.03118031 156.686";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "141.894 -37.3618 306.74";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/KansasWoodDebris.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "127.969 -89.5433 165.061";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "47.8243 -122.05 218.065";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.9464 -43.449 267.69";
+      rotation = "-0.5471301 0.231323 0.8044492 55.45";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "61.4473 -2.55769 274.232";
+      rotation = "-0.1575129 0.4753119 -0.8656029 41.8979";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "142.18 40.727 209.267";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "121.347 102.79 174.896";
+      rotation = "-0.2666691 0.9635463 -0.02159291 171.078";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.4169 1.44582 167.361";
+      rotation = "1 0 0 75.63041";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/Rock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "225.443 17.9736 205.196";
+      rotation = "-0.9788538 0.004053321 -0.2045209 88.91383";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "151.376 97.2239 159.738";
+      rotation = "0.8989171 -0.208427 0.3853651 231.857";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "40.1329 97.0476 169.252";
+      rotation = "-0.06615489 -0.6885731 -0.7221431 115.886";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-3.9455 58.0655 188.186";
+      rotation = "-0.6366112 0.3428501 0.6907822 169.379";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-18.2308 -28.8609 152.252";
+      rotation = "0.4555949 0.8859017 -0.08724368 199.257";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "25.1512 -125.353 154.095";
+      rotation = "0.287495 0.485098 0.825849 71.3287";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "119.316 -121.368 159.649";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "236.961 -67.9545 244.412";
+      rotation = "0.585161 -0.579336 -0.5674121 118.287";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "108.052 -79.2743 239.804";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "12.4513 -26.2034 318.813";
+      rotation = "0.6118329 0.576053 0.542055 113.936";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "111.648 19.1364 301.553";
+      rotation = "0.932832 0.308132 0.18676 204.681";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/fubargame/tree-ambient.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "55.6 -78.6 117.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
