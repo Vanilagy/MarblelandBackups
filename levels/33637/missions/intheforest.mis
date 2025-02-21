@@ -1,0 +1,2494 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         time = "0";
+         name = "In The Forest";
+         desc = "You are in between the forest!!. Run! You must reach to the goal ASAP! And be careful!";
+         artist = "abhishek839";
+         level = "4219";
+         type = "custom";
+         goldTime = "150000";
+         startHelpText = " Find gems and beware of the dangerous hazards in this forest...I\'d recommend getting out the forest ASAP!";
+         music = "Cookout.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/Night/sky_night.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "0.300000 0.300000 0.300000 1.000000";
+      ambient = "0.150000 0.140000 0.550000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "28 5.79158e-008 81";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape() {
+      position = "-267.575 -104.455 89.2282";
+      rotation = "0 0 -1 107.143";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Trigger(Bounds) {
+      position = "-490.415 76.3748 52.7544";
+      rotation = "1 0 0 0";
+      scale = "637.586 223.186 101.116";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(EndPoint) {
+      position = "-268.041 -104.696 81";
+      rotation = "0 0 -1 89.9544";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         time = "0";
+         powerUp = "0";
+         penaltyTime = "0";
+         pad = "1493";
+         bonusTime = "0";
+   };
+   new SimGroup(forestpart) {
+
+      new InteriorInstance() {
+         position = "20.0399 13.3117 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "20.0499 13.3041 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.5 -2.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "46.8574 -3.75682 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "46.8674 -3.76442 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.372 -3.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.382 -3.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "24.6423 -14.2547 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "24.6523 -14.2623 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-2.3092 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-2.2992 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.6908 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.7008 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.6908 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.7008 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-7.8092 -26.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-7.7992 -26.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "13.1023 -27.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "13.1123 -27.6936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "37.7756 -29.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "37.7856 -29.7516 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "62.0279 36.1498 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "62.0379 36.1422 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "54.5263 -22.0889 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "54.5363 -22.0965 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "31.6023 30.814 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "31.6123 30.8064 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "61.65 6.27546 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "61.66 6.26786 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-5.99592 -6.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-5.98592 -6.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "6.69787 34.9696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "6.70787 34.962 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-10.35 37.5255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-10.34 37.5179 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "64.9244 -34.2034 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "64.9344 -34.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "36.1979 10.4696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "36.2079 10.462 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-69.9601 13.3117 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-69.9501 13.3041 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-59.5 -2.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.1426 -3.75682 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.1326 -3.76442 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-77.628 -3.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-77.618 -3.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-65.3577 -14.2547 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-65.3477 -14.2623 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-92.3092 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-92.2992 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.3092 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.2992 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.3092 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.2992 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-97.8092 -26.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-97.7992 -26.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.8977 -27.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.8877 -27.6936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-52.2244 -29.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-52.2144 -29.7516 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-27.9721 36.1498 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-27.9621 36.1422 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-35.4737 -22.0889 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-35.4637 -22.0965 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-58.3977 30.814 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-58.3877 30.8064 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-28.35 6.27546 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-28.34 6.26786 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.9959 -6.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.9859 -6.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-83.3021 34.9696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-83.2921 34.962 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-100.35 37.5255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-100.34 37.5179 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-25.0756 -34.2034 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-25.0656 -34.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-53.8021 10.4696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-53.7921 10.462 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "20.0399 -75.6883 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "20.0499 -75.6959 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.5 -91.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "46.8574 -92.7568 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "46.8674 -92.7644 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.372 -92.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.382 -92.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "24.6423 -103.255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "24.6523 -103.262 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-2.3092 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-2.2992 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.6908 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.7008 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.6908 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "45.7008 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-7.8092 -115.101 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-7.7992 -115.108 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "13.1023 -116.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "13.1123 -116.694 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "37.7756 -118.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "37.7856 -118.752 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "62.0279 -52.8502 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "62.0379 -52.8578 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "54.5263 -111.089 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "54.5363 -111.096 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "31.6023 -58.186 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "31.6123 -58.1936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "61.65 -82.7245 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "61.66 -82.7321 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-5.99592 -95.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-5.98592 -95.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "6.69787 -54.0304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "6.70787 -54.038 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-10.35 -51.4745 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-10.34 -51.4821 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "64.9244 -123.203 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "64.9344 -123.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "36.1979 -78.5304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "36.2079 -78.538 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-69.9601 -75.6883 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-69.9501 -75.6959 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-59.5 -91.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.1426 -92.7568 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.1326 -92.7644 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-77.628 -92.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-77.618 -92.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-65.3577 -103.255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-65.3477 -103.262 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-92.3092 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-92.2992 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.3092 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.2992 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.3092 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-44.2992 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-97.8092 -115.101 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-97.7992 -115.108 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.8977 -116.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.8877 -116.694 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-52.2244 -118.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-52.2144 -118.752 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-27.9721 -52.8502 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-27.9621 -52.8578 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-35.4737 -111.089 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-35.4637 -111.096 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-58.3977 -58.186 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-58.3877 -58.1936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-28.35 -82.7245 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-28.34 -82.7321 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.9959 -95.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.9859 -95.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-83.3021 -54.0304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-83.2921 -54.038 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-100.35 -51.4745 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-100.34 -51.4821 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-25.0756 -123.203 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-25.0656 -123.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-53.8021 -78.5304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-53.7921 -78.538 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new ScriptObject() {
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2032";
+         bonusTime = "0";
+   };
+   new SimGroup(forestpart) {
+
+      new InteriorInstance() {
+         position = "-159.71 13.3117 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-159.7 13.3041 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-149.25 -2.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-132.893 -3.75682 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-132.883 -3.76442 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-167.378 -3.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-167.368 -3.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-155.108 -14.2547 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-155.098 -14.2623 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-182.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-182.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-187.559 -26.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-187.549 -26.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-166.648 -27.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-166.638 -27.6936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-141.974 -29.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-141.964 -29.7516 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-117.722 36.1498 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-117.712 36.1422 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-125.224 -22.0889 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-125.214 -22.0965 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-148.148 30.814 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-148.138 30.8064 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-118.1 6.27546 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-118.09 6.26786 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-185.746 -6.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-185.736 -6.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-173.052 34.9696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-173.042 34.962 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-190.1 37.5255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-190.09 37.5179 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-114.826 -34.2034 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-114.816 -34.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-143.552 10.4696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-143.542 10.462 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-249.71 13.3117 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-249.7 13.3041 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-239.25 -2.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-222.893 -3.75682 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-222.883 -3.76442 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-257.378 -3.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-257.368 -3.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-245.108 -14.2547 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-245.098 -14.2623 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-272.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-272.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.059 17.8993 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.049 17.8917 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-277.559 -26.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-277.549 -26.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-256.648 -27.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-256.638 -27.6936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-231.974 -29.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-231.964 -29.7516 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-207.722 36.1498 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-207.712 36.1422 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-215.224 -22.0889 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-215.214 -22.0965 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-238.148 30.814 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-238.138 30.8064 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-208.1 6.27546 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-208.09 6.26786 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-275.746 -6.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-275.736 -6.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-263.052 34.9696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-263.042 34.962 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-280.1 37.5255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-280.09 37.5179 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-204.826 -34.2034 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-204.816 -34.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-233.552 10.4696 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-233.542 10.462 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-159.71 -75.6883 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-159.7 -75.6959 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-149.25 -91.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-132.893 -92.7568 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-132.883 -92.7644 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-167.378 -92.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-167.368 -92.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-155.108 -103.255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-155.098 -103.262 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-182.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-182.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-134.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-187.559 -115.101 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-187.549 -115.108 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-166.648 -116.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-166.638 -116.694 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-141.974 -118.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-141.964 -118.752 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-117.722 -52.8502 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-117.712 -52.8578 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-125.224 -111.089 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-125.214 -111.096 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-148.148 -58.186 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-148.138 -58.1936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-118.1 -82.7245 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-118.09 -82.7321 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-185.746 -95.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-185.736 -95.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-173.052 -54.0304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-173.042 -54.038 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-190.1 -51.4745 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-190.09 -51.4821 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-114.826 -123.203 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-114.816 -123.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-143.552 -78.5304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-143.542 -78.538 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-249.71 -75.6883 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-249.7 -75.6959 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-239.25 -91.75 65.75";
+         rotation = "1 0 0 0";
+         scale = "2 2 1";
+         interiorFile = "~/data/interiors/others/1x1_Platforms/forestgrass.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-222.893 -92.7568 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-222.883 -92.7644 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-257.378 -92.6357 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-257.368 -92.6433 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-245.108 -103.255 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-245.098 -103.262 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-272.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-272.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.059 -71.1007 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-224.049 -71.1083 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-277.559 -115.101 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-277.549 -115.108 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-256.648 -116.686 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-256.638 -116.694 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-231.974 -118.744 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-231.964 -118.752 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-207.722 -52.8502 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-207.712 -52.8578 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-215.224 -111.089 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-215.214 -111.096 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-238.148 -58.186 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-238.138 -58.1936 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-208.1 -82.7245 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-208.09 -82.7321 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-275.746 -95.6529 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-275.736 -95.6605 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-263.052 -54.0304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-263.042 -54.038 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-280.1 -51.4745 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-280.09 -51.4821 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-204.826 -123.203 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-204.816 -123.211 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-233.552 -78.5304 82.5863";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_tree.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-233.542 -78.538 80.7594";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/sandbox/slendy_stump.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new StaticShape() {
+      position = "-230.953 -104.701 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "46.8157 -55.352 81.1248";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "41.6604 -107.994 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-27.6651 -107.37 80.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-30.9164 28.4366 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new Trigger() {
+      position = "-33.5568 31.5587 81";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-72.9736 -43.6558 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-110.372 -106.033 81.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-109.474 -23.2578 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new Trigger() {
+      position = "-111.991 -20.684 81";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-125.799 16.9819 81.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-200.55 20.3455 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-203.771 -68.2333 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new StaticShape() {
+      position = "-250.28 -40.109 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new Trigger() {
+      position = "-253.53 -37.359 81";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-269.604 7.36539 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new ScriptObject() {
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2032";
+         bonusTime = "0";
+   };
+   new StaticShape() {
+      position = "55.5293 23.8028 81";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "tornado";
+   };
+   new Item() {
+      position = "46.1207 37.8 81.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.0204 -86.4627 81.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-37.9208 -113.16 81.2473";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-104.527 -52.1207 81.1548";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-139.008 38.3934 81.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-209.975 34.0468 81.3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-267.706 27.9465 81.5398";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-217.631 -33.8243 81.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-209.038 -115.343 81.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "54.5075 27.1538 80.53";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "15.9683 14.5075 80.5";
+      rotation = "1 0 0 0";
+      scale = "6.61991 25.8918 5.4985";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don't go near tornados as some of them throw you OOB!";
+   };
+};
+//--- OBJECT WRITE END ---
