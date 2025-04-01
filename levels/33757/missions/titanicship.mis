@@ -1,0 +1,3577 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         level = "4311";
+         goldTime = "180000";
+         name = " The Titanic";
+         time = "0";
+         desc = "The legendary ship has arrived. While its voyage to the New York , Take a tour around the majestic ship and grab the jewels present in its domains.";
+         startHelpText = "All the gems are present on this upper deck only, also near the titanic\'s funnels and hallways. Grab them and go to the stern.";
+         type = "custom";
+         artist = "abhishek839";
+         music = "Summer Gathering.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "5000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "3000";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/Night/sky_night.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "-171.436 37.2382 188.651";
+      rotation = "0 0 1 118.212";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Trigger(Bounds) {
+      position = "-597.554 562.582 65.621";
+      rotation = "1 0 0 0";
+      scale = "1402.64 900.345 504.409";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(EndPoint) {
+      position = "384.358 2.23973 188.607";
+      rotation = "0 0 1 90.1371";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         powerUp = "0";
+         penaltyTime = "0";
+         bonusTime = "0";
+         pad = "1493";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "-107.389 3.22578 78.5923";
+      rotation = "0 0 1 180";
+      scale = "12.6328 10 10";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicdeck.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-141.791 16.9151 187.342";
+      rotation = "1 0 0 0";
+      scale = "6.5 6.5 6.5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicpole.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-192.137 -26.7244 188.321";
+      rotation = "0 0 1 39.5341";
+      scale = "2 2 1.20515";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-239.732 -3.81611 188.321";
+      rotation = "0 0 1 142.666";
+      scale = "2 2 1.24678";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-35.0381 11.8789 178.397";
+      rotation = "1 0 0 0";
+      scale = "7.86518 11.4604 0.978271";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-32.6862 12.1738 192.147";
+      rotation = "1 0 0 0";
+      scale = "8.02335 11.3449 0.978271";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.8164 4.30928 149.116";
+      rotation = "1 0 0 0";
+      scale = "7.31773 4.92901 4.23183";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.855 4.30928 161.116";
+      rotation = "1 0 0 0";
+      scale = "7.31415 4.92901 4.23183";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-36.6747 12.1896 202.397";
+      rotation = "1 0 0 0";
+      scale = "7.8666 11.3091 0.978271";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-210.512 18.4713 188.321";
+      rotation = "0 0 1 142.666";
+      scale = "2 2 1.24678";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-196.2 29.3877 188.321";
+      rotation = "0 0 1 142.666";
+      scale = "2 2 1.24678";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-163.217 -50.4634 188.321";
+      rotation = "0 0 1 39.5341";
+      scale = "2 2 1.20515";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-148.949 -62.2393 188.321";
+      rotation = "0 0 1 39.5341";
+      scale = "2 2 1.20515";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2032";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "345.209 16.9151 187.342";
+      rotation = "1 0 0 0";
+      scale = "6.5 6.5 6.5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicpole.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-59.3608 4.52962 221.977";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfunnels.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "55.3892 4.52962 221.977";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfunnels.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "150.139 4.52962 221.977";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfunnels.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "248.139 4.52962 221.977";
+      rotation = "1 0 0 0";
+      scale = "5 5 5";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfunnels.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(Hallway1) {
+
+      new InteriorInstance() {
+         position = "-80.8417 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-62.3417 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5917 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.658 41.2883 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2032";
+         time = "0";
+   };
+   new SimGroup(Hallway2) {
+
+      new InteriorInstance() {
+         position = "-80.8417 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-62.3417 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5917 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.158 -46.2117 204.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2032";
+         time = "0";
+   };
+   new SimGroup(Hallway21) {
+
+      new InteriorInstance() {
+         position = "-80.8417 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-62.3417 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5917 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.158 -46.2117 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(Hallway21) {
+
+      new InteriorInstance() {
+         position = "-80.8417 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-62.3417 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5917 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.158 40.7883 190.543";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.8606";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(frontfence) {
+   };
+   new SimGroup(frontfenceb) {
+
+      new InteriorInstance() {
+         position = "-117.89 -7.9225 190.59";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 2.04258";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-117.89 -26.6725 190.59";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 2.04258";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(backfence) {
+
+      new InteriorInstance() {
+         position = "312.36 9.48977 203.09";
+         rotation = "0 0 1 90.0002";
+         scale = "1.26462 1 0.783759";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "312.36 -26.6725 203.09";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 0.796825";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(backfenceb) {
+
+      new InteriorInstance() {
+         position = "303.61 -7.9225 190.59";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 2.04258";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "303.61 -26.6725 190.59";
+         rotation = "0 0 1 90.0002";
+         scale = "1 1 2.04258";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "-167.425 8.32785 186.717";
+      rotation = "0 0 1 180.482";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfrontandback.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-189.627 -6.42936 188.299";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-189.627 17.0706 188.299";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-143.299 -31.3771 188.299";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "-142.377 29.3206 188.299";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new InteriorInstance() {
+      position = "-65.8035 17.3127 213.759";
+      rotation = "0 0 1 180";
+      scale = "0.887581 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(nearfunnels1) {
+
+      new InteriorInstance() {
+         position = "46.5021 18.0006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "39.4989 -7.25498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "82.2521 18.0006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "75.2489 -7.25498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.7151 -4.47127 221.79";
+         rotation = "0 0 1 91.1003";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "-22.4914 17.3128 213.759";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "84.7586 17.3131 213.759";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "43.9145 -13.7431 213.759";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "130.915 -13.7431 213.759";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "229.687 -14.1653 213.759";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels01.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(nearfunnels2) {
+
+      new InteriorInstance() {
+         position = "144.002 18.0006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "136.999 -7.25498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.752 18.0006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "172.749 -7.25498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "173.654 5.48336 221.79";
+         rotation = "0 0 1 91.1003";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(nearfunnels3) {
+
+      new InteriorInstance() {
+         position = "241.002 15.5006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "233.999 -9.75498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "276.752 15.5006 221.754";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "269.749 -9.75498 221.754";
+         rotation = "0 0 1 179.909";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "273.188 4.68503 221.79";
+         rotation = "0 0 1 91.1003";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "42.9294 7.11325 221.79";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-205.694 3.65946 189.799";
+      rotation = "0 0 1 180";
+      scale = "1.3 1.3 1.3";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_starboardside.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-136.251 -47.4834 188.924";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-34.6567 3.4887 222.264";
+      rotation = "0 0 1 89.9544";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-99.4067 3.44556 222.014";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-57.9769 16.2653 220.93";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.6036 -9.05624 220.93";
+      rotation = "0 0 1 178.763";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicnearfunnels03.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "426.791 62.2573 188.639";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "444.543 53.7446 188.639";
+      rotation = "0 0 1 19.4805";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "461.146 37.3932 188.639";
+      rotation = "0 0 1 39.5341";
+      scale = "1.13339 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "470.382 18.3602 188.639";
+      rotation = "0 0 1 58.4417";
+      scale = "1.09437 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "471.422 -0.71471 188.639";
+      rotation = "0 0 1 80.2141";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "466.167 -22.4803 188.639";
+      rotation = "0 0 1 99.6946";
+      scale = "1.10837 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "470.118 -9.32918 188.639";
+      rotation = "0 0 -1 60.7335";
+      scale = "1.1814 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "460.438 -30.568 188.639";
+      rotation = "0 0 -1 37.2423";
+      scale = "1.08556 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "446.027 -45.2239 188.639";
+      rotation = "0 0 -1 18.3347";
+      scale = "1.15903 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "425.707 -54.441 188.639";
+      rotation = "1 0 0 0";
+      scale = "1.11077 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2034";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "387.588 -2.50443 188.168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfrontandback.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "442.383 19.5254 188.3";
+      rotation = "0 0 1 89.9544";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "442.375 28.9876 92.4336";
+      rotation = "0 0 1 89.9544";
+      scale = "0.122945 1 8.44753";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "442.413 -18.2624 92.4336";
+      rotation = "0 0 1 89.9544";
+      scale = "0.122945 1 8.44753";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(sternelev) {
+
+      new InteriorInstance() {
+         position = "443.712 1.81226 200.479";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 0.536514";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "443.712 14.5623 200.479";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 0.532725";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(sternelev) {
+
+      new InteriorInstance() {
+         position = "437.212 1.81226 200.479";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 0.485135";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "437.212 20.3123 200.479";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 0.482564";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "437.212 36.6963 200.479";
+         rotation = "0 0 -1 90.0002";
+         scale = "1.09536 1 0.476974";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new StaticShape() {
+      position = "418.042 24.1929 188.946";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "418.042 -20.5571 188.946";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "457.012 26.0798 188.946";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "457.042 -11.5571 188.946";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "368.542 36.4429 188.446";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new StaticShape() {
+      position = "368.542 -31.3071 188.446";
+      rotation = "1 0 0 0";
+      scale = "10 10 10";
+      dataBlock = "RoundBumper";
+   };
+   new SimGroup(Endfence1) {
+
+      new InteriorInstance() {
+         position = "-132.285 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-113.785 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.0348 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.658 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.2848 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-57.2848 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5348 61.8546 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "327.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "346.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "364.908 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "383.408 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "409.822 62.7883 188.043";
+         rotation = "1 0 0 0";
+         scale = "1.30654 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(Endfence2) {
+
+      new InteriorInstance() {
+         position = "-132.285 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-113.785 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-95.0348 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-24.8417 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-6.3417 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "12.1583 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "30.9083 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "49.9083 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "68.6583 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "86.6583 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "105.158 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "123.908 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "142.658 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "161.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "179.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "197.908 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "216.658 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "235.658 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "254.158 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "272.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "290.908 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "308.658 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-76.2848 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-57.2848 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-43.5348 -55.3954 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "327.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "346.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "364.908 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "383.408 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "409.822 -55.4617 188.043";
+         rotation = "1 0 0 0";
+         scale = "1.30654 1 1.32776";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2553";
+         time = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2030";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "416.888 3.30208 186.576";
+      rotation = "0 0 -1 91.1003";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternpart02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "429.623 3.87936 177.094";
+      rotation = "0 0 1 180";
+      scale = "0.15472 0.563538 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "452.121 13.3311 188.432";
+      rotation = "0 0 -1 89.9544";
+      scale = "1 1.85282 2.2897";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternstairs.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(Lifeboatsgroup1) {
+
+      new InteriorInstance() {
+         position = "-42.6987 -49.1558 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "285.301 -49.1554 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "7.5513 -49.1557 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "51.3013 -49.1556 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "91.8013 -49.1555 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "316.551 -49.1553 210.794";
+         rotation = "0 0 1 180";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(Lifeboatsgroup2) {
+
+      new InteriorInstance() {
+         position = "237.597 43.1004 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-81.1521 42.8217 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "204.597 43.0469 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-0.402527 42.9505 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-40.9025 42.8859 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+      new InteriorInstance() {
+         position = "-123.152 42.7547 210.794";
+         rotation = "0 0 -1 0.0884693";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+         showTerrainInside = "0";
+      };
+   };
+   new SimGroup(HallwayDoors) {
+
+      new TSStatic() {
+         position = "-82.8105 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-57.5605 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-36.5605 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-14.8105 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "6.4395 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "31.1895 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "55.9395 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "79.4395 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "106.689 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "135.939 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "159.939 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "182.439 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "206.189 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "232.189 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "255.939 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "275.939 -21.8304 208.193";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+   };
+   new StaticShape() {
+      position = "384.95 2.48735 204.498";
+      rotation = "0 0 -1 107.143";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2752";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "413.61 30.7442 184.326";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternpart02.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2090";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "414.781 -30.2446 184.326";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternpart02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-139.853 21.7602 188.467";
+      rotation = "0 0 1 144.385";
+      scale = "1.4 1.4 1.4";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicstarboardpart01.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2092";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "399.391 22.1224 183.987";
+      rotation = "0 0 1 89.3814";
+      scale = "2.4 2.4 2.4";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternpart01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "421.059 15.2463 177.344";
+      rotation = "0 0 1 179.909";
+      scale = "0.261058 0.563538 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "420.346 -7.75489 177.094";
+      rotation = "0 0 1 179.909";
+      scale = "0.261058 0.563538 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "172.847 42.9979 210.794";
+      rotation = "0 0 -1 0.0884693";
+      scale = "0.7 0.7 0.7";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "144.347 42.9539 210.794";
+      rotation = "0 0 -1 0.0884693";
+      scale = "0.7 0.7 0.7";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "256.301 -49.1555 210.794";
+      rotation = "0 0 1 180";
+      scale = "0.7 0.7 0.7";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "227.551 -49.1555 210.794";
+      rotation = "0 0 1 180";
+      scale = "0.7 0.7 0.7";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titaniclifeboat.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "99.5597 10.5802 95.842";
+      rotation = "1 0 0 0";
+      scale = "1000 1000 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicocean.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2091";
+         time = "0";
+   };
+   new SimGroup(HallwayDoors) {
+
+      new TSStatic() {
+         position = "-82.8105 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-57.5605 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-36.5605 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-14.8105 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "6.4395 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "31.1895 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "55.9395 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "79.4395 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "106.689 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "135.939 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "159.939 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "182.439 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "206.189 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "232.189 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "255.939 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "275.939 -21.8304 194.693";
+         rotation = "-1 0 0 88.2355";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+   };
+   new SimGroup(HallwayDoors) {
+
+      new TSStatic() {
+         position = "274.291 17.7387 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "249.041 17.6985 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "228.042 17.665 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "206.292 17.6304 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "185.042 17.5966 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "160.292 17.5571 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "135.542 17.5177 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "112.042 17.4803 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 17.4369 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 17.3903 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 17.3521 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 17.3162 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 17.2784 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 17.237 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 17.1992 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-84.4577 17.1673 194.693";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+   };
+   new SimGroup(HallwayDoors) {
+
+      new TSStatic() {
+         position = "274.291 17.7387 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "249.041 17.6985 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "228.042 17.665 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "206.292 17.6304 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "185.042 17.5966 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "160.292 17.5571 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "135.542 17.5177 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "112.042 17.4803 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 17.4369 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 17.3903 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 17.3521 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 17.3162 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 17.2784 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 17.237 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 17.1992 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+      new TSStatic() {
+         position = "-84.4577 17.1673 208.443";
+         rotation = "-0.000554494 0.696135 0.717911 179.934";
+         scale = "2.47059 3.50929 1";
+         shapeName = "~/data/shapes/hazards/trapdoor.dts";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2091";
+         time = "0";
+   };
+   new Item() {
+      position = "0.538257 9.30214 214.549";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "108.788 9.30214 214.549";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "254.538 2.30214 214.549";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-74.6713 3.86871 221.947";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-58.0858 -0.398603 214.809";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-83.7778 19.3131 215.736";
+      rotation = "0 0 1 180.482";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new StaticShape() {
+      position = "-83.7778 19.3131 217.236";
+      rotation = "0 0 1 180.482";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2091";
+         time = "0";
+   };
+   new Item() {
+      position = "251.092 46.3641 211.764";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-96.6456 1.49448 214.464";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "243.922 45.7569 212.119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-122.188 24.8188 190";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1200";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-122.196 24.2967 204.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "100";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-122.188 24.8188 190";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Linear";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-121.206 23.9056 190.021";
+         rotation = "1 0 0 0";
+         scale = "0.16478 0.496696 1.0414";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "1200";
+      };
+      new Trigger(MustChange) {
+         position = "-111.22 19.4435 188.771";
+         rotation = "1 0 0 0";
+         scale = "1.62962 11.092 1.0414";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "0";
+      };
+      new PathedInterior(MustChange) {
+         position = "-123.438 24.0688 186.32";
+         rotation = "1 0 0 0";
+         scale = "0.5 0.5 0.5";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/1x1_platforms/blueplatform.dif";
+         interiorIndex = "0";
+         basePosition = "-123.438 24.0688 186.32";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.5 0.5 0.5";
+            trackTime = "83514687";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "3138";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "-119.084 -12.718 214.131";
+      rotation = "0 0 -1 90.0002";
+      scale = "0.35 0.35 0.35";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_captaincabin.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.835 -4.92983 216.226";
+      rotation = "1 0 0 0";
+      scale = "0.15 0.15 0.15";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_speedcontroller.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.908 1.32644 216.623";
+      rotation = "0 0 1 90.0002";
+      scale = "0.3 0.3 0.3";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_steering.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.835 -8.42983 216.726";
+      rotation = "1 0 0 0";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_speedcontroller.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-114.835 8.57017 216.726";
+      rotation = "0 0 1 180";
+      scale = "0.2 0.2 0.2";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic_speedcontroller.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "314.935 -46.2278 203.09";
+      rotation = "0 0 1 0.0559529";
+      scale = "0.519524 1.23204 0.783759";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "312.36 -7.92253 203.09";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 0.783759";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "312.36 -55.749 203.09";
+      rotation = "0 0 1 90.0002";
+      scale = "1.41306 1 0.783759";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "315.021 41.2901 203.09";
+      rotation = "0 0 1 0.0559529";
+      scale = "0.519524 1 0.783759";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "306.408 23.3272 204.55";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "306.408 -34.6728 204.55";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "306.408 -34.6728 206.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "306.408 23.3272 206.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "440.645 32.3867 191.042";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "440.725 32.3058 189.174";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "441.314 -27.1817 189.292";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "441.18 -27.1857 190.924";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2091";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "443.712 34.1523 200.479";
+      rotation = "0 0 -1 90.0002";
+      scale = "0.6736 1 0.532725";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicfence02.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "309.429 43.7743 188.674";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "309.425 43.799 190.292";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "324.044 -40.524 188.615";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "324.04 -40.4993 190.233";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-135.477 44.3027 189.674";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2091";
+         time = "0";
+   };
+   new InteriorInstance() {
+      position = "-111.479 8.82186 220.071";
+      rotation = "0 0 1 89.9544";
+      scale = "0.54722 1.43813 0.199086";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-118.686 0.85717 222.481";
+      rotation = "1 0 0 0";
+      scale = "0.354612 0.739915 0.342738";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsparepart.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "456.024 10.9784 189.513";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "456.022 12.9684 189.237";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2093";
+         time = "0";
+   };
+   new TSStatic() {
+      position = "-107.076 9.50746 208.098";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "-107.076 -1.99258 208.098";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "-107.076 -13.7426 208.098";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "-107.065 -13.6318 194.727";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "-107.065 -1.88182 194.727";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new TSStatic() {
+      position = "-107.065 9.61822 194.727";
+      rotation = "-0.577196 0.577198 0.577658 119.974";
+      scale = "2.47059 3.50929 1";
+      shapeName = "~/data/shapes/hazards/trapdoor.dts";
+   };
+   new SimGroup(Hallway_Lights) {
+
+      new TSStatic() {
+         position = "-113.728 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "206.292 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "112.042 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "160.292 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "185.042 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "135.542 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "22.022 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 31.0006 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-84.7077 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "292.792 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "274.291 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "249.041 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "228.042 31.2506 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "206.292 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "112.042 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "160.292 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "185.042 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "135.542 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "22.022 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 -34.9994 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-84.7077 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "292.792 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "274.291 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "249.041 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "228.042 -34.7494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 -8.2494 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 9.5006 211.573";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+   };
+   new SimGroup(Hallway_Lights) {
+
+      new TSStatic() {
+         position = "-113.728 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "206.292 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "112.042 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "160.292 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "185.042 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "135.542 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "22.022 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 31.0006 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-84.7077 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "292.792 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "274.291 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "249.041 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "228.042 31.2506 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "206.292 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "112.042 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "160.292 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "185.042 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "135.542 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "84.7922 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "55.5422 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "31.5422 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "22.022 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "9.04227 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-14.7077 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-40.7076 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-64.4576 -34.9994 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-84.7077 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "292.792 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "274.291 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "249.041 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "228.042 -34.7494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 -8.2494 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+      new TSStatic() {
+         position = "-113.728 9.5006 201.073";
+         rotation = "1 0 0 0";
+         scale = "1 1 0.1";
+         shapeName = "~/data/shapes/gemlights/gemlight.dts";
+      };
+   };
+   new Item() {
+      position = "-163.438 2.71974 188.542";
+      rotation = "1 0 0 0";
+      scale = "9 9 9";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "417.752 -7.1436 189.748";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "427.493 4.66397 189.748";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "416.495 15.9791 190.248";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "441.087 20.7303 201";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "441.087 -16.0197 201";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "440.994 3.37586 200.954";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "220.736 19.8066 190.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "90.4679 33.8091 191.027";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-72.1723 26.1015 190.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "233.58 -35.1397 190.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "433.135 3.61412 184.326";
+      rotation = "0 0 -1 91.1003";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicsternpart02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "408.328 3.726 177.094";
+      rotation = "0 0 1 179.909";
+      scale = "0.261058 0.563538 1";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanic0101.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-35.6717 -33.2478 190.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2093";
+         time = "0";
+   };
+   new Item() {
+      position = "-108.561 -36.8855 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "79.8162 -30.6059 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "245.213 -40.9338 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "298.681 -13.134 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "302.602 16.9279 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "242.718 33.7833 204.527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "77.755 22.4049 204.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-94.3412 33.1862 204.777";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-110.522 2.02131 215.027";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-138.156 -12.1756 188.467";
+      rotation = "0 0 1 213.713";
+      scale = "1.4 1.4 1.4";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicstarboardpart01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "347.034 -31.4037 186.592";
+      rotation = "0 0 -1 33.2315";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicstarboardpart01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "345.272 28.8348 186.592";
+      rotation = "0 0 1 32.6586";
+      scale = "2 2 2";
+      interiorFile = "~/data/interiors/others/titanic_interiors/titanicstarboardpart01.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         pad = "2093";
+         time = "0";
+   };
+   new Item() {
+      position = "406.672 4.58178 189.748";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
