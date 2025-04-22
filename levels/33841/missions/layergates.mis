@@ -1,0 +1,1015 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         desc = "Pass through each gate and retrieve the important objects with varying difficulty at every level in this mission!";
+         artist = "abhishek839";
+         level = "3338";
+         name = "5 Level Gates";
+         goldTime = "25000";
+         startHelpText = "Welcome! Get each gem at every level. Roll to the gate to begin!";
+         time = "0";
+         type = "custom";
+         music = "Low Key.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "24.136 -4.84294 80.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "24.136 267.657 80.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Trigger(Bounds) {
+      position = "-16.1916 307.64 75.9429";
+      rotation = "1 0 0 0";
+      scale = "71.1562 342.816 84.9275";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "24.3601 267.982 87.35";
+      rotation = "0 0 -1 16.0428";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         penaltyTime = "0";
+         pad = "1493";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "21 -11.25 59";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/layer_gates/layer_gates_01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.9961 197.514 59";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/layer_gates/layer_gates_05.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21 24.75 59";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/layer_gates/layer_gates_02.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "21.0012 82.3176 59";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/layer_gates/layer_gates_03.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.9961 140.014 59";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      interiorFile = "~/data/interiors/others/layer_gates/layer_gates_04.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2135";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new SimGroup(Gates_Group1) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 6.33547 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 6.32856 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 6.33547 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 3.9722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 11.0997 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 6.37236 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 6.37236 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 25.8355 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 25.8286 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 25.8355 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 24.4722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 30.5997 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 25.8724 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 25.8724 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+   };
+   new SimGroup(Gates_Group2) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 42.3355 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 42.3286 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 42.3355 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 39.9722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 47.0997 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 42.3724 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 42.3724 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 83.0855 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 83.0786 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 83.0855 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 81.7222 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 87.8497 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 83.1224 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 83.1224 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+   };
+   new SimGroup(Gates_Group3) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 100.336 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 100.329 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 100.336 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 97.9722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 105.1 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 100.372 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 100.372 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 141.086 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 141.079 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 141.086 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 139.722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 145.85 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 141.122 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 141.122 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+   };
+   new SimGroup(Gates_Group4) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 157.836 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 157.829 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 157.836 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 155.472 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 162.6 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 157.872 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 157.872 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 198.586 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 198.579 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 198.586 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 197.222 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 203.35 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 198.622 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 198.622 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+   };
+   new SimGroup(Gates_Group5) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 215.336 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 215.329 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 215.336 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 212.972 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 220.1 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 215.372 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 215.372 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "23.0855 256.086 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.108 256.079 95.75";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1500";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "23.0855 256.086 84.5";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "0";
+               smoothingType = "Linear";
+            };
+         };
+         new Trigger(MustChange) {
+            position = "23.9475 254.722 84.0808";
+            rotation = "1 0 0 0";
+            scale = "0.47719 0.451251 9.16172";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+               targetTime = "1000";
+         };
+         new Trigger(MustChange) {
+            position = "23.6651 260.85 83.1747";
+            rotation = "1 0 0 0";
+            scale = "0.05 0.05 10.6986";
+            dataBlock = "TriggerGotoTarget";
+            polyhedron = "-63.7500000 63.2500000 0.2500000 0.0000000 -126.5000000 0.0000000 0.0000000 0.0000000 -0.5000000 127.5000000 0.0000000 0.0000000";
+               targetTime = "0";
+         };
+         new PathedInterior(MustChange) {
+            position = "23.8346 256.122 80.57";
+            rotation = "1 0 0 0";
+            scale = "0.720455 0.5 0.725715";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/others/layer_gates/norgatesdoor.dif";
+            interiorIndex = "0";
+            basePosition = "23.8346 256.122 80.57";
+            baseRotation = "1 0 0 0";
+            baseScale = "0.720455 0.5 0.725715";
+               trackTime = "19853468";
+         };
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "22.8522 52.5188 79.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "7000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "22.8522 76.5188 79.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "100";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "22.8522 52.5188 79.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Linear";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "23.7438 51.5166 80.771";
+         rotation = "1 0 0 0";
+         scale = "0.303497 1.10058 1.0414";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "7000";
+      };
+      new PathedInterior(MustChange) {
+         position = "21.6022 51.7688 75.77";
+         rotation = "1 0 0 0";
+         scale = "0.6 0.6 0.6";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/others/layer_gates/blueplatform.dif";
+         interiorIndex = "0";
+         basePosition = "21.6022 51.7688 75.77";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.6 0.6 0.6";
+            trackTime = "19853468";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3896";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "24.0202 122.142 80.0009";
+      rotation = "1 0 0 0";
+      scale = "2.5 2.5 2.5";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "24.0202 112.642 80.7509";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "7760";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "11512";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "37.1432 80.1776 81.129";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "20.2478 116.135 80.0976";
+      rotation = "1 0 0 0";
+      scale = "7 7 7";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Activate the superJump Immediately after getting that gem!";
+   };
+   new Item() {
+      position = "35.7505 132.947 81.5172";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13.5489 194.621 81.1299";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "37.7296 218.209 81.3162";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "12911";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "24.1279 167.95 80.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "13314";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "29.4236 181.689 88.201";
+      rotation = "1 0 0 0";
+      scale = "19.7364 19.7364 20.1901";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "14189";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "24.8681 63.3495 80.5506";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "23.1181 61.8495 80.5506";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "23.6181 67.5995 80.5506";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "24.8681 71.3495 80.5506";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "23.9848 239.909 80.6717";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new Item() {
+      position = "14.2704 16.6224 80.9743";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "35.7704 16.6224 80.9743";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23.9848 234.409 80.6717";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "15208";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2093";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "18270";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "23.802 64.4873 80.62";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "23.9848 245.659 80.6717";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RoundBumper";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "16720";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "23.6929 73.4436 80.5506";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+};
+//--- OBJECT WRITE END ---
