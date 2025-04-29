@@ -1,0 +1,1428 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         desc = "Soar to the gems between distinct platforms and glide to the goal!";
+         type = "custom";
+         artist = "abhishek839";
+         level = "3415";
+         name = "Soar through the Sky";
+         startHelpText = "Jump from the platform before using Gyrocopter to get extra height and slow down when reaching the next towers!.";
+         goldTime = "121000";
+         time = "0";
+         music = "Cookout.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "2500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "1500";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "28.2998 0.610434 79.75";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new TSStatic() {
+      position = "-157.078 -792.102 210.904";
+      rotation = "1 0 0 0";
+      scale = "19.1174 1 23.119";
+      shapeName = "~/data/shapes/colmesh.dts";
+   };
+   new Trigger(Bounds) {
+      position = "-480.306 38.0152 -153.07";
+      rotation = "1 0 0 0";
+      scale = "612.794 1014.13 2454.41";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         powerUp = "0";
+         penaltyTime = "0";
+         pad = "1493";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "18.3557 -5.36144 71.7023";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-139.394 -5.36202 26.9523";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0 -1 0 104.851";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0 -1 0 104.851";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0.621135 -0.621133 0.477896 128.914";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0.367101 -0.886263 0.282445 111.421";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0.753022 -0.311912 0.579369 153.01";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0.192929 -0.96992 0.148438 106.536";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "11.7267 0.64648 82.6286";
+         rotation = "0.782893 -0.155727 0.602351 166.335";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "11.7301 0.664849 82.6414";
+         rotation = "0.687736 -0.497024 0.529138 138.146";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2261";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-131.372 0.673826 35.1106";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0 -1 0 104.851";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0 -1 0 104.851";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0.621135 -0.621133 0.477896 128.914";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0.367101 -0.886263 0.282445 111.421";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0.753022 -0.311912 0.579369 153.01";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0.192929 -0.96992 0.148438 106.536";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-144.773 0.64648 38.3786";
+         rotation = "0.782893 -0.155727 0.602351 166.335";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-144.77 0.664849 38.3914";
+         rotation = "0.687736 -0.497024 0.529138 138.146";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-347.983 -19.422 -46.157";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(superJump_ring) {
+
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.652319 -0.636075 -0.412174 136.692";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.652319 -0.636075 -0.412174 136.692";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_Superjump_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.999851 0.0126081 -0.0117638 115.745";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.900649 -0.359827 -0.243629 121.646";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.895705 0.384312 0.223645 120.642";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.789178 -0.51304 -0.337622 128.22";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -27.8501 -35.1213";
+         rotation = "0.780728 0.536025 0.321155 126.806";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.287 -27.8448 -35.1093";
+         rotation = "0.981399 0.170696 0.0878544 116.444";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new Item() {
+      position = "-339.961 -13.3861 -37.9987";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-349.275 -189.171 60.9122";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "-0.618535 0.625249 0.475897 231.381";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "-0.618535 0.625249 0.475897 231.381";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "0.999977 -0.005396 0.00415228 104.852";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "0.885183 -0.372267 -0.27905 111.247";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "0.887305 0.361935 0.28582 111.597";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "0.762733 -0.515619 -0.390353 118.826";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.521 -24.5986 -35.1214";
+         rotation = "0.76634 0.506091 0.395721 119.312";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.54 -24.595 -35.1086";
+         rotation = "0.980337 0.152381 0.12538 106.044";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "-0.618535 0.625249 0.475897 231.381";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "-0.618535 0.625249 0.475897 231.381";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "0.999977 -0.005396 0.00415228 104.852";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "0.885183 -0.372267 -0.27905 111.247";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "0.887305 0.361935 0.28582 111.597";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "0.762733 -0.515619 -0.390353 118.826";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-341.521 -196.099 71.6286";
+         rotation = "0.76634 0.506091 0.395721 119.312";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-341.54 -196.095 71.6414";
+         rotation = "0.980337 0.152381 0.12538 106.044";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new Item() {
+      position = "-341.253 -183.135 69.0705";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-342.488 -357.127 44.8129";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new StaticShape() {
+      position = "-341.151 -214.519 69.0629";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new InteriorInstance() {
+      position = "-346.677 -357.855 36.9173";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-338.655 -351.819 45.0756";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2093";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new TSStatic() {
+      position = "-367.392 -384.676 43.9173";
+      rotation = "1 0 0 0";
+      scale = "36.6634 26.8356 0.5";
+      shapeName = "~/data/shapes/colmesh.dts";
+   };
+   new Item() {
+      position = "-142.83 -365.587 -22.6149";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-134.888 -365.635 -23.5104";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-150.852 -371.623 -30.7732";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "-144.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-144.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2619";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-144.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-144.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-144.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-144.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-142.899 -376.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-140.899 -378.554 -22.7424";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-137.207 -381.45 -21.6002";
+      rotation = "0 0 1 143.239";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new Item() {
+      position = "-156.805 -484.321 79.341";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(superbounce_ring) {
+
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_Superbounce_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "0.00530947 -0.706827 0.707367 179.15";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "0.276442 0.681823 -0.677271 212.228";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "0.285506 -0.67489 0.680448 210.595";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "0.423465 0.644179 -0.636955 227.05";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -492.882 82.3788";
+         rotation = "0.430616 -0.634099 0.642253 225.512";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.917 -492.883 82.3922";
+         rotation = "0.118224 -0.700865 0.703429 192.065";
+         scale = "0 15 0";
+         dataBlock = "SuperBounceItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new InteriorInstance() {
+      position = "-164.827 -490.357 71.183";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3058";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3905";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-169.127 -566.435 -59.5616";
+      rotation = "1 0 0 0";
+      scale = "3 3 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/bounce_platform.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "-0.706815 0.00501327 0.707381 180.333";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "-0.706815 0.00501327 0.707381 180.333";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "0.582076 0.573879 -0.576065 119.702";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "0.680865 0.276381 -0.67826 148.268";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "0.363941 0.861304 -0.354546 98.215";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "0.7012 0.134314 -0.700199 163.805";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-325.682 -351.629 48.1288";
+         rotation = "0.198444 0.96195 -0.187809 92.0487";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-325.683 -351.648 48.1422";
+         rotation = "0.511012 0.696628 -0.503563 109.796";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "0.00530947 -0.706827 0.707367 179.15";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "0.276442 0.681823 -0.677271 212.228";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "0.285506 -0.67489 0.680448 210.595";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "0.423465 0.644179 -0.636955 227.05";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.936 -498.882 82.3788";
+         rotation = "0.430616 -0.634099 0.642253 225.512";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.917 -498.883 82.3922";
+         rotation = "0.118224 -0.700865 0.703429 192.065";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-164.826 -663.607 174.683";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble2.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2980";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-156.874 -653.697 182.82";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-156.736 -669.624 182.838";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Tornado";
+   };
+   new SimGroup(gyrocopter_ring) {
+
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_gyrocopter_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "0.00530947 -0.706827 0.707367 179.15";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "0.276442 0.681823 -0.677271 212.228";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "0.285506 -0.67489 0.680448 210.595";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "0.423465 0.644179 -0.636955 227.05";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -659.882 185.879";
+         rotation = "0.430616 -0.634099 0.642253 225.512";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.667 -659.883 185.892";
+         rotation = "0.118224 -0.700865 0.703429 192.065";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new SimGroup(shockabsorber_ring) {
+
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "-0.574865 -0.583564 0.573571 119.282";
+         scale = "2.1 2.1 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_Shockabsorber_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "0.00530947 -0.706827 0.707367 179.15";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "0.276442 0.681823 -0.677271 212.228";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "0.285506 -0.67489 0.680448 210.595";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "0.423465 0.644179 -0.636955 227.05";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.686 -733.382 217.629";
+         rotation = "0.430616 -0.634099 0.642253 225.512";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-156.667 -733.383 217.642";
+         rotation = "0.118224 -0.700865 0.703429 192.065";
+         scale = "0 15 0";
+         dataBlock = "ShockAbsorberItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-156.585 -733.38 217.448";
+      rotation = "0.493711 -0.610267 0.619535 231.563";
+      scale = "0 15 0";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-156.58 -733.38 217.422";
+      rotation = "0.520286 -0.598974 0.608714 234.026";
+      scale = "0 15 0";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-157.2 -733.391 217.643";
+      rotation = "0.254128 0.685968 -0.681812 209.86";
+      scale = "0 15 0";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-157.271 -733.392 217.557";
+      rotation = "0.36539 0.661294 -0.655119 221.366";
+      scale = "0 15 0";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-157.298 -733.393 217.503";
+      rotation = "0.425943 0.643383 -0.636106 227.287";
+      scale = "0 15 0";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-162.483 -792.09 201.433";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/flying_marble/flymarble1.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3277";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-156.778 -802.267 217.588";
+      rotation = "0 0 1 155.454";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new StaticShape(EndPoint) {
+      position = "-156.471 -801.98 209.498";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new SimGroup(superJump_ring) {
+
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.652319 -0.636075 -0.412174 136.692";
+         scale = "0 15 0";
+         dataBlock = "HelicopterItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new InteriorInstance() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.652319 -0.636075 -0.412174 136.692";
+         scale = "0.7 0.7 0.7";
+         interiorFile = "~/data/interiors/others/flying_marble/poweruprings_Superjump_ring.dif";
+         showTerrainInside = "0";
+      };
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.999851 0.0126081 -0.0117638 115.745";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.900649 -0.359827 -0.243629 121.646";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.895705 0.384312 0.223645 120.642";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.789178 -0.51304 -0.337622 128.22";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.269 -28.8501 -34.3713";
+         rotation = "0.780728 0.536025 0.321155 126.806";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "-340.287 -28.8448 -34.3593";
+         rotation = "0.981399 0.170696 0.0878544 116.444";
+         scale = "0 15 0";
+         dataBlock = "SuperJumpItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "3431";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Trigger() {
+      position = "-334.697 4.1499 -44.157";
+      rotation = "1 0 0 0";
+      scale = "1 38 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "The next tower is way up there! Land there safely!";
+   };
+   new Trigger() {
+      position = "-359.667 -185.561 65.4122";
+      rotation = "1 0 0 0";
+      scale = "38 1 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Use the Tornado to propel you upward. Don\'t let it pull you down.";
+   };
+   new Trigger() {
+      position = "-157.125 -356.894 -41.7732";
+      rotation = "1 0 0 0";
+      scale = "38 16.1503 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Use the fans to help you reach the high tower over there high above!";
+   };
+   new Trigger() {
+      position = "-171.627 -475.9 60.183";
+      rotation = "1 0 0 0";
+      scale = "38 16.1503 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Activate Super Bounce at instant and then activate the Gyrocopter immediately after rebounding!";
+   };
+   new StaticShape() {
+      position = "-150.629 -492.516 80.356";
+      rotation = "0 0 1 147.823";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new Trigger() {
+      position = "-171.525 -649.069 163.683";
+      rotation = "1 0 0 0";
+      scale = "38 16.1503 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "After thrown by the tornado,activate the Shock Absorber to reach up to the finish!";
+   };
+   new Trigger() {
+      position = "19.521 5.64082 79.2023";
+      rotation = "1 0 0 0";
+      scale = "1 12.267 7.75613";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Activate the PowerUp immediately after passing through the PowerUp ring.";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "2398";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-142.526 -352.633 -22.2732";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-215.655 -324.384 60.183";
+      rotation = "1 0 0 0";
+      scale = "120.719 148.916 38";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Next is the level\'s toughest part. ";
+   };
+   new Trigger() {
+      position = "-200.518 -704.486 173.843";
+      rotation = "1 0 0 0";
+      scale = "100 1 100";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Don\'t be decieved for there\'s no wall. There is a invisible wall..und off.";
+   };
+};
+//--- OBJECT WRITE END ---
