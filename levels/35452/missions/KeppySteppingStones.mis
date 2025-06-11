@@ -1,0 +1,413 @@
+function KeppyStepping::setDailySeed(%this) {
+  %httpRequest = new HTTPObject(UTCFetcher);
+  %httpRequest.get("worldtimeapi.org:80", "/api/timezone/Etc/UTC", %query);
+}
+
+function UTCFetcher::onLine(%this, %response) {
+  if (%response !$= "") {
+    %json = jsonParse(%response);
+    if (%json) {
+      %seconds = %json.unixtime;
+      %daysPassed = mFloor((%seconds - 1749484800) / 86400);
+      SteppingStonesLevel.randomize(%daysPassed + 1);
+      %this.gotSeed = true;
+    }
+  }
+}
+
+function KeppyStepping::connectFailed(%this) {
+  %this.connectionTries++;
+  if(%this.connectionTries <= 5)
+    %this.schedule(500, "setDailySeed");
+  else {
+    %this.connectionTries = 0;
+    MessageBoxYesNo("Error", "Failed to get time data. Retry?", "SteppingStonesLevel.setDailySeed();", "");
+  }
+}
+
+function UTCFetcher::onDisconnect(%this) {
+  if(!%this.gotSeed)
+    SteppingStonesLevel.connectFailed();
+  %this.delete();
+}
+
+function KeppyStepping::checkForSeed(%this) {
+  if (%this.seed && isObject(RecordFO))
+    recordWriteScores(RecordFO);
+  else
+    %this.schedule(250, "checkForSeed");
+}
+
+function KeppyStepping::createStones(%this) {
+  %min = -1;
+  %max = 4;
+  for(%i = %min; %i <= %max; %i++) {
+    for(%j = %min; %j <= %max; %j++) {
+      if (%i == 0 && %j == 0)
+        continue;
+      
+      %edge = %i == %max || %i == %min || %j == %max || %j == %min;
+      
+      if (%edge) {
+        %interiorFile = "~/data/interiors_mbg/custom/red_stone.dif";
+        %group = ClosedStonesGroup;
+      }
+      else {
+        %interiorFile = "~/data/interiors_mbg/custom/stepping_stone.dif";
+        %group = OpenStonesGroup;
+      }
+
+      %stone = new InteriorInstance() {
+          interiorFile = %interiorFile;
+          edge = %edge;
+      };
+      
+      %width = getRadius("x", %stone);
+      %height = getRadius("y", %stone);
+      %x = %width * %i * (%width / 2);
+      %y = %height * %j * 2;
+      if (mAbs(%i) % 2 == 1)
+          %y += %height;
+        
+      %pos = %x SPC %y SPC 0;
+      
+      %stone.setTransform(%x SPC %y SPC 0);
+      %group.add(%stone);
+    }
+  }
+}
+
+function KeppyStepping::randomStone(%this) {
+  if (OpenStonesGroup.getCount() > 0)
+    return OpenStonesGroup.getObject(getRandom(0, OpenStonesGroup.getCount()-1));
+  else
+    return -1;
+}
+
+function KeppyStepping::assignItem(%this, %stone, %item) {
+  if (isObject(%stone)) {
+    %stone.item = %item;
+    ClosedStonesGroup.add(%stone);
+    %item.setTransform(%stone.position);
+    %offset = VectorAdd(VectorSub(%stone.position, %item.getWorldBoxCenter()), "0 0" SPC getRadius("z", %item));
+    %item.setTransform(VectorAdd(%stone.position, %offset));
+  }
+}
+
+function KeppyStepping::randomizeScale(%this, %stone) {
+  %height = getRandom(1, 15);
+  if (%stone.edge) {
+    %height += getWord(%stone.position, 0) + getWord(%stone.position, 1) + 5;
+    %height /= 10;
+  }
+  
+  %newPos = setWord(%stone.position, 2, %height);
+  %stone.setTransform(%newPos);
+  %stone.height = %height;
+}
+
+function KeppyStepping::randomize(%this, %seed) {
+  if(%this.seed)
+    return;
+  setRandomSeed(%seed);
+  %this.seed = %seed;
+  
+  for(%i = 0; %i < OpenStonesGroup.getCount(); %i++) {
+    %this.randomizeScale(OpenStonesGroup.getObject(%i));
+  }
+  for(%i = 0; %i < ClosedStonesGroup.getCount(); %i++) {
+    %this.randomizeScale(ClosedStonesGroup.getObject(%i));
+  }
+
+  %this.assignItem(%this.randomStone(), EndPoint);
+  
+  for(%i = 0; %i < GemGroup.getCount(); %i++) {
+    %this.assignItem(%this.randomStone(), GemGroup.getObject(%i));
+  }
+  
+  for(%i = 0; %i < RareItemGroup.getCount(); %i++) {
+    %rand = getRandom(1, 50);
+    if (%rand == 50)
+      %this.assignItem(%this.randomStone(), RareItemGroup.getObject(%i));
+  }
+  
+  for(%i = 0; %i < LowPowerUpGroup.getCount(); %i++) {
+    for(%tries = 0; %tries < 40; %tries++) {
+      %stone = %this.randomStone();
+      if (%tries < 20)
+        %isLow = %stone.height < 5;
+      else
+        %isLow = %stone.height < 10;
+      if (%isLow) {
+        %this.assignItem(%stone, LowPowerUpGroup.getObject(%i));
+        break;
+      }
+    }
+    if(!%isLow)
+      %this.assignItem(%this.randomStone(), LowPowerUpGroup.getObject(%i));
+  }
+  
+  %ePos = EndPoint.position;
+  %endRot = "0 0 -1" SPC mAtan(getWord(%ePos, 1), getWord(%ePos, 0)) - $pi / 2;
+  EndPoint.setTransform(%ePos SPC %endRot);
+  EndSign.setTransform(VectorAdd(%ePos, "0 0 10") SPC %endRot);
+}
+
+function marblelandSubmit(%mission, %user, %score, %scoreType) {
+  if(strstr(%mission, "KeppySteppingStones") != -1) {
+    %seed = SteppingStonesLevel.seed;
+    if(%seed $= "") {
+      MessageBoxOK("Error", "Stepping stones submission error: seed not found.");
+      return;
+    }
+    else
+      %user = "Day" SPC %seed @ ":" SPC %user;
+  }
+  new HTTPObject(MarblelandSubmitter);
+  MarblelandSubmitter.post("https://marbleblast.com","/pq/leader/api/Score/RecordMarblelandScore.php", "", "mission=" @ URLEncode(%mission) @ "&username=" @ URLEncode(%user) @ "&score=" @ %score @ "&scoreType=" @ %scoreType);
+}
+
+package KeppySteppingRecord {
+  function recordWriteScores(%stream) {
+    %stream.writeRawU8($RecordTag["scores"]);
+    %stream.writeRawU32(SteppingStonesLevel.seed);
+  }
+  function PlaybackInfo::readScores(%this) {
+    %seed = %this.fo.readRawU32();
+    SteppingStonesLevel.randomize(%seed);
+  }
+};
+
+function clientCbOnRespawn() {
+  if($Game::Record) {
+    cancel(SteppingStonesLevel.seedCheckSch);
+    SteppingStonesLevel.seedCheckSch = SteppingStonesLevel.schedule(500, "checkForSeed");
+  }
+  if(!$PlayingDemo && !SteppingStonesLevel.seed)
+    SteppingStonesLevel.setDailySeed();
+}
+
+function serverCbOnMissionEnded() {
+	deactivatePackage(KeppySteppingRecord);
+}
+
+activatePackage(KeppySteppingRecord);
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+  
+  new ScriptObject(MissionInfo) {
+        name = "Stepping Stones Daily";
+        goldTime = "10000";
+        type = "Advanced";
+        startHelpText = "Collect the gems as fast as you can!";
+        desc = "This level changes every day!";
+        music = "Beach Party.ogg";
+        artist = "Keppy";
+        game = "Gold";
+  };
+  new ScriptObject(SteppingStonesLevel) {
+    class = "KeppyStepping";
+  };
+  new SimGroup(OpenStonesGroup);
+  new SimGroup(ClosedStonesGroup);
+  new SimGroup(GemGroup) {
+    new Item() {
+        dataBlock = "GemItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GemItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GemItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GemItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GemItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+  };
+  new SimGroup(LowPowerUpGroup) {
+    new Item() {
+        dataBlock = "SuperJumpItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperBounceItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperJumpItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperBounceItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperJumpItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperJumpItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+  };
+  new SimGroup(RareItemGroup) {
+    new Item() {
+        dataBlock = "SuperSpeedItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "SuperSpeedItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GyrocopterItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "GyrocopterItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new StaticShape() {
+        dataBlock = "RoundBumper";
+    };
+    new StaticShape() {
+        dataBlock = "RoundBumper";
+    };
+    new StaticShape() {
+        dataBlock = "TriangleBumper";
+    };
+    new StaticShape() {
+        dataBlock = "TriangleBumper";
+    };
+    new StaticShape() {
+        dataBlock = "oilslick";
+    };
+    new StaticShape() {
+        dataBlock = "oilslick";
+    };
+    new StaticShape() {
+        position = "1000 1000 1000";
+        dataBlock = "DuctFan";
+    };
+    new StaticShape() {
+        position = "1000 1000 1000";
+        dataBlock = "DuctFan";
+    };
+    new StaticShape() {
+        scale = "5 5 5";
+        dataBlock = "LandMine";
+    };
+    new StaticShape() {
+        position = "1000 1000 1000";
+        dataBlock = "Tornado";
+    };
+    new Item() {
+        position = "1000 1000 1000";
+        dataBlock = "AntiGravityItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "ShockAbsorberItem";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+    new Item() {
+        dataBlock = "EasterEgg_MBG";
+        collideable = "0";
+        static = "1";
+        rotate = "1";
+    };
+  };
+  new Sky(Sky) {
+    visibleDistance = "500";
+    useSkyTextures = "1";
+    renderBottomTexture = "1";
+    materialList = "~/data/skies/sky_day.dml";
+    noRenderBans = "1";
+  };
+  new Sun() {
+    direction = "0.57735 0.57735 -0.57735";
+    color = "1.400000 1.200000 0.400000 1.000000";
+    ambient = "0.300000 0.300000 0.400000 1.000000";
+  };
+  new StaticShape(StartPoint) {
+    position = "0 0 15";
+    rotation = "0 0 1 37.5";
+    dataBlock = "StartPad_MBG";
+  };
+  new StaticShape(EndPoint) {
+    dataBlock = "EndPad_MBG";
+  };
+  new StaticShape(EndSign) {
+      dataBlock = "SignFinish";
+  };
+  new InteriorInstance(StartStone) {
+      position = "0 0 15";
+      interiorFile = "~/data/interiors_mbg/custom/stepping_stone.dif";
+      showTerrainInside = "0";
+      height = 15;
+  };
+  new InteriorInstance(MarblelandStone) {
+      scale = "0 0 0";
+      interiorFile = "~/data/interiors_mbg/custom/red_stone.dif";
+  };
+  new Trigger(Bounds) {
+    position = "-18 35 -7.25";
+    scale = "50 50 50";
+    dataBlock = "InBoundsTrigger";
+    polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+  };
+  new SimGroup(PathNodeGroup) {
+    new StaticShape(CameraPath1) {
+        position = "14.1494 14.8875 14.661";
+        rotation = "-0.142717 -0.274562 0.950919 232.605";
+        scale = "1 1 1";
+        dataBlock = "PathNode";
+    };
+  };
+};
+//--- OBJECT WRITE END ---
+
+SteppingStonesLevel.createStones();
