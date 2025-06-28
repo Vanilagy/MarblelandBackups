@@ -1,0 +1,1193 @@
+
+datablock StaticShapeData(EchoMarble) {
+	className = "Echo";
+	category = "Hazards";
+	shapeFile = "~/data/shapes/echo/echoball.dts";
+	scopeAlways = true;
+   axis = "x";
+   offset = 0;
+	folow = false;
+};
+
+datablock StaticShapeData(LEVELCOL) {
+	className = "LevelCol";
+	category = "Hazards";
+	shapeFile = "~/data/shapes/echo/levelcol.dts";
+	scopeAlways = true;
+};
+
+function Echo::onMissionReset(%this, %obj) {
+	if (%obj.sch !$="") cancel(%obj.sch);
+	%obj.sch = schedule(1,0,updateEcho,%obj);
+}
+
+function Echo::onAdd(%this, %obj){
+	%obj.playThread(0,"echo");
+   %obj.hide(true);
+//   %obj.scale = "0 0 0";
+}
+
+function updateEcho(%obj) {
+	if (!isObject(%obj)) return;
+	%pos = $MP::MyMarble.getPosition();
+   if (%obj.axis $= "x")
+      %pos = setWord(%pos, 0, (getWord(%pos, 0) + %obj.offset) * -1);
+   if (%obj.axis $= "y")
+      %pos = setWord(%pos, 1, (getWord(%pos, 1) + %obj.offset) * -1);
+   if (%obj.axis $= "z")
+      %pos = setWord(%pos, 2, (getWord(%pos, 2) + %obj.offset) * -1);
+	%obj.position = %pos;
+	%obj.setTransform(%obj.getTransform());
+	%obj.sch = schedule(10,0,updateEcho,%obj);
+}
+
+datablock AudioProfile(EchoGain) {
+	filename    = "~/data/sound/echo/echogain.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+datablock AudioProfile(EchoLoss) {
+	filename    = "~/data/sound/echo/echobreak.wav";
+	description = AudioDefault3d;
+	preload = true;
+};
+
+datablock TriggerData(HideEchoTrigger) {
+   tickPeriodMS = 10;
+   
+	customField[0, "field"  ] = "echobj";
+   customField[0, "type"  ] = "object";
+   customField[0, "name"  ] = "Echo Object Name";
+	customField[0, "desc"   ] = "Name of the Echo object to hide";
+	customField[0, "default"] = "";
+
+   customField[1, "field"  ] = "hidde";
+   customField[1, "type"  ] = "boolean";
+   customField[1, "name"  ] = "Hidde";
+	customField[1, "default"] = "0";
+
+   customField[2, "field"] = "axis";
+   customField[2, "type"] = "string";
+   customField[2, "name"] = "reflection";
+   customField[2, "default"] = "x";
+
+   customField[3, "field"] = "offset";
+   customField[3, "type"] = "float";
+   customField[3, "name"] = "offset of reflection";
+   customField[3, "default"] = 0;
+
+	customField[4, "field"  ] = "colmesh";
+   customField[4, "type"  ] = "object";
+   customField[4, "name"  ] = "Collision Object Name";
+	customField[4, "desc"   ] = "Name of the Collision object to hide";
+	customField[4, "default"] = "";
+};
+
+function HideEchoTrigger::onAdd(%this,%trigger,%obj) {
+   if (isObject(%trigger.colmesh))
+      %trigger.colmesh.hide(true);
+}
+
+function HideEchoTrigger::onEnterTrigger(%this,%trigger,%obj) {
+//    %trigger.echobj.scale = "1 1 1";
+   %trigger.echobj.hide(false);
+
+   if (isObject(%trigger.colmesh))
+      %trigger.colmesh.hide(false);
+
+   %trigger.echobj.offset = %trigger.offset * 2;
+   %trigger.echobj.axis = %trigger.axis;
+
+   if (!%trigger.hidde)
+   %obj.client.play3D(EchoGain, %trigger.echobj.getTransform());
+}
+
+function HideEchoTrigger::onLeaveTrigger(%this,%trigger,%obj) {
+//   %trigger.echobj.scale = "0 0 0";
+   %trigger.echobj.hide(true);
+
+   if (isObject(%trigger.colmesh))
+      %trigger.colmesh.hide(true);
+
+   if (!%trigger.hidde)
+   %obj.client.play3D(EchoLoss, %trigger.echobj.getTransform());
+}
+
+
+
+datablock TriggerData(GivePowerupTrigger) {
+   tickPeriodMS = 100;
+   
+	customField[0, "field"  ] = "powerup";
+   customField[0, "type"  ] = "object";
+   customField[0, "name"  ] = "Power Up Name";
+	customField[0, "desc"   ] = "Which PowerUp to activate when the player enters the trigger.";
+	customField[0, "default"] = "";
+};
+
+function GivePowerupTrigger::onEnterTrigger(%this,%trigger,%obj) {
+  %powerup = %trigger.powerup;
+  if(!%powerup.isHidden())
+    %obj.getDatablock().onCollision(%obj, %powerup);
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+    new ScriptObject(MissionInfo) {
+        alarmstarttime = "10";
+        artist = "Go\'way";
+        awesometime = "16000";
+        blast = "1";
+        customradarrule = "0";
+        desc = "VectorReflect(pos);";
+        game = "Ultra";
+        gamemode = "null";
+        generalhint = "I\'m being blasted by the boy in the mirror.";
+        goldtime = "25000";
+        music = "Tim Trance.ogg";
+        name = "ECHO()";
+        starthelptext = "Objects in Mirror are more tangible than they appear!";
+        time = "90000";
+        trivia = "Special Thankies to: Kathryn for playtesting, Nieveria for the help text, and Keppy for help with some code!";
+        type = "Custom";
+        ultimatetime = "20000";
+        useultramarble = "1";
+    };
+    new SimGroup(SceneryGroup) {
+        new StaticShape() {
+            position = "0 17 -0.165";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape() {
+            position = "0 11 -0.165";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 23 -0.165";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 29 -0.165";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 35 -0.165";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 55 0";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 61 0";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 55 6";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-12 61 15";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-18 61 15";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-24 61 15";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-3 58 6";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 58 6";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 61 6";
+            rotation = "0 0 -1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 58 0";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-3 58 0";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape() {
+            position = "1 -4 -0.25";
+            rotation = "0 -1 0 -90";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "1 -5.17 -1";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "1 -5.17 -3";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 -5.17 -1";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 -5.17 -3";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "-1 -5.17 -1";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(StaticShape) {
+            position = "-1 -5.17 -3";
+            rotation = "-0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04";
+        };
+        new StaticShape(PathedWindow) {
+            position = "0 77 17.25";
+            rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape() {
+            position = "3 220.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "6 217.5 35";
+            rotation = "0 0 1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-6 235.5 35";
+            rotation = "0 0 1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-19 250.5 41";
+            rotation = "0 -1 0 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-25 250.5 41";
+            rotation = "0 -1 0 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-31 250.5 41";
+            rotation = "0 -1 0 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-37 250.5 41";
+            rotation = "0 -1 0 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "6 235.5 35";
+            rotation = "0 0 1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-6 217.5 35";
+            rotation = "0 0 1 -90";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 226.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "3 232.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-3 220.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-9 232.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-9 226.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-9 220.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "9 232.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "9 226.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "9 220.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-3 226.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "-3 232.5 35";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape() {
+            position = "0 229.5 41.25";
+            rotation = "0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+        new StaticShape(StaticShape) {
+            position = "0 229.5 45.75";
+            rotation = "0.5773502691896258 -0.5773502691896258 0.5773502691896258 -119.99999999999999";
+            scale = "1 1 1";
+            datablock = "window04_3x3";
+            skin = "lighter";
+        };
+    };
+    new Sun() {
+        direction = "0.638261 0.459006 -0.61801";
+        color = "1 1 0.4 1";
+        ambient = "0.2980392156862745 0.2980392156862745 0.4 1";
+    };
+    new StaticShape() {
+        position = "0 0 -600";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "astrolabe";
+    };
+    new SimGroup(PathNodeGroup) {
+        new StaticShape(CameraPath1) {
+            position = "39 0 22";
+            rotation = "-0.1251200082898892 -0.03376000223678596 0.9915670656967757 -30.444999999999965";
+            scale = "1 1 1";
+            datablock = "pathnode";
+            bezier = "0";
+            branchnodes = " ";
+            delay = "0";
+            finalrotoffset = "0 0 0";
+            nextnode = "CameraPath2";
+            placed = "1";
+            reverserotation = "0";
+            rotationmultiplier = "1";
+            smooth = "0";
+            smoothend = "0";
+            smoothstart = "0";
+            speed = "0";
+            spline = "0";
+            timetonext = "4000";
+            useposition = "1";
+            userotation = "1";
+            usescale = "1";
+        };
+        new StaticShape(WPath1) {
+            position = "0 77 17.25";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "pathnode";
+            bezier = "0";
+            branchnodes = " ";
+            delay = "0";
+            finalrotoffset = "1 0 0 0";
+            nextnode = "wpath2";
+            placed = "1";
+            reverserotation = "0";
+            rotationmultiplier = "1";
+            smooth = "0";
+            smoothend = "0";
+            smoothstart = "0";
+            speed = "0";
+            spline = "0";
+            timetonext = "10000";
+            useposition = "1";
+            userotation = "0";
+            usescale = "0";
+        };
+        new StaticShape(WPath3) {
+            position = "0 77 17.25";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "pathnode";
+            bezier = "0";
+            branchnodes = " ";
+            delay = "0";
+            finalrotoffset = "1 0 0 0";
+            placed = "1";
+            reverserotation = "0";
+            rotationmultiplier = "1";
+            smooth = "0";
+            smoothend = "0";
+            smoothstart = "0";
+            speed = "0";
+            spline = "0";
+            timetonext = "10000";
+            useposition = "1";
+            userotation = "0";
+            usescale = "0";
+        };
+        new StaticShape(WPath2) {
+            position = "0 142.5 17.5";
+            rotation = "0 0 0 0";
+            scale = "1 1 1";
+            datablock = "pathnode";
+            bezier = "0";
+            branchnodes = " ";
+            delay = "0";
+            finalrotoffset = "1 0 0 0";
+            placed = "1";
+            reverserotation = "0";
+            rotationmultiplier = "1";
+            smooth = "0";
+            smoothend = "0";
+            smoothstart = "0";
+            speed = "0";
+            spline = "0";
+            timetonext = "5000";
+            useposition = "1";
+            userotation = "0";
+            usescale = "0";
+        };
+    };
+    new SimGroup(MissionData) {
+        new Sky(Sky) {
+            useSkyTextures = true;
+            skySolidColor = "0.6 0.6 0.6 1";
+            fogColor = "0.6 0.6 0.6 1";
+            materialList = "~/data/skies_mbu/advanced/sky_advanced.dml";
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            cloudheightper0 = "0";
+            cloudheightper1 = "0";
+            cloudheightper2 = "0";
+            cloudspeed1 = "0.0001";
+            cloudspeed2 = "0.0002";
+            cloudspeed3 = "0.0003";
+            visibledistance = "5000";
+            fogdistance = "300";
+            fogstorm1 = "0";
+            fogstorm2 = "0";
+            fogstorm3 = "0";
+            fogvolume1 = "-1 7.45949e-31 1.3684e-38";
+            fogvolume2 = "-1 1.07208e-14 8.756e-14";
+            fogvolume3 = "-1 5.1012e-10 2.05098e-08";
+            fogvolumecolor1 = "128 128 128 0";
+            fogvolumecolor2 = "128 128 128 4e-06";
+            fogvolumecolor3 = "128 128 128 1.44355e+07";
+            windvelocity = "1 0 0";
+            windeffectprecipitation = "0";
+            renderbottomtexture = "1";
+            norenderbans = "1";
+        };
+    };
+    new StaticShape(echo) {
+        position = "0 0 81.5053";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "echomarble";
+        hidden = "1";
+        sch = "34246";
+        axis = "z";
+        offset = "-82";
+    };
+    new StaticShape(echo2) {
+        position = "-6 0 0.494703";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "echomarble";
+        hidden = "1";
+        sch = "34247";
+        axis = "x";
+        offset = "6";
+    };
+    new InteriorInstance() {
+        position = "0 0 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        interiorFile = "~/data/interiors_mbu/custom/echo/echo0.dif";
+        usegllighting = "0";
+        showterraininside = "0";
+    };
+    new StaticShape(StartPoint) {
+        position = "0 0 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "startpad_mbu";
+    };
+    new Trigger() {
+        position = "-2.5 41 0";
+        rotation = "0 0 0 0";
+        scale = "5 30 10";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+        axis = "z";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "0.165";
+    };
+    new Trigger(Trigger) {
+        position = "-0.5 -3.5 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 12";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+        axis = "z";
+        echobj = "echo";
+        hidde = "1";
+        offset = "0.165";
+    };
+    new Trigger() {
+        position = "-0.5 -3.5 4";
+        rotation = "0 0 0 0";
+        scale = "1 1 1.34529";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+        powerup = "eyegg";
+    };
+    new Trigger(Trigger) {
+        position = "-0.5 54.5 6";
+        rotation = "0 0 0 0";
+        scale = "1 1 1.34529";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+        powerup = "firstblast";
+    };
+    new Trigger(Trigger) {
+        position = "-0.5 52.5 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1.34529";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+        powerup = "firstfirstblast";
+    };
+    new Item(FirstFirstBlast) {
+        position = "0 58 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "blastitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        noparticles = "0";
+    };
+    new Trigger() {
+        position = "2.5 49 0";
+        rotation = "0 0 0 0";
+        scale = "5 6 10.5";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "y";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "-55";
+    };
+    new TSStatic(TSStatic) {
+        position = "-3 58 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "0 61 6";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-12 61 15";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-9 232.5 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-9 226.5 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-9 220.5 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "9 220.5 35";
+        rotation = "0 0 -1 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "6 217.5 35";
+        rotation = "0 0 1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-6 217.5 35";
+        rotation = "0 0 1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "0 223.5 41.25";
+        rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-6 235.5 35";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "6 235.5 35";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "9 226.5 35";
+        rotation = "0 0 -1 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "9 232.5 35";
+        rotation = "0 0 -1 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-18 61 15";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "0 77 17.25";
+        rotation = "-0.5773502691896258 -0.5773502691896258 -0.5773502691896258 -119.99999999999999";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+        parent = "pathedwindow";
+        parentmodtrans = "0 0 0 -1.5265566588595902e-16 1.387778780781445e-17 -1.5265566588595902e-16 0";
+        parentnorot = "0";
+        parentoffset = "0 0 0";
+        parentsimple = "1";
+    };
+    new TSStatic(TSStatic) {
+        position = "-24 61 15";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "0 61 0";
+        rotation = "0 0 -1 -90";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "3 58 6";
+        rotation = "0 0 -1 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "3 58 0";
+        rotation = "0 0 -1 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-3 58 6";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes/echo/3x3-oneway.dts";
+        computeconvexhulls = "0";
+    };
+    new Trigger() {
+        position = "-9.5 55 15";
+        rotation = "0 0 0 0";
+        scale = "17 6 5.5";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "y";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "-61";
+    };
+    new Item(Eyegg) {
+        position = "0 -4 -6.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1.34529";
+        datablock = "easteregg_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+    };
+    new Item(FirstBlast) {
+        position = "0 56 6";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "blastitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        noparticles = "0";
+    };
+    new StaticShape(Checkpoint1) {
+        position = "-32 58 15.04";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "checkpoint_mbu";
+        chkcollide = "1";
+        disableoob = "0";
+        gravity = "0";
+    };
+    new Trigger() {
+        position = "-30.5 56.5 15";
+        rotation = "0 0 0 0";
+        scale = "3 3 3";
+        datablock = "checkpointtrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        gravity = "0";
+        respawnpoint = "checkpoint1";
+    };
+    new Item(gem1) {
+        position = "-19 64 15";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "gemitemred_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+    };
+    new Trigger() {
+        position = "-18.5 57.5 15";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "gem1";
+    };
+    new Trigger() {
+        position = "2.5 77.5 17.25";
+        rotation = "0 0 0 0";
+        scale = "5 5 10";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        parent = "pathedwindow";
+        parentmodtrans = "-0.25 2.5 0.5 -2.886751345948127 -5.773502691896249 -2.8867513459481247 -240.0000000000001";
+        parentnorot = "1";
+        parentoffset = "2.5 0.5 0";
+        parentsimple = "1";
+        axis = "z";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "-17.25";
+    };
+    new Trigger() {
+        position = "3 79 17.5";
+        rotation = "0 0 0 0";
+        scale = "6 1 5";
+        datablock = "pathtrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        object1 = "PathedWindow";
+        path1 = "WPath1";
+        triggeronce = "0";
+    };
+    new Trigger() {
+        position = "-28.5 55 15";
+        rotation = "0 0 0 0";
+        scale = "6 6 5";
+        datablock = "pathtrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        object1 = "PathedWindow";
+        path1 = "WPath3";
+        triggeronce = "0";
+    };
+    new StaticShape(Test) {
+        position = "0 0 0";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "levelcol";
+    };
+    new Item() {
+        position = "0.5 122 18";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "timetravelitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        skin = "base";
+        timebonus = "5000";
+    };
+    new Item(Item) {
+        position = "-1 100 18";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "timetravelitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        skin = "base";
+        timebonus = "5000";
+    };
+    new Item(PathSS) {
+        position = "0 107 16.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "superspeeditem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        showhelponpickup = "0";
+    };
+    new Trigger() {
+        position = "0.5 106.5 18";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "pathss";
+    };
+    new Item(gem3) {
+        position = "-4 232.5 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "gemitemred_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+    };
+    new Item(Gem2) {
+        position = "4 220.5 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "gemitemred_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+    };
+    new Trigger() {
+        position = "3 218 35";
+        rotation = "0 0 0 0";
+        scale = "6 17 5.5";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "x";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "-3";
+    };
+    new Trigger(Trigger) {
+        position = "3 218 35";
+        rotation = "0 0 0 0";
+        scale = "6 17 5.5";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "x";
+        echobj = "echo2";
+        hidde = "1";
+        offset = "3";
+    };
+    new Trigger() {
+        position = "2.5 220 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "gem2";
+    };
+    new Trigger(Trigger) {
+        position = "-1.5 232 35";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "gem3";
+    };
+    new Trigger() {
+        position = "-19 247.5 35";
+        rotation = "0 0 0 0";
+        scale = "24 6 6";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "z";
+        colmesh = "test";
+        echobj = "echo";
+        hidde = "0";
+        offset = "-41";
+    };
+    new TSStatic(TSStatic) {
+        position = "-40 250.5 47";
+        rotation = "-1 0 0 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes_mbu/pads/mbu/endarea.dts";
+        computeconvexhulls = "0";
+    };
+    new TSStatic(TSStatic) {
+        position = "-40 250.5 47";
+        rotation = "-1 0 0 -180";
+        scale = "1 1 1";
+        shapeName = "~/data/shapes_mbu/pads/mbu/lightbeam.dts";
+        computeconvexhulls = "0";
+    };
+    new Trigger() {
+        position = "-39 249.5 32";
+        rotation = "0 0 0 0";
+        scale = "2 2 16";
+        datablock = "finishtrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+    };
+    new Item() {
+        position = "0 153.5 17.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "gemitemred_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+    };
+    new Trigger() {
+        position = "3 223.5 41.5";
+        rotation = "0 0 0 0";
+        scale = "6 6 6";
+        datablock = "hideechotrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        axis = "z";
+        colmesh = "test";
+        echobj = "echo2";
+        hidde = "0";
+        offset = "-41.25";
+    };
+    new Item(HouseTT1) {
+        position = "-2 224.5 35.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "timetravelitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        skin = "base";
+        timebonus = "5000";
+    };
+    new Item(HouseTT2) {
+        position = "2 228.5 35.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "timetravelitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        skin = "base";
+        timebonus = "5000";
+    };
+    new Trigger() {
+        position = "2.5 228 46";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "housett2";
+    };
+    new Trigger(Trigger) {
+        position = "-1.5 224 46";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "givepoweruptrigger";
+        polyhedron = "0 0 0 -1 0 0 0 1 0 0 0 1";
+        powerup = "housett1";
+    };
+    new Item() {
+        position = "0 232.5 41.5";
+        rotation = "0 0 0 0";
+        scale = "1 1 1";
+        datablock = "blastitem_mbu";
+        collideable = true;
+        static = true;
+        rotate = true;
+        collidable = "0";
+        noparticles = "0";
+    };
+    new Trigger(Bounds) {
+        position = "-54 -13.5 -8.5";
+        rotation = "0 0 0 0";
+        scale = "88 297 174";
+        datablock = "inboundstrigger";
+        polyhedron = "0 0 0 1 0 0 0 1 0 0 0 1";
+    };
+};
+//--- OBJECT WRITE END ---
