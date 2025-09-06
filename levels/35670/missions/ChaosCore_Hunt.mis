@@ -1,0 +1,1643 @@
+//Make sure the rainbow gem exists, otherwise substitute it with a (revalued) black gem
+function serverCbOnMissionLoaded() {
+   if (!isObject(GemItemRainbow)) {
+      RainbowGem.setSkinName("black");
+      RainbowGem._huntColor = "black";
+      RainbowGem._huntDatablock = "GemItemBlack";
+      GemItemBlack.huntExtraValue = 19;
+      GemItemPink.huntExtraValue = 5;
+   }
+}
+function serverCbOnMissionEnded() {
+   if (!isObject(GemItemRainbow)) {
+      GemItemBlack.huntExtraValue = -2;
+      GemItemPink.huntExtraValue = 0;
+   }
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+   
+   new ScriptObject(MissionInfo) {
+         CustomRadarRule = "5";
+         Time = "300000";
+         alarmStartTime = "25";
+         artist = "Alex Swanson, modded by A-Game";
+         blast = "1";
+         blueSpawnChance = "0";
+         desc = "Don\'t get lost in the gravity well on your way to the gems.";
+         game = "Ultra";
+         gameMode = "hunt";
+         gravity = "4";
+         jumpImpulse = "10";
+         level = "18";
+         maxGemsPerSpawn = "6";
+         modification = "Ultra";
+         music = "Tim Trance.ogg";
+         name = "Chaos Core";
+         overviewHeight = "-5";
+         platinumScore0 = "40";
+         platinumScore1 = "60";
+         platinumSpawnChance = "0";
+         radiusFromGem = "20";
+         redSpawnChance = "0";
+         score0 = "20";
+         score1 = "20";
+         type = "Intermediate";
+         ultimateScore0 = "75";
+         ultimateScore1 = "110";
+         yellowSpawnChance = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "27.3259 27.4096 10.9011";
+         rotation = "-0.0617647 -0.151554 0.986517 223.805";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "9000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath2) {
+         position = "18.7381 18.7789 6.95436";
+         rotation = "-0.0671585 -0.161327 0.984613 224.576";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath3) {
+         position = "17.313 -9.44044 -29.9411";
+         rotation = "-0.208937 -0.118179 -0.970762 60.4547";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "8500";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath4) {
+         position = "7.71531 -17.3318 -29.7404";
+         rotation = "-0.932136 -0.163135 -0.323278 56.8593";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath5) {
+         position = "-28.1738 4.10715 0.727374";
+         rotation = "0.00573202 -0.00790299 0.999952 108.096";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "8000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath6) {
+         position = "1.39322 4.26612 0.540749";
+         rotation = "0.00142849 -0.00790311 0.999968 159.509";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+      fogVolume2 = "-1 1.07208e-014 8.756e-014";
+      fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+      materialList = "~/data/skies_mbu/intermediate/sky_intermediate.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+   };
+   new Sun() {
+      direction = "0.573201 0.275357 -0.771764";
+      color = "1.080000 1.030000 0.900000 1.000000";
+      ambient = "0.400000 0.400000 0.500000 1.000000";
+   };
+   new StaticShape() {
+      position = "0 0 -600";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "astrolabe";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/multiplayer/interiors/mbu/Core.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-32.5 32.5 -32.5";
+      rotation = "1 0 0 0";
+      scale = "65 65 65";
+      dataBlock = "GravityPointTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         RadiusSize = "20";
+         UpDownLeave = "0";
+         custompoint = " ";
+         invert = "0";
+         useRadius = "0";
+   };
+   new SimGroup(GemSpawns) {
+
+      new Item(RainbowGem) {
+         position = "-0.75 -0.75 -0.527433";
+         rotation = "0.707107 0.707107 0 60";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "rainbow";
+      };
+      new Item() {
+         position = "31.4413 1.50611 -8";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "31.4413 11.0061 -2.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "31.4413 7.50611 11.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "31.4413 -13.4939 6";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "32 -4.5 9.57222";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "32 9.5 -8.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "30.9449 2.88744 2";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 14.5 21.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 21.5 15.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "28 -15 22";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 -21 15.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 -21.5 -15";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 -15.5 -21.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "28 14.5 -21.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "28 20.5 -15.5";
+         rotation = "0 1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-28 21.5 -15.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-28 14.5 -21";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-28 -15 -21.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-28 -21.5 15";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-28 -15 21";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItemPink_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-28 15 21";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-28 21 16.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-30 3 -2.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-30 3 4.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-30 -4.5 3";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-31 -11.5 0";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-32 -1 12";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-14 -22 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-22 -14.5 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-22 14.5 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-14.5 22 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "14 22.5 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "21 15 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "21.5 -15 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "14 -21.5 -28";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "9.5 0 -30";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-12 0 -30";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-11.6566 6.64876 0.192948";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-17.1957 2.06728 0.148912";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "2.12135 -16.1306 0.0649506";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "6.17529 -10.6651 0.0390642";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "7.13293 0.23424 -7.56451";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "1.1089 0.142027 -13.3742";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "3.77102 0.478433 -18.8579";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-3.39114 0.273117 13.0054";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-1.16021 0.130381 23.1957";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-12.2356 0.185587 5.81692";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-19.5582 0.111458 2.76687";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.139948 3.77459 -10.7163";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.204707 1.57283 -16.599";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.279673 -10.2578 6.05468";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.131041 -4.03641 12.2799";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.281044 -23.1101 1.6972";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.308665 -0.936942 18.7127";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.227269 4.28445 -2.71885";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "14 6 -30";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "6.5 11 -29";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0 -14.5 -30";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-14.5 -21.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-21.5 -15.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-21 15.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-16 20.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "15 21.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "20.5 16.5 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "22 -15 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "15 -22 28";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "10 -12 31";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "7 7.5 30.9074";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-13 9.5 30.9074";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-12 4.5 32";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-6.5 -9 31";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-13 -5 31.1394";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "3 3 31.4563";
+         rotation = "1 0 0 180";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-31 10 8";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-32 12.5 -4";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-32 -6 -12";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-28 -21 -15.5";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-7.97022 0.482076 0.512877";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "6.02983 -0.355828 6";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-0.347757 5.96967 6";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "6 6 -0.411104";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "3.75 -30 -3.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "3.75 -30 4";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-4.25 -30 3";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-14.25 -31 3.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "16.3204 -29.5569 0.0505596";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-5.25 -32 -12.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.75 -32 -12.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "5.25 -32 12.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-4.75 -32 12.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-21.25 -28 16.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-17.25 -28 21";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "15.75 -28 22";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "21.75 -28 16.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "21.25 -28 -16";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "16.25 -28 -21.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-16.25 -28 -22";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-21.25 -28 -16.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-21.25 28 -17";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-16.25 28 -22";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "16.25 28 -21.5";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "21.25 28 -16";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "21.75 28 16.5";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "15.75 28 22";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-15.75 28 21.5";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-21.25 28 16.5";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "-9.25 32 7.5";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "5.74133 31.2081 14.0854";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "13.25 32 4";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-6.25736 31.3767 15";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-2.75 18.5 0";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-2.25 10 0";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "11.25 -2.5 0";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "22.25 0 -3";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "12.75 0 -1.5";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "22.75 -2.5 0";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0 7 -3";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0 19.5 -3";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-8.25736 31.3767 -8";
+         rotation = "-1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "-12.25 -31 -4";
+         rotation = "1 0 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "orange";
+      };
+      new Item() {
+         position = "0.331948 -7.97624 0.454675";
+         rotation = "1 0 0 0";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+      new Item() {
+         position = "0.449052 0.467071 -4.03665";
+         rotation = "0 -1 0 90";
+         scale = "2 2 2";
+         dataBlock = "GemItem_MBU";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+         skin = "pink";
+      };
+   };
+   new Item() {
+      position = "11 -30.813 -7";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2 -29.813 2";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "14 -29.5 12";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-29.5 12 -14";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-29.5 -12 14";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "10 2 30.8";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13.7 -13.65 -29";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "10 -8 -32.267";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4 -10 32";
+      rotation = "1 0 0 180";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-7.97958 -30.8 7.11408";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "28 -23 -2";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "BlastItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "30.8 -10.1126 -8";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.82558 31 11";
+      rotation = "-1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2 -28 -23";
+      rotation = "1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "BlastItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2 2 -28.313";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-29.813 2 2";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-12 13 -30";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-31.267 -10 8";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "32 -4 14";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      dataBlock = "MegaMarbleItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "8 32.267 -10";
+      rotation = "-1 0 0 90";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2 27.6 23";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BlastItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-28 23.4 -2";
+      rotation = "0 -1 0 90";
+      scale = "1 1 1";
+      dataBlock = "BlastItem_MBU";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-35.5 35.5 -35.5";
+      rotation = "1 0 0 0";
+      scale = "71 71 100";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      position = "-0.5 0.5 32.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+};
+//--- OBJECT WRITE END ---
