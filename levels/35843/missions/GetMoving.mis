@@ -1,0 +1,421 @@
+// NORMAL AND SPEC MAPS
+
+// @include "~/data/interiors_bm/shaders_bm/bm_beam.normal.png"
+// @include "~/data/interiors_bm/shaders_bm/bm_beam.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/bm_edge_white.normal.png"
+// @include "~/data/interiors_bm/shaders_bm/bm_edge_white.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/bm_friction_grass.normal.png"
+// @include "~/data/interiors_bm/shaders_bm/bm_friction_grass.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/bm_grid_blank4.normal.png"
+// @include "~/data/interiors_bm/shaders_bm/bm_grid_blank4.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/bm_stripe_caution2.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/bm_tile06_A.normal.png"
+// @include "~/data/interiors_bm/shaders_bm/bm_tile06_A.spec.png"
+
+// @include "~/data/interiors_bm/shaders_bm/solid_bm.spec.png"
+
+// CUSTOM SKINS FOR SHAPES
+
+// @include "~/data/shapes_bm/hazards/Propellers/Propeller.png"
+// @include "~/data/shapes_bm/hazards/Propellers/base.Propeller.png"
+// @include "~/data/shapes_bm/hazards/Propellers/bm.Propeller.png"
+
+// @include "~/data/shapes_bm/LumiCube/solid_bm_blue.png"
+// @include "~/data/shapes_bm/LumiCube/metal_bm.png"
+
+// @include "~/data/shapes_bm/pads/endpad_bm_edge.png"
+// @include "~/data/shapes_bm/pads/exit.png"
+// @include "~/data/shapes_bm/pads/metal_bm.png"
+// @include "~/data/shapes_bm/pads/endpad_bm_base.png"
+
+// @include "~/data/shapes_bm/signs/solid_bm.png"
+// @include "~/data/shapes_bm/signs/finish_bm.png"
+
+// PROPELLERS
+
+datablock StaticShapeData(PropLarge1_BM : Propeller) {
+	shapeFile = "~/data/shapes_bm/hazards/Propellers/Propeller_large_1.dts";
+	forceStrength[0] = 0;     // Force to apply
+	forceRadius[0] = 0;       // Max radius
+	forceArc[0] = 0;         // Cos angle
+	skin[0] = "base";
+	skin[1] = "bm";
+};
+
+// HELP BUBBLE
+
+datablock StaticShapeData(HelpBubble_BM : HelpBubble) {
+	className = "LevelParts";
+	category = "Help";
+	shapeFile = "platinum/data/shapes_bm/signs/bm_hintscreen.dts";
+
+	customField[0, "field"  ] = "text";
+	customField[0, "type"   ] = "string";
+	customField[0, "name"   ] = "Help Text";
+	customField[0, "desc"   ] = "Text that is shown to the player when they enter the trigger.";
+	customField[0, "default"] = "Help Text";
+	customField[1, "field"  ] = "displayonce";
+	customField[1, "type"   ] = "boolean";
+	customField[1, "name"   ] = "Only Display Once";
+	customField[1, "desc"   ] = "If the trigger should only show once (resets on restart).";
+	customField[1, "default"] = "0";
+	customField[2, "field"  ] = "persistTime";
+	customField[2, "type"   ] = "time";
+	customField[2, "name"   ] = "Persist Time";
+	customField[2, "desc"   ] = "For how long the help message will be visible after entering the trigger.";
+	customField[2, "default"] = "5000";
+	customField[3, "field"  ] = "extended";
+	customField[3, "type"   ] = "boolean";
+	customField[3, "name"   ] = "Use Extended Help";
+	customField[3, "desc"   ] = "If the extended help dialog should be used instead.";
+	customField[3, "default"] = "0";
+	customField[4, "field"  ] = "disable";
+	customField[4, "type"   ] = "boolean";
+	customField[4, "name"   ] = "Disabled";
+	customField[4, "desc"   ] = "If the help bubble is disabled (for use with a trigger).";
+	customField[4, "default"] = "0";
+	customField[5, "field"  ] = "triggerRadius";
+	customField[5, "type"   ] = "float";
+	customField[5, "name"   ] = "Active Radius";
+	customField[5, "desc"   ] = "Will only show when marble is within this distance.";
+	customField[5, "default"] = "3";
+};
+
+// END PAD
+
+datablock StaticShapeData(EndPad_BM : EndPad) {
+	shapeFile = "~/data/shapes_bm/pads/endpadcore_bm.dts";
+	
+	skinCount = 0;
+};
+
+datablock StaticShapeData(EndPad_BMGate : EndPad) {
+	shapeFile = "~/data/shapes_bm/pads/endgate_bm.dts";
+	
+	skinCount = 0;
+};
+
+// POWERUPS
+
+datablock ItemData(LumiCube : EasterEgg) {
+	superCategory = "PowerUps";
+	category = "Blasted";	// This should be put in a new category
+	className = "PowerUp";	// Ditto
+
+	// Basic Item properties
+	shapeFile = "~/data/shapes_bm/LumiCube/LumiCube.dts";
+	mass = 1;
+	friction = 1;
+	elasticity = 0.3;
+	emap = false;
+
+	displayName = "LumiCube";
+
+	// Dynamic properties defined by the scripts
+	noRespawn = true;
+	maxInventory = 1;
+	noPickupMessage = true;
+};
+
+function LumiCube::onPickup(%this,%obj,%user,%amount) {
+	return EasterEgg::onPickup(%this, %obj, %user, %amount);
+}
+
+// SCENERY
+
+datablock StaticShapeData(EndPadEdge_BM) {
+	className = "EndPadEdge";
+	superCategory = "Pads";
+	category = "Blasted";
+	shapeFile = "~/data/shapes_bm/pads/endpadedge_bm.dts";
+};
+
+datablock StaticShapeData(Propeller_BM_Base) {
+	className = "LevelParts";
+	superCategory = "Level Parts";
+	category = "Propeller Base";
+	shapeFile = "~/data/shapes_bm/hazards/Propellers/bm_propeller_base.dts";
+};
+
+// FRICTION PROPERTIES
+new MaterialProperty(BMGrassMaterial) {
+	friction = 1.5;
+	restitution = 0.5;
+};
+
+addMaterialMapping("bm_friction_grass" , BMGrassMaterial);
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         CustomRadarRule = "0";
+         artist = "James C.";
+         awesomeTime = "10000";
+         desc = "Roll to the end of the course.";
+         game = "Blasted";
+         gameMode = "null";
+         goldTime = "25000";
+         level = "1";
+         name = "1-1: Get Moving";
+         platinumTime = "20000";
+         type = "Custom";
+         ultimateTime = "15000";
+   };
+   new SimGroup(HelpBubbleGroup) {
+
+      new StaticShape(Movement) {
+         position = "0 3 2";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble_BM";
+            disable = "0";
+            displayonce = "0";
+            extended = "1";
+            persistTime = "1000";
+            text = "Use the <func:bind moveforward>, <func:bind moveleft>, <func:bind movebackward>, and <func:bind moveright> keys to move your marble around.";
+            triggerRadius = "4";
+      };
+      new StaticShape(Look) {
+         position = "4 84 3.25";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble_BM";
+            disable = "0";
+            displayonce = "0";
+            extended = "1";
+            persistTime = "1000";
+            text = "Use the <func:bind panUp>, <func:bind panDown>, <func:bind turnLeft>, and <func:bind turnRight> keys or the mouse to turn the camera.";
+            triggerRadius = "4";
+      };
+      new StaticShape(LumiCubeHint) {
+         position = "-3.75 29 0.25";
+         rotation = "0 0 -1 56.2501";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble_BM";
+            disable = "0";
+            displayonce = "0";
+            extended = "1";
+            persistTime = "1000";
+            text = "This is a LumiCube. There\'s one in each level. Collect them all to earn an achievement.";
+            triggerRadius = "3";
+      };
+   };
+   new InteriorInstance() {
+      position = "47.75 125.75 -2.75";
+      rotation = "-0.18037 0.0964097 0.978863 57.274";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/parts/bm_chevron_left1.dif";
+      showTerrainInside = "0";
+   };
+   new SimGroup(MissionData) {
+
+      new MissionArea(MissionArea) {
+         area = "-360 -648 720 1296";
+         flightCeiling = "300";
+         flightCeilingRange = "20";
+            locked = "true";
+      };
+      new Sky(Sky) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         cloudHeightPer[0] = "0";
+         cloudHeightPer[1] = "0";
+         cloudHeightPer[2] = "0";
+         cloudSpeed1 = "0.0001";
+         cloudSpeed2 = "0.0002";
+         cloudSpeed3 = "0.0003";
+         visibleDistance = "500";
+         useSkyTextures = "1";
+         renderBottomTexture = "1";
+         SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+         fogDistance = "300";
+         fogColor = "0.600000 0.600000 0.600000 1.000000";
+         fogVolume1 = "-1 7.45949e-031 1.3684e-038";
+         fogVolume2 = "-1 1.07208e-014 8.756e-014";
+         fogVolume3 = "-1 5.1012e-010 2.05098e-008";
+         materialList = "~/data/skies_bm/Day/sky_day.dml";
+         windVelocity = "1 0 0";
+         windEffectPrecipitation = "0";
+         noRenderBans = "1";
+         fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+         fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000004";
+         fogVolumeColor3 = "128.000000 128.000000 128.000000 14435505.000000";
+      };
+   };
+   new InteriorInstance() {
+      position = "43 100 -3.25";
+      rotation = "-0.0297199 0.097974 0.994745 146.418";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/parts/bm_chevron_left1.dif";
+      showTerrainInside = "0";
+   };
+   new Sun() {
+      direction = "-0.48795 0 -0.872872";
+      color = "1.000000 1.000000 1.000000 1.000000";
+      ambient = "0.500000 0.500000 0.600000 1.000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "-0.905968 -10.4105 9.41655";
+         rotation = "0.966606 -0.0649526 0.247898 30.3329";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            FinalRotOffset = "1 0 0 0";
+            RotationMultiplier = "1";
+            Smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            Spline = "0";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            speed = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/chapter1/GetMoving.dif";
+      showTerrainInside = "0";
+   };
+   new Trigger() {
+      position = "-0.5 0.5 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SpawnTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         center = "1";
+         gravity = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/chapter1/GetMovingCurves.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/chapter1/GetMovingCurve2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/chapter1/GetMovingCurve3.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         value = "WorldEditorSettingsDlg";
+   };
+   new StaticShape(EndPoint) {
+      position = "12 128 -2.5";
+      rotation = "0 0 -1 89.9998";
+      scale = "1 1 1";
+      dataBlock = "EndPad_BM";
+   };
+   new StaticShape() {
+      position = "12 128 -2.5";
+      rotation = "0 0 -1 89.9998";
+      scale = "1 1 1";
+      dataBlock = "EndPadEdge_BM";
+   };
+   new TSStatic() {
+      position = "12 128 1.35";
+      rotation = "0 0 1 90.0002";
+      scale = "0.7 0.7 0.7";
+      shapeName = "~/data/shapes_bm/signs/bm_finishsign.dts";
+   };
+   new StaticShape() {
+      position = "-8 44 11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Propeller_BM_Base";
+   };
+   new StaticShape() {
+      position = "-8 40 11";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "PropLarge1_BM";
+   };
+   new StaticShape() {
+      position = "20 80 19";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Propeller_BM_Base";
+   };
+   new StaticShape() {
+      position = "20 76 19";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "PropLarge1_BM";
+   };
+   new StaticShape() {
+      position = "2 112 15";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Propeller_BM_Base";
+   };
+   new StaticShape() {
+      position = "2 108 15";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "PropLarge1_BM";
+   };
+   new StaticShape() {
+      position = "32 142 11";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Propeller_BM_Base";
+   };
+   new StaticShape() {
+      position = "32 138 11";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "PropLarge1_BM";
+   };
+   new Trigger(Bounds) {
+      position = "-43 -22 -9.25";
+      rotation = "1 0 0 0";
+      scale = "107.432 180.606 123";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new InteriorInstance() {
+      position = "6 104.75 -0.25";
+      rotation = "0.0356761 -0.326355 -0.944574 36.0589";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_bm/parts/bm_chevron_right1.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-9 27 -0.65";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LumiCube";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+   };
+};
+//--- OBJECT WRITE END ---
