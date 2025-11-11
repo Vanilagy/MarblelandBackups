@@ -1,0 +1,218 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         startHelpText = "Try to get to the finish with these awesome teleporters!";
+         level = "1";
+         desc = "Besides MBPlatinum, mbopal also has teleporters :P";
+         time = "0";
+         type = "Tutorial";
+         name = "Teleporter Training";
+         artist = "Jeff";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 7.47605e-027 1.69387e+038";
+      fogVolume2 = "-1 -1.17676e-038 0.0383887";
+      fogVolume3 = "-1 2.75609e+038 1.76723e-012";
+      materialList = "~/data/skies/beginning/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -14848524993944557000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 99392957236346094000.000000";
+   };
+   new Sun() {
+      direction = "0.57735 0.57735 -0.57735";
+      color = "0.600000 0.600000 0.600000 1.000000";
+      ambient = "0.400000 0.400000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/tutorial/tutorialteleporters.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "3 3 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "47 -7 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Item() {
+      position = "39 17 11.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         timeBonus = "7500";
+   };
+   new Trigger(Bounds) {
+      position = "-21.95 42.875 -13";
+      rotation = "1 0 0 0";
+      scale = "116 85.75 50.5";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      position = "85.6201 37.5602 6";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      shapeName = "~/data/shapes/scenery/yellow.dts";
+   };
+   new Trigger(teleport1) {
+      position = "8.3554 17.441 0.325788";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleporterTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         location = "location1";
+   };
+   new Trigger(location1) {
+      position = "30.6431 17.5641 0.245954";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LocationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "32.8958 17.1185 0.694418";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SmallMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "43.283 17.0413 0.862149";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MarbleChangeItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         changeTo = "@random@";
+         cmnum = "CM0";
+         failure = "0";
+   };
+   new Trigger(location2) {
+      position = "19.5689 17.6443 20.4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LocationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(teleport2) {
+      position = "46.4495 17.537 0.315228";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleporterTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         location = "location2";
+   };
+   new Item() {
+      position = "19.8784 -19.0075 21.3";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "BigMarbleItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "67.5232 -19.0786 20.7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "MarbleChangeItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+         changeTo = "MBO Black.dts";
+         cmnum = "CM1";
+         failure = "0";
+   };
+   new Trigger(location3) {
+      position = "46.582 -0.429113 0.500381";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LocationTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(teleport3) {
+      position = "67.0179 17.4405 20.4";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TeleporterTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         location = "location3";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         powerup = "0";
+         penaltyTime = "0";
+         time = "0";
+         pad = "1682";
+   };
+   new TSStatic() {
+      position = "-14.2804 37.5454 6";
+      rotation = "1 0 0 0";
+      scale = "6 75 6";
+      shapeName = "~/data/shapes/scenery/yellow.dts";
+   };
+   new TSStatic() {
+      position = "33.096 -32.6058 6";
+      rotation = "1 0 0 0";
+      scale = "115 6 6";
+      shapeName = "~/data/shapes/scenery/yellow.dts";
+   };
+   new TSStatic() {
+      position = "38.1748 39.166 6";
+      rotation = "1 0 0 0";
+      scale = "115 6 6";
+      shapeName = "~/data/shapes/scenery/yellow.dts";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new TSStatic() {
+      position = "86.2128 38.0843 6";
+      rotation = "1 0 0 0";
+      scale = "6 75 6";
+      shapeName = "~/data/shapes/scenery/yellow.dts";
+   };
+};
+//--- OBJECT WRITE END ---
