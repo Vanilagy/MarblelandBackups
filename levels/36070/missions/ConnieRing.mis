@@ -1,0 +1,264 @@
+datablock StaticShapeData(PierceBeam) {
+   superCategory = "Scenery";
+	shapeFile = "~/data/shapes/gemlights/gemlight.dts";
+	emap = false;
+};
+
+function PierceBeam::onAdd(%this, %obj)
+{
+   %obj.setSkinName("platinum");
+}
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Connie";
+         customRadarRule = "0";
+         desc = "Roll around the Ring of a planet, but be careful to not run into a space rock!\n\nCredits to Nockess for the level name!";
+         eastereggHint = "I\'m gonna be honest, there aren\'t many places where it can be.";
+         game = "Gold";
+         gameMode = "null";
+         goldTime = "18000";
+         level = "1000";
+         music = "Groove Police.ogg";
+         name = "Ring of the Sundering";
+         radar = "1";
+         startHelpText = "Use this Powerup whenever you see fit.";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      materialList = "~/data/skies/SpaceStation/SpaceStationSky.dml";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "900";
+      fogDistance = "300";
+      fogColor = "0.6 0.6 0.6 1";
+      fogStorm1 = "0";
+      fogStorm2 = "0";
+      fogStorm3 = "0";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      fogVolumeColor1 = "128 128 128 0";
+      fogVolumeColor2 = "128 128 128 4e-06";
+      fogVolumeColor3 = "128 128 128 1.44355e+07";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      SkySolidColor = "0 0 0 0";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      noRenderBans = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "0.8 0.8 0.8 1";
+      ambient = "0.2 0.2 0.3 1";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "-118.312 167.389 187.097";
+         rotation = "-0.0149114 -0.1521 0.988253 191.068";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new StaticShape() {
+      position = "-391.284 -31.7735 -344.739";
+      rotation = "-0.357834 -0.931651 0.0630961 26.7701";
+      scale = "25 25 50";
+      dataBlock = "PierceBeam";
+   };
+   new StaticShape(ExplosionImpactOne) {
+      position = "-185.393 -114.421 96.0788";
+      rotation = "-0.357834 -0.931651 0.0630961 26.7701";
+      scale = "300 300 0.813914";
+      dataBlock = "PierceBeam";
+   };
+   new StaticShape(ExplosionImpactTwo) {
+      position = "-185.393 -114.421 96.0788";
+      rotation = "-0.0443421 -0.613196 0.788685 44.1459";
+      scale = "300 300 0.813914";
+      dataBlock = "PierceBeam";
+   };
+   new StaticShape(ExplosionImpactThree) {
+      position = "-185.393 -114.421 96.0788";
+      rotation = "0.0544951 -0.436643 0.897983 63.3416";
+      scale = "300 300 0.813914";
+      dataBlock = "PierceBeam";
+   };
+   new StaticShape(ExplosionImpactFour) {
+      position = "-185.393 -114.421 96.0788";
+      rotation = "-0.127055 -0.738562 0.662105 35.9118";
+      scale = "300 300 0.813914";
+      dataBlock = "PierceBeam";
+   };
+   new SimGroup(AutoInterior_g) {
+         type = "blender";
+
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg0.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+      new Item() {
+         position = "-213.129 -302.006 101.823";
+         rotation = "0.989603 -0.141909 0.0234098 18.9317";
+         scale = "1 1 1";
+         dataBlock = "GemItemBlack";
+         collidable = "0";
+         static = "1";
+         rotate = "1";
+            locked = "1";
+            noRespawn = "0";
+      };
+      new Item() {
+         position = "-320.052 -251.541 103.262";
+         rotation = "0.723648 -0.685168 0.0829397 18.9928";
+         scale = "1 1 1";
+         dataBlock = "TimeTravelItem";
+         collidable = "0";
+         static = "1";
+         rotate = "1";
+            locked = "1";
+            noRespawn = "1";
+            skin = "mbg";
+            timeBonus = "5000";
+      };
+      new Item() {
+         position = "-290.934 34.7462 100.206";
+         rotation = "-0.81347 -0.5763 -0.07839 18.9852";
+         scale = "1 1 1";
+         dataBlock = "GemItemBlack";
+         collidable = "0";
+         static = "1";
+         rotate = "1";
+            locked = "1";
+            noRespawn = "0";
+      };
+      new Item() {
+         position = "-58.9669 -258.358 102.925";
+         rotation = "0.755871 0.649551 -0.08212 18.9907";
+         scale = "1 1 1";
+         dataBlock = "TimeTravelItem";
+         collidable = "0";
+         static = "1";
+         rotate = "1";
+            locked = "1";
+            noRespawn = "1";
+            skin = "mbg";
+            timeBonus = "5000";
+      };
+      new StaticShape(StartPoint) {
+         position = "-61.5 26 101.5";
+         rotation = "0 0 1 135";
+         scale = "1 1 1";
+         dataBlock = "StartPad_MBG";
+            locked = "1";
+      };
+      new Item() {
+         position = "-57.2398 21.885 101.701";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "SuperSpeedItem";
+         collidable = "0";
+         static = "1";
+         rotate = "1";
+            locked = "1";
+      };
+      new StaticShape(EndPoint) {
+         position = "-111 61.265 102.043";
+         rotation = "-0.13925 -0.11727 0.983289 105.182";
+         scale = "1 1 1";
+         dataBlock = "EndPad_MBG";
+            locked = "1";
+      };
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg1.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg2.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg3.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg4.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+      new InteriorInstance() {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         interiorFile = "~/data/interiors_mbg/custom/idfkdawg5.dif";
+         useGLLighting = "0";
+         showTerrainInside = "0";
+            locked = "1";
+      };
+   };
+   new Item() {
+      position = "-111.546 61.4892 101.692";
+      rotation = "0.994996 -0.0194931 0.0979985 157.61";
+      scale = "1 1 1";
+      dataBlock = "EasterEgg_MBG";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-489.664 -542.976 -20.7443";
+      rotation = "1 0 0 0";
+      scale = "612.565 854.384 252.731";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---
