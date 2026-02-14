@@ -1,0 +1,5024 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         level = "35";
+         music = "Summer Gathering.ogg";
+         name = "Moving Objects";
+         goldTime = "90000";
+         time = "0";
+         desc = "What?! All the Objects are Moving?..But How?? Anyways..Dodge the dangers to Get the Gems.";
+         startHelpText = "What?! Am I moving too? Finally... :)";
+         type = "custom";
+         artist = "abhishek839";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume2 = "-1 -1.73483e+009 -1.73483e+009";
+      fogVolume3 = "-1 -1.73483e+009 -1.73483e+009";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1734829824.000000";
+   };
+   new Sun() {
+      direction = "0.481726 -0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "-1.00484 1.01011 1";
+      rotation = "0 0 -1 90.0002";
+      scale = "0 0 0";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-144.129 -282.257 -24.937";
+      rotation = "1 0 0 0";
+      scale = "1 1 0";
+      dataBlock = "EndPad";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/movingshapes/movingobjects0.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-1.00484 1.01011 1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "300";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-4.58413 1.92341 1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-15.298 7.82903 1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-21.5856 12.1906 1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-29.8069 22.5014 0.999999";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-20.4561 30.4556 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-20.4561 30.4556 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-2.39194 1.01011 2.8175";
+         rotation = "1 0 0 0";
+         scale = "0.115054 1 3.63499";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "70000";
+      };
+      new Trigger(MustChange) {
+         position = "0.24516 1.01011 2.84554";
+         rotation = "1 0 0 0";
+         scale = "0.1 1 3.69108";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "70000";
+      };
+      new Trigger(MustChange) {
+         position = "-0.986727 -0.00703108 2.8175";
+         rotation = "0 0 -1 89.9544";
+         scale = "0.1 1 3.63499";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "70000";
+      };
+      new Trigger(MustChange) {
+         position = "-1.10717 2.33319 2.84554";
+         rotation = "0 0 -1 90.5273";
+         scale = "0.121412 1 3.69108";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "70000";
+      };
+      new PathedInterior(MustChange) {
+         position = "-1.00484 1.01011 2";
+         rotation = "0 0 1 90";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/startpad0.dif";
+         interiorIndex = "0";
+         basePosition = "-1.00484 1.01011 2";
+         baseRotation = "0 0 1 90";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2946";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2518";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-61.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-61.0649 -1.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-61.0649 -1.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-61.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-61.0649 -7.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-61.0649 -7.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-61.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-61.0649 -9.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-61.0649 -9.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-61.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-61.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-61.0649 -15.0017 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-61.0649 -15.0017 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-57.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-57.0649 -1.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-57.0649 -1.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-57.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -1.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -7.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-57.0649 -7.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-57.0649 -7.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-57.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-57.0649 -9.00166 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-57.0649 -9.00166 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-57.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -9.00166 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "600";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-57.0649 -15.0017 1.1";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-57.0649 -15.0017 1.1";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/roundbumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-57.0649 -15.0017 1.1";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-54.445 -8.09474 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-63.445 -8.09474 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-54.445 -8.09474 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-54.4053 -7.87831 1.25";
+         rotation = "0 0 -1 89.9544";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/tribumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-54.4053 -7.87831 1.25";
+         baseRotation = "0 0 -1 89.9544";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new Trigger(StayHere) {
+      position = "-197.284 39.55 -28.25";
+      rotation = "1 0 0 0";
+      scale = "207.056 336.2 171.031";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-63.445 -17.3447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-54.445 -17.3447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-63.445 -17.3447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-63.445 -17.3447 1.25";
+         rotation = "0 0 -1 89.9544";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/tribumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-63.445 -17.3447 1.25";
+         baseRotation = "0 0 -1 89.9544";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-63.445 0.9053 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-54.445 0.9053 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-63.445 0.9053 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-63.445 0.9053 1.25";
+         rotation = "0 0 -1 89.9544";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/tribumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-63.445 0.9053 1.25";
+         baseRotation = "0 0 -1 89.9544";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-63.445 -0.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-63.445 -15.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-63.445 -0.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-63.4847 -1.06113 1.25 7.22498e+036";
+         rotation = "-1 0 0 1.00014";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/tribumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-63.4847 -1.06113 1.25 7.22498e+036";
+         baseRotation = "-1 0 0 1.00014";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-54.445 -15.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-54.445 -0.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-54.445 -15.8447 1.25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "900";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-54.445 -15.8447 1.25";
+         rotation = "-1 0 0 1.00014";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/tribumper0.dif";
+         interiorIndex = "0";
+         basePosition = "-54.445 -15.8447 1.25";
+         baseRotation = "-1 0 0 1.00014";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.813 -24.6122 2.3982";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-105.813 -24.6122 2.3982";
+            baseRotation = "1 0 0 0";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -24.7106 2.32306";
+            rotation = "0 1 0 91.1003";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-105.679 -24.7106 2.32306";
+            baseRotation = "0 1 0 91.1003";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -24.7105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-105.679 -24.7105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-104.972 -24.6833 2.32306";
+            rotation = "0 0 -1 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-104.972 -24.6833 2.32306";
+            baseRotation = "0 0 -1 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -24.7105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-105.679 -24.7105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -18.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -24.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -24.7105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-105.679 -24.7105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.813 -43.3622 2.3982";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-105.813 -43.3622 2.3982";
+            baseRotation = "1 0 0 0";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -43.4606 2.32306";
+            rotation = "0 1 0 91.1003";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-105.679 -43.4606 2.32306";
+            baseRotation = "0 1 0 91.1003";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -43.4605 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-105.679 -43.4605 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-104.972 -43.4333 2.32306";
+            rotation = "0 0 -1 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-104.972 -43.4333 2.32306";
+            baseRotation = "0 0 -1 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -43.4605 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-105.679 -43.4605 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -36.6122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -43.3622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -43.4605 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-105.679 -43.4605 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.04 -33.9677 2.3982";
+            rotation = "0 0 1 179.909";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-115.04 -33.9677 2.3982";
+            baseRotation = "0 0 1 179.909";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -33.8695 2.32306";
+            rotation = "0.713864 0.000568552 0.700285 179.936";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-115.174 -33.8695 2.32306";
+            baseRotation = "0.713864 0.000568552 0.700285 179.936";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -33.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-115.174 -33.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.881 -33.8979 2.32306";
+            rotation = "0 0 1 89.9085";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-115.881 -33.8979 2.32306";
+            baseRotation = "0 0 1 89.9085";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -33.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-115.174 -33.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -26.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -33.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -33.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-115.174 -33.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.813 -61.1122 2.3982";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-105.813 -61.1122 2.3982";
+            baseRotation = "1 0 0 0";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -61.2106 2.32306";
+            rotation = "0 1 0 91.1003";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-105.679 -61.2106 2.32306";
+            baseRotation = "0 1 0 91.1003";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -61.2105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-105.679 -61.2105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-104.972 -61.1833 2.32306";
+            rotation = "0 0 -1 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-104.972 -61.1833 2.32306";
+            baseRotation = "0 0 -1 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -61.2105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-105.679 -61.2105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -54.8622 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-105.813 -61.1122 2.3982";
+               rotation = "1 0 0 0";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-105.679 -61.2105 2.32306";
+            rotation = "0 1 0 90.0002";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-105.679 -61.2105 2.32306";
+            baseRotation = "0 1 0 90.0002";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.04 -51.7177 2.3982";
+            rotation = "0 0 1 179.909";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-115.04 -51.7177 2.3982";
+            baseRotation = "0 0 1 179.909";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -51.6195 2.32306";
+            rotation = "0.713864 0.000568552 0.700285 179.936";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-115.174 -51.6195 2.32306";
+            baseRotation = "0.713864 0.000568552 0.700285 179.936";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -51.6196 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-115.174 -51.6196 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.881 -51.6479 2.32306";
+            rotation = "0 0 1 89.9085";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-115.881 -51.6479 2.32306";
+            baseRotation = "0 0 1 89.9085";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -51.6196 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-115.174 -51.6196 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -45.2177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -51.7177 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -51.6196 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-115.174 -51.6196 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.04 -70.9677 2.3982";
+            rotation = "0 0 1 179.909";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-115.04 -70.9677 2.3982";
+            baseRotation = "0 0 1 179.909";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -70.8695 2.32306";
+            rotation = "0.713864 0.000568552 0.700285 179.936";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-115.174 -70.8695 2.32306";
+            baseRotation = "0.713864 0.000568552 0.700285 179.936";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -70.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-115.174 -70.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.881 -70.8979 2.32306";
+            rotation = "0 0 1 89.9085";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-115.881 -70.8979 2.32306";
+            baseRotation = "0 0 1 89.9085";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -70.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-115.174 -70.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -64.4677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-115.04 -70.9677 2.3982";
+               rotation = "0 0 1 179.909";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-115.174 -70.8696 2.32306";
+            rotation = "0.707108 0.000563107 0.707105 179.935";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-115.174 -70.8696 2.32306";
+            baseRotation = "0.707108 0.000563107 0.707105 179.935";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.866 -66.4987 2.3982";
+            rotation = "0 0 -1 90.7096";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-153.866 -66.4987 2.3982";
+            baseRotation = "0 0 -1 90.7096";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.769 -66.3636 2.32306";
+            rotation = "0.583425 -0.576241 0.57233 238.957";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-153.769 -66.3636 2.32306";
+            baseRotation = "0.583425 -0.576241 0.57233 238.957";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-153.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.805 -65.657 2.32306";
+            rotation = "0 0 1 179.29";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-153.805 -65.657 2.32306";
+            baseRotation = "0 0 1 179.29";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-153.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-148.616 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-153.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-153.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.866 -66.4987 2.3982";
+            rotation = "0 0 -1 90.7096";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-164.866 -66.4987 2.3982";
+            baseRotation = "0 0 -1 90.7096";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.769 -66.3636 2.32306";
+            rotation = "0.583425 -0.576241 0.57233 238.957";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-164.769 -66.3636 2.32306";
+            baseRotation = "0.583425 -0.576241 0.57233 238.957";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-164.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.805 -65.657 2.32306";
+            rotation = "0 0 1 179.29";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-164.805 -65.657 2.32306";
+            baseRotation = "0 0 1 179.29";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-164.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-158.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-164.866 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-164.769 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-164.769 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.366 -66.4987 2.3982";
+            rotation = "0 0 -1 90.7096";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-177.366 -66.4987 2.3982";
+            baseRotation = "0 0 -1 90.7096";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.269 -66.3636 2.32306";
+            rotation = "0.583425 -0.576241 0.57233 238.957";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-177.269 -66.3636 2.32306";
+            baseRotation = "0.583425 -0.576241 0.57233 238.957";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.269 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-177.269 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.305 -65.657 2.32306";
+            rotation = "0 0 1 179.29";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-177.305 -65.657 2.32306";
+            baseRotation = "0 0 1 179.29";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.269 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-177.269 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-171.116 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.366 -66.4987 2.3982";
+               rotation = "0 0 -1 90.7096";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-177.269 -66.3636 2.32306";
+            rotation = "0.57972 -0.572582 0.57972 239.589";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-177.269 -66.3636 2.32306";
+            baseRotation = "0.57972 -0.572582 0.57972 239.589";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.071 -102.891 2.3982";
+            rotation = "0 0 1 89.7721";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-149.071 -102.891 2.3982";
+            baseRotation = "0 0 1 89.7721";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.169 -103.026 2.32306";
+            rotation = "0.580229 0.582544 0.56919 120.507";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-149.169 -103.026 2.32306";
+            baseRotation = "0.580229 0.582544 0.56919 120.507";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.169 -103.026 2.32306";
+            rotation = "0.576584 0.578884 0.57658 119.868";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-149.169 -103.026 2.32306";
+            baseRotation = "0.576584 0.578884 0.57658 119.868";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.139 -103.732 2.32306";
+            rotation = "0 0 -1 0.227282";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-149.139 -103.732 2.32306";
+            baseRotation = "0 0 -1 0.227282";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.169 -103.026 2.32306";
+            rotation = "0.576584 0.578884 0.57658 119.868";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-149.169 -103.026 2.32306";
+            baseRotation = "0.576584 0.578884 0.57658 119.868";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-153.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-149.071 -102.891 2.3982";
+               rotation = "0 0 1 89.7721";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-149.169 -103.026 2.32306";
+            rotation = "0.576584 0.578884 0.57658 119.868";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-149.169 -103.026 2.32306";
+            baseRotation = "0.576584 0.578884 0.57658 119.868";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new SimGroup(ductfan_g) {
+
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.82 -103.142 2.3982";
+            rotation = "0 0 1 90.5273";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan_frame.dif";
+            interiorIndex = "0";
+            basePosition = "-169.82 -103.142 2.3982";
+            baseRotation = "0 0 1 90.5273";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialTargetPosition = "-1";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.92 -103.275 2.32306";
+            rotation = "0.582808 0.577469 0.57172 120.938";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "4";
+            basePosition = "-169.92 -103.275 2.32306";
+            baseRotation = "0.582808 0.577469 0.57172 120.938";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.92 -103.275 2.32306";
+            rotation = "0.579115 0.573809 0.57911 120.305";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "0";
+            basePosition = "-169.92 -103.275 2.32306";
+            baseRotation = "0.579115 0.573809 0.57911 120.305";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.899 -103.982 2.32306";
+            rotation = "0 0 1 0.526374";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "1";
+            basePosition = "-169.899 -103.982 2.32306";
+            baseRotation = "0 0 1 0.526374";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.92 -103.275 2.32306";
+            rotation = "0.579115 0.573809 0.57911 120.305";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "2";
+            basePosition = "-169.92 -103.275 2.32306";
+            baseRotation = "0.579115 0.573809 0.57911 120.305";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+      new SimGroup(MustChange_g) {
+
+         new Path() {
+
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "0";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-177.32 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "1";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+            new Marker() {
+               position = "-169.82 -103.142 2.3982";
+               rotation = "0 0 1 90.5276";
+               scale = "1 1 1";
+               seqNum = "2";
+               msToNext = "1000";
+               smoothingType = "Accelerate";
+            };
+         };
+         new PathedInterior(MustChange) {
+            position = "-169.92 -103.275 2.32306";
+            rotation = "0.579115 0.573809 0.57911 120.305";
+            scale = "1 1 1";
+            dataBlock = "PathedDefault";
+            interiorResource = "marble/data/interiors/movingshapes/ductfan.dif";
+            interiorIndex = "3";
+            basePosition = "-169.92 -103.275 2.32306";
+            baseRotation = "0.579115 0.573809 0.57911 120.305";
+            baseScale = "1 1 1";
+               trackTime = "167156578";
+               trackTarget = "-1";
+               initialPosition = "0";
+               initialTargetPosition = "-1";
+               trackPos = "0";
+         };
+      };
+   };
+   new StaticShape() {
+      position = "-104.659 -18.0829 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-104.659 -24.8329 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-104.659 -36.5829 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-104.659 -43.3329 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-104.659 -55.0829 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "-104.659 -61.0829 2.61845";
+      rotation = "0 1 0 90.5273";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-115.201 -27.9807 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "SmallDuctFan";
+   };
+   new StaticShape() {
+      position = "-115.27 -70.9806 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-115.259 -64.2306 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-115.24 -52.4807 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-115.23 -45.7307 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-115.211 -33.9807 2.44487";
+      rotation = "0.710353 -0.000565805 0.703845 180.064";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "3078";
+   };
+   new StaticShape() {
+      position = "-154.001 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-148.501 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-159.001 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-165.001 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-171.251 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-177.251 -66.4501 2.36166";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-174.501 -66.4501 2.36161";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-168.251 -66.4501 2.36161";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-151.251 -66.4501 2.36161";
+      rotation = "-1 0 0 92.2462";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new Trigger() {
+      position = "-182.407 -81.0586 -2.141";
+      rotation = "1 0 0 0";
+      scale = "36.0723 6.81304 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-148.844 -102.988 2.33891";
+      rotation = "1 0 0 87.6625";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-153.094 -102.988 2.33891";
+      rotation = "1 0 0 87.6625";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-169.844 -102.988 2.33891";
+      rotation = "1 0 0 87.6625";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-177.344 -102.988 2.33891";
+      rotation = "1 0 0 87.6625";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-174.094 -102.988 2.33891";
+      rotation = "1 0 0 87.6625";
+      scale = "0 0 0";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-153.015 -154.944 2.15764";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "2400";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-161.015 -154.944 2.15764";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2400";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-167.765 -154.944 2.15764";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "2400";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-153.015 -154.944 2.15764";
+         rotation = "0.00297242 0.707102 0.707105 180.341";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/downsign0.dif";
+         interiorIndex = "0";
+         basePosition = "-153.015 -154.944 2.15764";
+         baseRotation = "0.00297242 0.707102 0.707105 180.341";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+            trackPos = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-160.179 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-160.179 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-2026.18 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-2026.18 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-160.196 -232.249 -25.04";
+         rotation = "1 0 0 0";
+         scale = "0.5 0.5 0.5";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/reappear_platform1.dif";
+         interiorIndex = "0";
+         basePosition = "-160.196 -232.249 -25.04";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.5 0.5 0.5";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-2026.18 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-2026.18 -232.244 -25";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-160.196 -232.249 -25.04";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-160.196 -232.249 -25.04";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-2026.18 -232.244 -25";
+         rotation = "1 0 0 0";
+         scale = "0.5 0.5 0.5";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/reappear_platform2.dif";
+         interiorIndex = "0";
+         basePosition = "-2026.18 -232.244 -25";
+         baseRotation = "1 0 0 0";
+         baseScale = "0.5 0.5 0.5";
+            trackTime = "167156578";
+            trackTarget = "-1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-156.86 -248.017 -36.5";
+            rotation = "0 0 1 154.126";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-156.86 -248.017 -28.5";
+            rotation = "0 0 1 154.126";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-160.381 -245.795 -17.3111";
+         rotation = "1 0 0 0";
+         scale = "0.487179 1 15.8779";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "500";
+      };
+      new PathedInterior(MustChange) {
+         position = "-159.456 -248.999 -36.25";
+         rotation = "0 0 1 154.126";
+         scale = "0.359114 0.5 0.5";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/finish_path.dif";
+         interiorIndex = "0";
+         basePosition = "-159.456 -248.999 -36.25";
+         baseRotation = "0 0 1 154.126";
+         baseScale = "0.359114 0.5 0.5";
+            trackTime = "167156578";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "3614";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-160.19 -246.238 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-144.129 -282.257 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "10";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-160.248 -241.128 -18.3111";
+         rotation = "1 0 0 0";
+         scale = "1.16076 1.83326 15.8779";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "1000";
+      };
+      new PathedInterior(MustChange) {
+         position = "-160.19 -246.238 -23.9";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/finishpad0.dif";
+         interiorIndex = "0";
+         basePosition = "-160.19 -246.238 -23.9";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "3201";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "4177";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-160.19 -246.238 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-144.129 -282.257 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "10";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-160.248 -241.128 -18.3111";
+         rotation = "1 0 0 0";
+         scale = "1.16076 1.83326 15.8779";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "1000";
+      };
+      new PathedInterior(MustChange) {
+         position = "-160.924 -246.109 -19.9";
+         rotation = "1 0 0 0";
+         scale = "1 0.938329 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/finishlinesign.dif";
+         interiorIndex = "2";
+         basePosition = "-160.924 -246.109 -19.9";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 0.938329 1";
+            trackTime = "167156578";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-160.19 -246.238 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-144.129 -282.257 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "10";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-160.248 -241.128 -18.3111";
+         rotation = "1 0 0 0";
+         scale = "1.16076 1.83326 15.8779";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "1000";
+      };
+      new PathedInterior(MustChange) {
+         position = "-160.391 -246.109 -18.6822";
+         rotation = "-0.000563155 0.707105 0.707108 179.935";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/finishlinesign.dif";
+         interiorIndex = "0";
+         basePosition = "-160.391 -246.109 -18.6822";
+         baseRotation = "-0.000563155 0.707105 0.707108 179.935";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "-160.19 -246.238 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-144.129 -282.257 -23.9";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "10";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "-160.248 -241.128 -18.3111";
+         rotation = "1 0 0 0";
+         scale = "1.16076 1.83326 15.8779";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-7.5000000 2.0000000 0.5000000 0.0000000 -4.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 15.0000000 0.0000000 0.0000000";
+            targetTime = "1000";
+      };
+      new PathedInterior(MustChange) {
+         position = "-160.686 -246.071 -17.75";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/movingshapes/finishlinesign.dif";
+         interiorIndex = "1";
+         basePosition = "-160.686 -246.071 -17.75";
+         baseRotation = "0 0 1 180";
+         baseScale = "1 1 1";
+            trackTime = "167156578";
+      };
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "4048";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "2345";
+   };
+   new Trigger() {
+      position = "-26.8365 36.0444 -2.89221";
+      rotation = "0 0 1 45.2637";
+      scale = "14.6945 1 13.7867";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Phew! This was my Original Place....";
+   };
+   new Trigger() {
+      position = "-65.75 3.5 0";
+      rotation = "1 0 0 0";
+      scale = "14.7235 24.3539 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Bumpers are also Moving";
+   };
+   new Trigger() {
+      position = "-117.75 3.5 0";
+      rotation = "1 0 0 0";
+      scale = "14.7235 24.3539 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Beware of the wind, Since these fans\nnow cover larger area..";
+   };
+   new Trigger() {
+      position = "-153.696 -70.9266 0.417418";
+      rotation = "1 0 0 0";
+      scale = "14.7235 24.3539 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "You would need a bit of effort to get those gems..";
+   };
+   new Trigger() {
+      position = "-168.11 -132.408 -2.0958";
+      rotation = "1 0 0 0";
+      scale = "14.7235 24.3539 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Hmm..Can you really trust a Deviating sign?";
+   };
+   new Trigger() {
+      position = "-167.527 -195.707 -27.7777";
+      rotation = "1 0 0 0";
+      scale = "14.7235 24.3539 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Hepp you managed your way out..\nNow Grab those gems on Disappearing Platforms..";
+   };
+   new Trigger() {
+      position = "-167.249 -230.757 -26.2373";
+      rotation = "1 0 0 0";
+      scale = "14.7235 10.9177 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Go Forward..The Finish is over there! Rush to it Quick!";
+   };
+   new Trigger() {
+      position = "-167.249 -244.535 -26.2373";
+      rotation = "1 0 0 0";
+      scale = "14.7235 7.88952 8.6429";
+      dataBlock = "HelpTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         text = "Ahh.. The Finish Fooled you..Hurry up before it whisks off again..";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         bonusTime = "0";
+         time = "0";
+         pad = "4312";
+   };
+   new Item() {
+      position = "-58.9006 -7.98863 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-60.9342 -11.7682 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-57.1049 -11.5755 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-61.1049 -3.57551 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-57.1049 -3.57551 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-63.7876 -10.6103 1.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-110.016 -56.0818 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-109.989 -24.3026 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-161.503 -73.9026 1.20878";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-151.467 -73.9397 1.20878";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-175.103 -74.1572 1.20878";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-173.017 -95.4878 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-151.017 -94.9878 1";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-163.864 -169.552 -27.043";
+      rotation = "1 0 0 0";
+      scale = "16.8538 13.7823 14.0557";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "-160.255 -182.003 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-158.814 -183.365 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.986 -183.878 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-161.719 -186.102 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-159.047 -185.151 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-161.611 -182.208 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-159.268 -180.633 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.721 -180.599 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-162.122 -180.909 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.049 -172.8 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.133 -179.838 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.453 -175.977 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-158.995 -169.636 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-162.081 -170.371 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-161.945 -177.169 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-158.944 -179.256 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-161.745 -179.83 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-159.334 -175.263 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.579 -170.792 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-160.93 -178.823 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-158.828 -177.15 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-161.43 -174.439 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-159.848 -178.451 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.992 -176.524 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.574 -172.512 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-151.972 -175.223 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.074 -176.896 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.723 -168.865 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.478 -173.336 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.889 -177.903 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.088 -177.329 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-155.089 -175.242 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-155.225 -168.444 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.139 -167.709 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.597 -174.05 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.277 -177.911 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.193 -170.873 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-155.266 -178.982 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.865 -178.672 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.412 -178.706 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.755 -180.281 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-152.191 -183.224 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.863 -184.175 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-154.13 -181.951 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-151.958 -181.438 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new StaticShape() {
+      position = "-153.399 -180.076 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "LandMine";
+         resetTime = "Default";
+   };
+   new Item() {
+      position = "-167.438 -174.682 -24.6654";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-162.259 -230.21 -24.8635";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-158.213 -234.257 -24.8945";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-52.6273 1.95672 2.12299";
+      rotation = "0 0 -1 41.8259";
+      scale = "1 1 1";
+      dataBlock = "SignCautionCaution";
+   };
+   new StaticShape() {
+      position = "-53.0324 -19.0339 2.25";
+      rotation = "0 0 1 227.074";
+      scale = "1 1 1";
+      dataBlock = "SignCautionDanger";
+   };
+   new Item() {
+      position = "-174.691 -69.1509 1.42052";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
