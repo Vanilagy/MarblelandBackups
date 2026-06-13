@@ -1,0 +1,302 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         name = "Swing";
+         startHelpText = "Let's swing this bad boy!";
+         type = "Custom";
+         desc = "Do it like in a mini-golf. Get in the hole and you're good.";
+         artist = "aalex17";
+         level = "1";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.199973";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.544508 0.439467 -0.714409";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+         scale = "1 1 1";
+         locked = "true";
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+   };
+   new SimGroup(CheckPoints) {
+
+      new StaticShape(StartPoint) {
+         position = "0 0 -1.8";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "269.703 88.9888 -50.4";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 1";
+      rotation = "1 0 0 0";
+      scale = "0.005 0.005 2";
+      interiorFile = "~/data/interiors/advanced/platform_circle.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new InteriorInstance() {
+      position = "-3 3 0";
+      rotation = "1 0 0 0";
+      scale = "1 0.9 1";
+      interiorFile = "~/data/interiors/advanced/trapdoor.dif";
+      showTerrainInside = "0";
+         locked = "true";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            msToNext = "1000";
+            smoothingType = "Linear";
+         };
+         new Marker() {
+            position = "0 0 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            msToNext = "2200";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "0 -7 4";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            msToNext = "300";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "0 -1 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            msToNext = "300";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "0 6 5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            msToNext = "1000000";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "0 7 4";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            msToNext = "1000";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior(MustChange) {
+         position = "-3 -33 -7.5";
+         rotation = "1 0 0 9.99997";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "marble/data/interiors/addon/pinball0.dif";
+         interiorIndex = "0";
+         basePosition = "-3 -33 -7.5";
+         baseRotation = "1 0 0 9.99997";
+         baseScale = "1 1 1";
+            initialTargetPosition = "-1";
+      };
+   };
+   new Trigger(start) {
+      position = "0 0 1.5";
+      rotation = "1 0 0 0";
+      scale = "0.1 0.1 0.5";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         time = "0";
+         pad = "1548";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.3213 82.9799 -8.08769";
+      rotation = "1 0 0 35";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/parts/tubes/tube_lintersect.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         penaltyTime = "0";
+         powerUp = "0";
+         time = "0";
+         pad = "2324";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new InteriorInstance() {
+      position = "1.16095 92.2911 -41.1659";
+      rotation = "0 1 0 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/parts/tubes/tube_long.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "1.06017 92.2173 -26.5401";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "ShockAbsorberItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "13.9087 104.735 -44.9924";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training1.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "34.0071 102.138 -44.8088";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/mb_Bridge.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "98.8459 100.597 -43.9088";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "95.2578 100.601 -44.9363";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "102.536 102.662 -43.0088";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "106.087 100.544 -42.1438";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "113.045 96.3401 -40.3303";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "109.494 98.4581 -41.1953";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/smallsquare3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "136.713 96.3286 -40.4303";
+      rotation = "0 0 1 90";
+      scale = "1 4 1";
+      interiorFile = "~/data/interiors/tube_grass.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "192.911 109.313 -40.2265";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/beginner/training_bumpers.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "207.914 101.296 -37.4359";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/parts/tubes/tube_turn.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "216.751 89.066 -37.4166";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/parts/tubes/tube_long.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "269.778 89.1943 -40.2618";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/intermediate/tornadotoss.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "269.737 88.9893 -50.4118";
+      rotation = "1 0 0 0";
+      scale = "1 1 20";
+      interiorFile = "~/data/interiors/addon/pipecap.dif";
+      showTerrainInside = "0";
+   };
+};
+//--- OBJECT WRITE END ---
