@@ -1,0 +1,3351 @@
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost.ifl"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0002.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0003.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0004.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0005.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0006.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0007.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0008.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0009.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0010.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0011.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0012.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0013.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0014.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0015.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0016.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0017.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0018.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0019.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0020.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0021.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0022.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0023.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0024.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0025.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0026.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0027.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0028.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0029.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0030.png"
+// @include "~/data/shapes/Mushroom Gorge/BoostPanel/Boost0031.png"
+// @include "~/data/shapes/Mushroom Gorge/CourseShadows.dts"
+// @include "~/data/README.txt"
+// @include "~/data/AUDIO INSTRUCTIONS.txt"
+// @include "~/data/sound/music/Mushroom Peaks SoundTrack (CTGP).json"
+datablock AudioDescription(AudioCustomCollision3d) {
+   volume   = 1.0;
+   isLooping = false; 
+   is3D      = true;
+   ReferenceDistance = 10.0;
+   MaxDistance       = 50.0;
+   type      = 4; 
+};
+datablock AudioProfile(BOING) {
+	filename    = "~/data/shapes/Mushroom Gorge/BoingSFX.wav";
+	description = AudioCustomCollision3d;
+	preload = true;
+};
+datablock AudioProfile(BOINGCAVE) {
+	filename    = "~/data/shapes/Mushroom Gorge/BoingCaveSFX.wav";
+	description = AudioCustomCollision3d;
+	preload = true;
+};
+datablock StaticShapeData(course) {
+	className = "course";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mG_complete.dts";
+};
+datablock StaticShapeData(BP) {
+	className = "BP";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/BoostPanel/mG_BoostPannels.dts";
+};
+function BP::onAdd(%this, %obj){
+	%obj.playThread(0, "BP");
+}
+datablock StaticShapeData(BPCol) {
+	className = "BPCol";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/BoostPanel/mG_BoostPannelsCol.dts";
+};
+datablock StaticShapeData(BPCol2) {
+	className = "BPCol2";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mG_BoostPannelsCol.dts";
+};
+datablock StaticShapeData(Red) {
+	className = "Red";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mushroom red with colisions.dts";
+};
+function Red::onAdd(%this, %obj){
+	%obj.playThread(0, "Red");
+}
+function Red::onCollision(%this, %obj, %col) {
+	%obj.playAudio(0, BOING);
+}
+function Red::onCollision(%this, %obj, %col, %vec, %speed) {
+   // %this = El datablock del StaticShape
+   // %obj  = El StaticShape clonado en el mapa
+   // %col  = La bola que impacta
+
+   if (%col.getClassName() $= "Marble" || %col.getClassName() $= "Player") {
+      
+      // 1. Validar que la bola no tenga un bloqueo de sonido activo para ESTE objeto específico
+      if (%col.bouncySoundBlock[%obj]) {
+         return; 
+      }
+
+      // 2. Obtener la velocidad lineal actual de la bola
+      %velocity = %col.getVelocity();
+      %velLen = VectorLen(%velocity);
+
+      // 3. Umbral de velocidad mínimo para evitar que suene si la bola está en reposo relativo
+      if (%velLen > 1.5) {
+         
+         // Activamos el bloqueo inmediatamente
+         %col.bouncySoundBlock[%obj] = true;
+
+         // Reproducir sonido posicionalmente
+         serverPlay3D(BOING, %obj.getTransform());
+
+         // 4. Ejecutar el bucle de verificación de salida de rango
+         %this.checkBallDeparture(%obj, %col);
+      }
+   }
+}
+
+function Red::checkBallDeparture(%this, %obj, %col) {
+   // Si la bola o el objeto dejaron de existir en la partida, abortar
+   if (!isObject(%obj) || !isObject(%col)) {
+      return;
+   }
+
+   // Calcular la distancia física real entre los centros de ambos objetos
+   %dist = VectorDist(%obj.getPosition(), %col.getPosition());
+
+   // OBTENER EL RADIO DE SEGURIDAD:
+   // Si el objeto mide por ejemplo 3 unidades de radio, sumamos 2 unidades de margen por la animación
+   // Ajusta el "5.0" dependiendo del tamaño real de tu StaticShape en el juego
+   %radioDeSeguridad = 5.0; 
+
+   if (%dist > %radioDeSeguridad) {
+      // Si la bola ya superó la distancia de la colisión animada, liberamos el bloqueo por completo
+      %col.bouncySoundBlock[%obj] = false;
+   } else {
+      // Si sigue demasiado cerca, reevaluar en 100 milisegundos sin reproducir ruidos
+      %this.schedule(100, "checkBallDeparture", %obj, %col);
+   }
+}
+
+
+// Función auxiliar para desbloquear la colisión con ese objeto específico
+function Marble::resetHitLock(%this, %obj) {
+   %this.hasHitObject[%obj] = false;
+}
+
+function Red::resetSoundCooldown(%this) {
+   %this.soundCooldown = false;
+}
+datablock StaticShapeData(RedTrunk) {
+	className = "RedTrunk";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mushroom red Trunk with colisions.dts";
+};
+datablock StaticShapeData(Green) {
+	className = "Green";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mushroom green.dts";
+};
+datablock StaticShapeData(SunPlane) {
+	className = "SunPlane";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/sun.dts";
+};
+function syncObjectRotationWithCamera(%shapeId)
+{
+    if (!isObject(%shapeId))
+        return;
+
+    %client = LocalClientConnection;
+    if (isObject(%client))
+    {
+        %controlObj = %client.getControlObject();
+        
+        if (isObject(%controlObj))
+        {
+            %shapePos = %shapeId.getPosition();
+            %targetPos = "";
+
+            if (%controlObj.getClassName() $= "Marble")
+            {
+                %targetPos = %controlObj.getPosition();
+            }
+            else
+            {
+                %targetPos = getWords(%controlObj.getTransform(), 0, 2);
+            }
+
+            if (%targetPos !$= "")
+            {
+                %dirX = getWord(%targetPos, 0) - getWord(%shapePos, 0);
+                %dirY = getWord(%targetPos, 1) - getWord(%shapePos, 1);
+                %dirZ = getWord(%targetPos, 2) - getWord(%shapePos, 2);
+
+                if (%dirX == 0 && %dirY == 0)
+                    %dirY = 0.1;
+
+                // --- CÁLCULO HORIZONTAL (Yaw) ---
+                %yaw = mAtan(%dirX, %dirY);
+
+                // --- CÁLCULO VERTICAL (Pitch) ---
+                %dist2D = mSqrt((%dirX * %dirX) + (%dirY * %dirY));
+                %pitch = mAtan(%dirZ, %dist2D);
+
+                // CORRECCIÓN MATEMÁTICA DE AMBOS EJES (Horizontal y Vertical)
+                if (%controlObj.getClassName() $= "Marble")
+                {
+                    // Eje horizontal (Ya corregido anteriormente)
+                    %yaw = (-%yaw) + 3.14159265; 
+                    
+                    // CORRECCIÓN: Invertimos el signo del Pitch para arreglar el eje vertical
+                    %pitch = -%pitch; 
+                }
+                else
+                {
+                    // Ajuste para el modo cámara libre
+                    %yaw = -%yaw;
+                    %pitch = %pitch; // Invertido simétricamente también en modo libre si fallaba
+                }
+
+                // Creamos la matriz combinada (Pitch, Roll, Yaw)
+                %eulerRot = %pitch SPC "0" SPC %yaw;
+                %matrix = MatrixCreateFromEuler(%eulerRot);
+                %finalRot = getWords(%matrix, 3, 6);
+
+                %shapeId.setTransform(%shapePos SPC %finalRot);
+            }
+        }
+    }
+
+    %shapeId.cameraSyncSchedule = schedule(32, %shapeId, "syncObjectRotationWithCamera", %shapeId);
+}
+
+function SunPlane::onAdd(%this, %obj)
+{
+    syncObjectRotationWithCamera(%obj);
+}
+
+function TuStaticShapeData::onRemove(%this, %obj)
+{
+    // Limpieza para evitar fugas de memoria al destruir el objeto
+    cancel(%obj.cameraSyncSchedule);
+}
+datablock StaticShapeData(CourseMushrooms) {
+	className = "CourseMushrooms";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/mG_Mushrooms.dts";
+};
+datablock StaticShapeData(DecorativeRedMushrooms) {
+	className = "DecorativeRedMushrooms";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/RedMushrooms.dts";
+};
+function DecorativeRedMushrooms::onAdd(%this, %obj){
+	%obj.playThread(0, "R");
+}
+datablock StaticShapeData(Trees) {
+	className = "Trees";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/Trees.dts";
+};
+datablock StaticShapeData(MoreDecoratives) {
+	className = "MoreDecoratives";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/MoreDecoratives.dts";
+};
+datablock StaticShapeData(skyModel) {
+	className = "skyModel";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/sky.dts";
+};
+function skyModel::onAdd(%this, %obj){
+	%obj.playThread(0, "S");
+}
+datablock StaticShapeData(CaveRed) {
+	className = "CaveRed";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/CaveMushroomRed.dts";
+};
+function CaveRed::onCollision(%this, %obj, %col, %vec, %speed) {
+   // %this = El datablock del StaticShape
+   // %obj  = El StaticShape clonado en el mapa
+   // %col  = La bola que impacta
+
+   if (%col.getClassName() $= "Marble" || %col.getClassName() $= "Player") {
+      
+      // 1. Validar que la bola no tenga un bloqueo de sonido activo para ESTE objeto específico
+      if (%col.bouncySoundBlock[%obj]) {
+         return; 
+      }
+
+      // 2. Obtener la velocidad lineal actual de la bola
+      %velocity = %col.getVelocity();
+      %velLen = VectorLen(%velocity);
+
+      // 3. Umbral de velocidad mínimo para evitar que suene si la bola está en reposo relativo
+      if (%velLen > 1.5) {
+         
+         // Activamos el bloqueo inmediatamente
+         %col.bouncySoundBlock[%obj] = true;
+
+         // Reproducir sonido posicionalmente
+         serverPlay3D(BOINGCAVE, %obj.getTransform());
+
+         // 4. Ejecutar el bucle de verificación de salida de rango
+         %this.checkBallDeparture(%obj, %col);
+      }
+   }
+}
+
+function CaveRed::checkBallDeparture(%this, %obj, %col) {
+   // Si la bola o el objeto dejaron de existir en la partida, abortar
+   if (!isObject(%obj) || !isObject(%col)) {
+      return;
+   }
+
+   // Calcular la distancia física real entre los centros de ambos objetos
+   %dist = VectorDist(%obj.getPosition(), %col.getPosition());
+
+   // OBTENER EL RADIO DE SEGURIDAD:
+   // Si el objeto mide por ejemplo 3 unidades de radio, sumamos 2 unidades de margen por la animación
+   // Ajusta el "5.0" dependiendo del tamaño real de tu StaticShape en el juego
+   %radioDeSeguridad = 5.0; 
+
+   if (%dist > %radioDeSeguridad) {
+      // Si la bola ya superó la distancia de la colisión animada, liberamos el bloqueo por completo
+      %col.bouncySoundBlock[%obj] = false;
+   } else {
+      // Si sigue demasiado cerca, reevaluar en 100 milisegundos sin reproducir ruidos
+      %this.schedule(100, "checkBallDeparture", %obj, %col);
+   }
+}
+
+
+// Función auxiliar para desbloquear la colisión con ese objeto específico
+function Marble::resetHitLock(%this, %obj) {
+   %this.hasHitObject[%obj] = false;
+}
+
+function CaveRed::resetSoundCooldown(%this) {
+   %this.soundCooldown = false;
+}
+function CaveRed::onAdd(%this, %obj){
+	%obj.playThread(0, "CR");
+}
+datablock StaticShapeData(CaveGreen) {
+	className = "CaveGreen";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/CaveMushroom.dts";
+};
+datablock StaticShapeData(CaveRStatic) {
+	className = "CaveRStatic";
+	superCategory = "Mushroom Gorge";
+	shapeFile = "~/data/shapes/Mushroom Gorge/CaveMushroomRedTrunk.dts";
+};
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "JRubik";
+         awesomeHint = "If you see the opportunity, go for the boost panels path!";
+         awesomeTime = "80000";
+         customRadarRule = "0";
+         desc = "Mushroom Gorge, from Mario kart Wii (no original Soundtrack).";
+         eastereggHint = "No";
+         eggHint = "No";
+         game = "Platinum";
+         gameMode = "null laps";
+         generalHint = "Beat the level with the best time you can do!";
+         goldTime = "210000";
+         lapsNumber = "3";
+         music = "Mushroom Peaks SoundTrack (CTGP).ogg";
+         name = "Mushroom Gorge";
+         platinumTime = "120000";
+         startHelpText = "Welcome to Mushroom Gorge!";
+         Time = "600000";
+         type = "Custom";
+         ultimateHint = "there are a couple of mushrooms at the start that you can use as a shortcut ;)";
+         ultimateTime = "110000";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      materialList = "~/data/skies/Beginner/Beginner_Sky.dml";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "10000";
+      fogDistance = "900";
+      fogColor = "0.6 0.6 0.6 1";
+      fogStorm1 = "0";
+      fogStorm2 = "0";
+      fogStorm3 = "0";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      fogVolumeColor1 = "128 128 128 0";
+      fogVolumeColor2 = "128 128 128 4e-06";
+      fogVolumeColor3 = "128 128 128 1.44355e+07";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      SkySolidColor = "0 0 0 1";
+      useSkyTextures = "0";
+      renderBottomTexture = "0";
+      noRenderBans = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1 1 1 1";
+      ambient = "1 1 1 1";
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "3.20001 117.33 -9.9";
+         rotation = "0.128171 0.128172 -0.983435 90.9571";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath2) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "1.67761 124.984 -9.9";
+         rotation = "0.0860331 0.128758 -0.987937 113.141";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath3) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-2.65789 131.472 -9.9";
+         rotation = "-0.0534557 -0.129053 0.990196 224.602";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath4) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-9.14639 135.808 -9.9";
+         rotation = "-0.0256987 -0.129195 0.991286 202.309";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath5) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-16.8001 137.33 -9.9";
+         rotation = "-1.6382e-07 -0.129238 0.991614 180";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath6) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-24.4538 135.808 -9.9";
+         rotation = "0.0256983 -0.129195 0.991286 157.691";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath7";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath7) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-30.9421 131.472 -9.9";
+         rotation = "0.0534553 -0.129053 0.990196 135.398";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath8";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath8) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-190.083 9.93892 -9.31883";
+         rotation = "0.0860336 -0.128758 0.987937 113.141";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath9";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath9) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-191.605 2.28523 -9.31883";
+         rotation = "0.128172 -0.128172 0.983435 90.9571";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath10";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath10) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-190.083 -5.36847 -9.31883";
+         rotation = "0.189899 -0.126886 0.97357 68.9251";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath11";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath11) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-185.747 -11.8569 -9.31883";
+         rotation = "0.297847 -0.123372 0.946608 47.266";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath12";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath12) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-179.259 -16.1925 -9.31883";
+         rotation = "0.544828 -0.108372 0.831516 26.9063";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath13";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath13) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-171.605 -17.7149 -9.31883";
+         rotation = "1 2.23319e-06 -1.71348e-05 14.851";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath14";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath14) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-163.951 -16.1925 -9.31883";
+         rotation = "0.544828 0.108372 -0.831515 26.9063";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath15";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath15) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-157.463 -11.8569 -9.31883";
+         rotation = "0.297847 0.123372 -0.946608 47.2659";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath16";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+      new StaticShape(CameraPath16) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-153.127 -5.36844 -9.31883";
+         rotation = "0.189899 0.126886 -0.97357 68.9251";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "course";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "BP";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-14.0925 73.8309 -40.6901";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "red";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-21.501 99.2783 -36.3695";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "red";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-130.177 204.944 -25.1171";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "red";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-176.431 189.832 -24.4457";
+      rotation = "-0.919003 -0.278776 -0.278777 94.8336";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "red";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-36.8656 170.938 -34.9962";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.443485 0.443485 0.443485";
+      dataBlock = "red";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "BPCol2";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CourseMushrooms";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-152.85 197.548 -23.1175";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "green";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/CourseShadows2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/CourseShadowscave.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/Courselightscave.dts";
+      computeConvexHulls = "0";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "DecorativeRedMushrooms";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Trees";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "MoreDecoratives";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "skyModel";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-211.587 62.1576 -25.2794";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-147.861 54.4423 -19.9699";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveGreen";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-36.8656 170.938 -34.9962";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.54233 0.54233 0.54233";
+      dataBlock = "RedTrunk";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-14.0925 73.8309 -40.6901";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.54233 0.54233 0.54233";
+      dataBlock = "RedTrunk";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-21.501 99.2783 -36.3695";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.54233 0.54233 0.54233";
+      dataBlock = "RedTrunk";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-130.177 204.944 -25.1171";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.54233 0.54233 0.54233";
+      dataBlock = "RedTrunk";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-176.431 189.832 -24.4457";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.54233 0.54233 0.54233";
+      dataBlock = "RedTrunk";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-191.107 62.2862 -23.465";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-201.886 42.9928 -25.4369";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-183.658 25.3742 -26.8456";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveGreen";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-163.68 13.46 -29.54";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveGreen";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-83.5707 -13.2555 -34.4463";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-115.086 -14.1506 -32.6631";
+      rotation = "-0.990438 -0.0975501 -0.0975497 90.5507";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-104.954 4.22417 -32.6631";
+      rotation = "-0.990438 -0.0975501 -0.0975497 90.5507";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-136.649 0.278874 -32.6631";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-125.432 40.878 -22.9733";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-169.919 62.4298 -20.2605";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-97.0965 24.2226 -27.9188";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-71.6946 6.66999 -33.8627";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.4 0.4 0.4";
+      dataBlock = "CaveRed";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-83.5707 -13.2555 -34.4463";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-71.6946 6.66999 -33.8627";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-97.0965 24.2226 -27.9188";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-104.954 4.22417 -32.6631";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-115.086 -14.1506 -32.6631";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-136.649 0.278874 -32.6631";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-125.432 40.878 -22.9733";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-211.587 62.1576 -25.2794";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-201.886 42.9928 -25.4369";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-191.107 62.2862 -23.465";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-169.919 62.4298 -20.2605";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "CaveRStatic";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/moreshadows.dts";
+      computeConvexHulls = "0";
+   };
+   new Trigger(BP1) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-43.0723 155.26 -33.4844";
+      rotation = "1 0 0 0";
+      scale = "16.3244 3.67096 1.71074";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "1";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "0 17 12";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "104.228 205.307 -61.3223";
+      rotation = "0.0694775 0.705397 0.705399 187.949";
+      scale = "1 1.44437 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-51.507 207.937 -102.358";
+      rotation = "0.42719 0.639338 0.63934 226.263";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-34.7213 199.396 -88.6736";
+      rotation = "0.427189 0.639337 0.639342 226.263";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-35.9375 227.454 -96.8372";
+      rotation = "0.427189 0.639337 0.639342 226.263";
+      scale = "0.7 1.01902 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-98.9781 233.682 -101.363";
+      rotation = "0.281081 0.678597 0.678601 211.399";
+      scale = "0.7 1.01902 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-87.1171 208.225 -93.199";
+      rotation = "0.281081 0.678597 0.678601 211.399";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-105.894 209.693 -106.883";
+      rotation = "0.281083 0.678598 0.678599 211.399";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "38.9937 266.86 -65.8477";
+      rotation = "-0.069474 0.705397 0.705399 172.052";
+      scale = "1 1.44437 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "172.39 -76.5715 -97.3302";
+      rotation = "-1 -8.28519e-07 -7.0691e-06 89.9998";
+      scale = "0.7 1.01902 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "146.002 -66.9575 -89.1662";
+      rotation = "-1 -8.28519e-07 -7.0691e-06 89.9998";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "160.318 -54.7183 -102.85";
+      rotation = "-1 1.42643e-06 -6.04579e-06 90.0001";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "98.289 -197.592 -61.8149";
+      rotation = "-0.797735 -0.426393 -0.42639 102.839";
+      scale = "1 1.44437 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "82.9417 -60.2925 -95.6047";
+      rotation = "-1 -8.28519e-07 -7.0691e-06 89.9998";
+      scale = "0.7 0.888814 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-26.7083 -186.22 -38.0444";
+      rotation = "-0.577349 0.577353 0.577349 120";
+      scale = "1 1.65226 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-7.17825 -70.6132 -98.5964";
+      rotation = "-0.962636 -0.191486 -0.191479 92.1815";
+      scale = "0.7 1.11878 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-56.5634 -179.608 -103.616";
+      rotation = "0.577347 0.577355 0.577349 240";
+      scale = "0.7 1.11878 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "69.3547 -226.29 -43.0642";
+      rotation = "-0.962637 0.191483 0.191478 92.1813";
+      scale = "1 1.65226 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "142.131 168.702 -42.0364";
+      rotation = "-0.72683 -0.485652 -0.485654 107.979";
+      scale = "1 1.65226 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "95.4494 42.7835 -102.588";
+      rotation = "-6.43267e-06 0.707108 0.707106 180";
+      scale = "0.7 1.11878 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "94.7818 -111.202 -56.4227";
+      rotation = "-0.962637 -0.191479 -0.191483 92.1814";
+      scale = "1 1.65226 1";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom red low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-20.3793 -144.032 -116.975";
+      rotation = "0.281079 0.678601 0.678598 211.4";
+      scale = "0.7 1.11878 0.7";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom green low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-113.047 206.696 -23.1227";
+      rotation = "0 0 -1 90.0002";
+      scale = "3.75261 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "-15 -4 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-114.964 210.888 -23.1019";
+      rotation = "0 0 -1 90.0002";
+      scale = "3.75261 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "-15 -4 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-117.285 215.193 -22.8441";
+      rotation = "0 0 -1 90.0002";
+      scale = "3.75261 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "-15 -4 10";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-154.081 158.276 -26.5778";
+      rotation = "1 0 0 0";
+      scale = "6.79199 8.5823 3.44473";
+      dataBlock = "UsePowerupTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         powerup = "SuperSpeedItem";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-178.36 165.733 -28.6177";
+      rotation = "1 0 0 0";
+      scale = "4.83249 8.5823 3.44473";
+      dataBlock = "UsePowerupTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+         powerup = "SuperSpeedItem";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-227.09 70.7005 -21.8621";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -9 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-225.398 73.3957 -21.5331";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -8 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-223.331 76.3064 -21.83";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -8 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-228.287 69.2319 -21.2744";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -10 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-230.742 65.9119 -21.1777";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -10 10";
+   };
+   new Trigger(BP2) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-232.32 63.6554 -20.9617";
+      rotation = "1 0 0 0";
+      scale = "2.63555 2.84026 3.39538";
+      dataBlock = "SetVelocityTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 0.8660000 0.5000000 0.0000000 -0.5000000 0.8660000 0.0000000 0.0000000 0.0000000 1.0000000";
+         ignoreX = "0";
+         ignoreY = "0";
+         ignoreZ = "0";
+         velocity = "15 -10 10";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-298.203 238.188 -44.0849";
+      rotation = "1 0 0 0";
+      scale = "369.66 410.39 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-3.32628 215.284 174.721";
+      rotation = "-1 0 0 90.0002";
+      scale = "369.66 410.39 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "85.3518 214.33 175.917";
+      rotation = "-0.57735 0.57735 0.577352 120";
+      scale = "369.66 410.39 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-176.779 -155.45 164.05";
+      rotation = "-1 0 0 90.0002";
+      scale = "369.66 410.39 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-800.552 804.033 -177.738";
+      rotation = "1 0 0 0";
+      scale = "1483.63 1637.25 543.129";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-122.716 148 -140.436";
+      rotation = "1 0 0 0";
+      scale = "0.742965 0.742965 0.742965";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-94.3244 261.773 -86.1061";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-195.199 406.973 -82.9026";
+      rotation = "0 0 -1 11.2501";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "46.0527 336.75 -93.6079";
+      rotation = "0 0 1 22.5001";
+      scale = "0.5 0.5 0.544113";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "75.9028 212.078 -108.994";
+      rotation = "0 0 1 90.0002";
+      scale = "0.565305 0.540105 0.594924";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "137.558 -3.80132 -75.4479";
+      rotation = "0 0 1 90.0002";
+      scale = "0.268304 0.3 0.3";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "120.023 -338.461 -77.4157";
+      rotation = "0 0 1 191.25";
+      scale = "0.5 0.5 0.544113";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "241.531 -212.725 -90.104";
+      rotation = "0 0 1 146.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "408.842 146.515 -90.4032";
+      rotation = "0 0 1 90.0001";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/Mountains1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-163.224 104.895 -79.3411";
+      rotation = "0 0 -1 90.0002";
+      scale = "0.6 0.6 0.6";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-263.555 195.373 -70.3984";
+      rotation = "0 0 -1 90.0002";
+      scale = "0.451563 0.417121 0.520043";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-190.491 130.926 -68.3465";
+      rotation = "0 0 -1 45.0001";
+      scale = "0.6 0.6 0.6";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-165.92 179.81 -74.2187";
+      rotation = "0 0 -1 33.7501";
+      scale = "0.528739 0.523563 0.557819";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "126.53 188.035 -121.167";
+      rotation = "0 0 1 123.75";
+      scale = "0.565305 0.540105 0.548963";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "75.0487 304.869 -98.0301";
+      rotation = "0 0 1 22.5001";
+      scale = "0.742965 0.742965 0.742965";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "124.06 396.961 -83.286";
+      rotation = "0 0 1 45.0002";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "272.321 -313.83 -89.1907";
+      rotation = "0 0 1 157.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "207.807 -437.806 -99.1897";
+      rotation = "0 0 1 168.75";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "158.764 5.99135 -95.443";
+      rotation = "0 0 1 101.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "275.979 -376.461 -91.4775";
+      rotation = "0 0 1 157.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "45.7756 -177.091 -107.022";
+      rotation = "0 0 1 180";
+      scale = "0.565305 0.540105 0.548963";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "345.981 -308.952 -82.6084";
+      rotation = "0 0 1 135";
+      scale = "0.565305 0.540105 0.548963";
+      shapeName = "~/data/shapes/Mushroom Gorge/BGdeco2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-191.073 233.728 -90.6055";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-52.0136 3.31804 -94.1338";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-51.7782 -1.32526 -93.8002";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-49.6882 189.985 -90.4692";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-75.003 204.897 -89.6286";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-74.9024 205.362 -89.5171";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/CourseFog.dts";
+      computeConvexHulls = "0";
+   };
+   new ScriptObject() {
+         file = "-1";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-211.546 231.435 -91.6601";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-274.635 242.726 -97.555";
+      rotation = "1 0 0 0";
+      scale = "0.6 0.6 0.6";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-42.9493 166.919 -92.9348";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_2.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "34.3887 97.0583 -97.0326";
+      rotation = "0 0 1 67.5002";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "80.4256 -72.8791 -96.7032";
+      rotation = "0 0 1 168.75";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-61.6016 70.0721 -97.1773";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-4.95921 -119.474 -97.446";
+      rotation = "0 0 1 236.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "101.628 26.0497 -96.8174";
+      rotation = "0 0 1 101.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-84.0823 -87.5822 -96.2079";
+      rotation = "0 0 -1 67.5002";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-60.9492 18.4613 -95.7018";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-126.113 17.0683 -94.4269";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-59.6981 50.798 -83.4507";
+      rotation = "0 0 1 45.0001";
+      scale = "0.5 0.5 0.411557";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-121.059 -144.433 -92.8187";
+      rotation = "0 0 -1 67.5002";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "59.1058 -42.0439 -92.8112";
+      rotation = "0 0 1 101.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-63.0285 88.5176 -97.3148";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-81.2975 97.2022 -97.4321";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-82.3633 123.353 -96.8488";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "89.681 191.604 -89.5207";
+      rotation = "0 0 1 101.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-58.6768 197.348 -90.1688";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-77.4882 76.0531 -90.5011";
+      rotation = "0 0 -1 67.501";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-107.097 44.5526 -93.6487";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "65.4059 17.6681 -93.8755";
+      rotation = "0 0 1 112.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-128.184 270.563 -90.1784";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-141.568 288.026 -88.0485";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-121.336 246.034 -78.8777";
+      rotation = "1 0 0 0";
+      scale = "0.403253 0.372779 0.4164";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-135.442 250.202 -87.2906";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-158.021 217.167 -78.7709";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-156.91 248.974 -84.2304";
+      rotation = "1 0 0 0";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-137.786 246.952 -77.0307";
+      rotation = "1 0 0 0";
+      scale = "0.403253 0.372779 0.4164";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-83.2602 251.866 -79.9893";
+      rotation = "1 0 0 0";
+      scale = "0.403253 0.372779 0.4164";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-280.969 240.862 -72.7164";
+      rotation = "1 0 0 0";
+      scale = "0.403253 0.372779 0.4164";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-275.946 241.468 -73.4498";
+      rotation = "1 0 0 0";
+      scale = "0.403253 0.372779 0.4164";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_1.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-14.6329 249.789 -90.1256";
+      rotation = "0 0 1 78.7502";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-46.4675 240.123 -89.6872";
+      rotation = "0 0 1 45.0001";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-25.6637 173.988 -87.4197";
+      rotation = "0 0 1 191.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-71.3599 148.878 -88.1695";
+      rotation = "0 0 -1 101.25";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-102.819 158.404 -89.7321";
+      rotation = "0 0 -1 56.2501";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-27.2139 161.929 -80.7561";
+      rotation = "0 0 1 157.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-16.6314 171.083 -80.7014";
+      rotation = "0 0 1 157.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-52.5052 207.532 -82.6138";
+      rotation = "0 0 1 157.5";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-71.6383 157.255 -82.899";
+      rotation = "0 0 1 213.75";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "63.2715 51.7518 -97.4229";
+      rotation = "0 0 1 135";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "32.1273 54.7014 -80.5038";
+      rotation = "0 0 1 101.25";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-32.3931 -12.9177 -97.1106";
+      rotation = "0 0 -1 78.7497";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-31.2823 4.68409 -80.5026";
+      rotation = "0 0 -1 67.4995";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-1.67665 47.916 -97.1596";
+      rotation = "0 0 1 56.2498";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "19.428 33.1979 -97.1152";
+      rotation = "0 0 1 78.7499";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-44.312 -16.3654 -80.8586";
+      rotation = "0 0 -1 11.2495";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "11.4836 -12.5007 -78.9063";
+      rotation = "0 0 1 67.4999";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "33.1148 -30.5745 -78.096";
+      rotation = "0 0 1 101.25";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "6.69893 -29.0754 -77.9049";
+      rotation = "0 0 1 56.2499";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-21.2527 -140.436 -76.2302";
+      rotation = "0 0 1 236.25";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-12.1434 -131.466 -76.3304";
+      rotation = "0 0 1 213.75";
+      scale = "0.336396 0.351939 0.359146";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "2.31918 -146.884 -92.65";
+      rotation = "0 0 1 213.75";
+      scale = "0.5 0.5 0.5";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom_plant_3.dts";
+      computeConvexHulls = "0";
+   };
+   new SimGroup(LapsGroup) {
+
+      new Trigger(LC) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-5.98427 4.93377 -38.7505";
+         rotation = "1 0 0 0";
+         scale = "21.5875 1 13.1568";
+         dataBlock = "LapsCounterTrigger";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(1) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-16.8433 37.5712 -43.5235";
+         rotation = "1 0 0 0";
+         scale = "44.4225 1 37.0192";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "1";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(2) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-7.008 108.649 -34.6404";
+         rotation = "0 0 -1 90.0002";
+         scale = "36.7626 1.38415 20.0769";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "2";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(3) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-62.0951 150.649 -38.1649";
+         rotation = "1 0 0 0";
+         scale = "48.1605 1 24.8811";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "3";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(4) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-85.0284 194.284 -30.5312";
+         rotation = "0 0 1 236.25";
+         scale = "54.2219 1 24.8811";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "4";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(6) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-241.465 141.615 -20.7827";
+         rotation = "0 0 1 236.25";
+         scale = "37.9709 1 24.8811";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "6";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(7) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-231.855 58.4905 -28.6466";
+         rotation = "0 0 -1 56.2501";
+         scale = "29.6085 1 24.8811";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "7";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(8) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-179.52 -8.0174 -48.6384";
+         rotation = "0 0 -1 56.2501";
+         scale = "46.3097 1 52.9399";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "8";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(9) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-74.4935 -54.1145 -40.2315";
+         rotation = "0 0 -1 33.7501";
+         scale = "53.5562 1.1504 24.8811";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "9";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(8) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-149.642 31.5468 -48.0736";
+         rotation = "0 0 -1 56.2501";
+         scale = "46.3097 1 52.9399";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "8";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(2) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-36.9057 118.464 -31.1458";
+         rotation = "0 0 1 0.0395647";
+         scale = "25.5008 1.38415 20.0769";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "2";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+      new Trigger(5) {
+         _moving = "0";
+         _pathSyncId = "-1";
+         _pathRngStart = "0";
+         _pathPosition = "0";
+         trail = "0";
+         attachId = "-1";
+         position = "-176.618 120.365 -29.7326";
+         rotation = "0 0 -1 89.9999";
+         scale = "117.117 21.0853 38.1334";
+         dataBlock = "LapsCheckpoint";
+         polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+            checkpointNumber = "5";
+            customSpawnPoint = "0";
+            enableRespawning = "1";
+            SpawnPoint = "0.5 -0.5 0.5 1 0 0 0";
+      };
+   };
+   new StaticShape(StartPoint) {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "4.79968 3.56114 -38.2258";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-315.237 171.239 17.4148";
+      rotation = "-1 0 0 90.0002";
+      scale = "0.2 0.287476 0.2";
+      shapeName = "~/data/shapes/Mushroom Gorge/mushroom blue low poli.dts";
+      computeConvexHulls = "0";
+   };
+   new StaticShape() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-395.305 295.901 50.406";
+      rotation = "0.0377194 -0.0791715 0.996147 129.223";
+      scale = "22 22 22";
+      dataBlock = "SunPlane";
+         cameraSyncSchedule = "30354";
+   };
+   new TSStatic() {
+      _moving = "0";
+      _pathSyncId = "-1";
+      _pathRngStart = "0";
+      _pathPosition = "0";
+      trail = "0";
+      attachId = "-1";
+      position = "-32.9998 66.0762 -30.7716";
+      rotation = "1 0 0 0";
+      scale = "3.57545 3.94906 8.24147";
+      shapeName = "~/data/shapes/Mushroom Gorge/FogArch.dts";
+      computeConvexHulls = "0";
+   };
+};
+//--- OBJECT WRITE END ---
