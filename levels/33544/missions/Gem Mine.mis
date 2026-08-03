@@ -1,0 +1,334 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Advanced";
+	     level = "3";
+	     name = "Gem Mine";
+         artist = "Aayrl";
+         desc = "Be careful when collecting gems in this mine, the rock is very muddy!";
+         startHelpText = "Try to keep airborne to keep full control.";
+         goldTime = "60000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "Crawling In Grass.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Day/day_sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -265481509622188020000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -333834609190347200000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1.000000";
+   };
+   new Sun() {
+      direction = "0.433884 0.614021 -0.659336";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "1.4103 -13.4524 -15.1619";
+      rotation = "0 0 -1 89.9544";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/GemMine.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "-15.1521 -15.6429 -14.88";
+      rotation = "0 0 1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "39.1724 126.727 -23.05";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+      };
+   };
+   new Trigger(dBounds) {
+      position = "-18.4364 131.826 -24.4";
+      rotation = "1 0 0 0";
+      scale = "90 160 35";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "39.2295 120.33 -14.2778";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "1507";
+         bonusTime = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "6315";
+         bonusTime = "0";
+   };
+   new ScriptObject() {
+         gemCount = "0";
+         time = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+         pad = "1756";
+         bonusTime = "0";
+   };
+   new Item() {
+      position = "31.336 42.8248 -18.2668";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23 4.09567 -14.6288";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "37.9949 10.7419 -18.776";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "63.1339 4.40504 -18.702";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "63.2628 56.9029 -18.7206";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "39.0684 80.5306 -18.7149";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "24.5331 64.7079 -18.7392";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-8.79934 44.9802 -22.9436";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "22.9307 30.95 -22.9518";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.7896 -8.5197 -18.6576";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7.65085 14.5538 -18.6371";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "27.5665 47.6895 -18.7168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "35.3323 47.7734 -18.7168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "35.1953 38.565 -18.7168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "27.8025 38.9064 -18.7168";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "16.1199 -16.7618 -14.2455";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "27.3509 27.2381 -20.0785";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "38.0971 120.343 -12.8915";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

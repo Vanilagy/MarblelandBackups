@@ -1,0 +1,275 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Advanced";
+	     level = "15";
+	     name = "Power Grid";
+         artist = "Aayrl";
+         desc = "Collect the gems, but be mindful of the electrical lines.";
+         startHelpText = "";
+         goldTime = "60000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "Jungle Jam 2.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.20959e-007 1.89856";
+      fogVolume2 = "-1 -1 9.29061e-043";
+      fogVolume3 = "-1 5.60519e-045 1.4013e-045";
+      materialList = "~/data/skies/Generic/Day/day_sky.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 0.000000";
+   };
+   new Sun() {
+      direction = "0.57735 0.57735 -0.57735";
+      color = "0.600000 0.600000 0.600000 1.000000";
+      ambient = "0.400000 0.400000 0.400000 1.000000";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/powergrid2.dif";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "31.9869 6.01186 12";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "-64.0022 58.0232 -20";
+      rotation = "0 0 -1 90";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Item() {
+      position = "16 0.75 7.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-16 11.25 7.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-64 11.25 9.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-64 37.25 -4.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-32 27.25 -4.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-16 37.25 -6.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "32 27.25 -4.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "32 63.25 -22.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0 53.25 -22.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-48.75 52.75 -24.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(Bounds) {
+      position = "-68.4992 71.7363 -31.4";
+      rotation = "1 0 0 0";
+      scale = "105 80 130";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-63.992 57.851 -23.0846";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-31.94 57.9036 -26.8616";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger(SPARKD) {
+      position = "-7.65395 63.7227 -24.968";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SPARKD) {
+      position = "15.9407 53.2887 -25.0617";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SPARKD) {
+      position = "1.68051 37.7038 -6.06808";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SPARKD) {
+      position = "-38.5279 1.18803 7.12975";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Trigger(SPARKD) {
+      position = "7.4153 11.7423 6.83809";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+};
+//--- OBJECT WRITE END ---

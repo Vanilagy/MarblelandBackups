@@ -1,0 +1,1779 @@
+//--- INFO BEGIN ---
+//Mission information for the level select. Generated from the MissionInfo object except with extra goodies.
+
+//--- INFO END ---
+//Don't continue loading if this just wants the mission info
+if ($loadingMissionInfo) return;
+//--- CLIENT SCRIPTS BEGIN ---
+//Put any scripts that will be loaded on all clients (in MP / SP) here.
+// Note: these will be loaded by dedicated servers too, so be sure to test for
+// $Server::Dedicated before creating any GUI.
+
+function clientCbOnMissionReset(%client) {
+	if ($Game::Menu)
+		return;
+	activatePackage(Autumn);
+	
+	// PG_HuntCounter.setBitmap($userMods @ "/data/interiors_daniel741852/hell/toobad.png",true);
+	// PG_HuntCounter.setVisible(true);
+	// PG_HuntCounter.timer = PG_HuntCounter.schedule(3500,"setVisible",true);
+}
+
+function clientCbOnMissionEnded() {
+	deactivatePackage(Autumn);
+}
+
+package Autumn {
+	function SceneObject::getSurfaceVelocity(%this, %marble, %contact, %dist) {
+		if ((strpos(%this.getFieldValue("interiorFile"), "Autumn's Apathy0.dif") != -1) ||
+			(strpos(%this.getFieldValue("interiorFile"), "Autumn's Apathy0.dif") != -1)) {
+			if ($ripperoni) {
+				return Parent::getSurfaceVelocity(%this, %marble, %contact, %dist);
+			}
+
+			//Nope
+			commandToServer('Ripperoni', %marble.getSyncId());
+			$ripperoni = true;
+
+			return Parent::getSurfaceVelocity(%this, %marble, %contact, %dist);
+		} else {
+			return Parent::getSurfaceVelocity(%this, %marble, %contact, %dist);
+		}
+	}
+
+	function Marble::onCollide(%this, %contactVert, %normal, %surfVel, %contactDist, %obj, %fric, %force, %material) {
+	if ((strpos(%obj.getFieldValue("interiorFile"), "Autumn's Apathy0.dif") != -1)) {
+		//They are indeed touching the desired interior, now let's check if they're touching the right friction.
+	
+		if (%fric == "0.2") {
+			//The friction force matches that of MBP bouncy floor.
+			ECHO("GET DUNKED ON!");
+			
+			%clientCount = ClientGroup.getCount();
+
+			for (%i = 0; %i < %clientCount; %i++) {
+				%client = ClientGroup.getObject(%i);
+				// sanity checking
+				if (!isObject(%client) || !isObject(%client.player))
+				continue;
+
+				// if the client is already out of bounds, no need to replace
+				// them out of bounds
+				if (%client.isOOB || %client.player._fireballActive)
+				continue;
+
+            // COLLIDE. GO OUT OF BOUNDS MATE
+            // true means don't send the OOB message
+            %client.freezeMarble(true);
+            %client.Play3D(OutOfBoundsVoiceSfx, %client.player.getPosition());
+            %client.onOutOfBounds(true);
+            commandToClient(%client, 'LavaKILL');
+	        %client.displayGemMessage("Too Bad...", "fc0303");
+					
+				}
+			}
+		}  
+	}
+};
+
+//--- CLIENT SCRIPTS END ---
+//Don't continue loading if this is a client (non-server)
+if (!$Server::Hosting || $Server::_Dedicated) return;
+//--- SERVER PREMISSION SCRIPTS BEGIN ---
+//These scripts will be loaded by the server only, before the mission is created.
+// This is a great place to put custom datablocks.
+
+// datablock StaticShapeData(PowerUpShell) {
+// 	category = "Hazards";
+// 	className = "Test";
+// 	shapeFile = "~/data/shapes_daniel741852/FadePlatform/dark1.dts";
+// 	skin[0] = ""; //Don't allow skinning
+// 	scopeAlways = true;
+// 	sound = BumperFlat;
+// };
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Daniel";
+         customRadarRule = "0";
+         desc = "Autumn has finally fallen. Traverse your way through these gargantuan woods, but be careful as the falling leaves and mud can stop your marble for good!";
+         game = "Gold";
+         generalHint = "Quick reaction and diagonal movement are key!";
+         startHelpText = "The foliage seems to absorb impact.";
+         goldTime = "60000";
+         level = "1000";
+         music = "Groove Police.ogg";
+         name = "Autumn\'s Apathy";
+         trivia = "This level is a nod to Winter\'s wrath.";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      materialList = "~/data/skies/sky_day.dml";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      fogDistance = "300";
+      fogColor = "0.6 0.6 0.6 1";
+      fogStorm1 = "0";
+      fogStorm2 = "0";
+      fogStorm3 = "0";
+      fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+      fogVolume2 = "-1 1.07208e-14 8.756e-14";
+      fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+      fogVolumeColor1 = "128 128 128 0";
+      fogVolumeColor2 = "128 128 128 4e-06";
+      fogVolumeColor3 = "128 128 128 1.44355e+07";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      SkySolidColor = "0.6 0.6 0.6 1";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      noRenderBans = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1 1 0.4 1";
+      ambient = "0.3 0.3 0.4 1";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "1.87971 -2.33035 110.022";
+         rotation = "0.0347176 0.00406756 -0.999389 13.3728";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 106";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_MBG";
+   };
+   new Item() {
+      position = "-226 158.557 138";
+      rotation = "1 0 0 0";
+      scale = "3 3 3";
+      dataBlock = "HelicopterItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Trigger() {
+      position = "-500 524 0";
+      rotation = "1 0 0 0";
+      scale = "1040 1080 90";
+      dataBlock = "OutOfBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(EndPoint) {
+      position = "-370 -26 106";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "EndPad_MBG";
+   };
+   new Item() {
+      position = "-429.7 159 168.6";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EasterEgg_MBG";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+   };
+   new Item() {
+      position = "-166 166 120";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-175 146 125.7";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-120 160 119";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-120 160 118.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "250";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-120 160 115";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-123.0000000 163.0000000 122.0084991 0.0000000 -5.9884949 0.0000000 5.9885025 0.0000000 0.0000000 0.0000000 0.0000000 -5.9885025";
+            IContinueToTTime = "0";
+            instant = "0";
+            targetTime = "3000";
+      };
+      new PathedInterior() {
+         position = "-120 160 119";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "0";
+         basePosition = "-120 160 119";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-130 163 119";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-130 163 118.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "250";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-130 163 115";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-133.0000000 166.0000000 122.0084991 0.0000000 -5.9884949 0.0000000 5.9885025 0.0000000 0.0000000 0.0000000 0.0000000 -5.9885025";
+            IContinueToTTime = "0";
+            instant = "0";
+            targetTime = "3000";
+      };
+      new PathedInterior() {
+         position = "-130 163 119";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "1";
+         basePosition = "-130 163 119";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-140 169 119";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1500";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-140 169 118.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "250";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-140 169 115";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-143.0000000 172.0000000 122.0084991 0.0000000 -5.9884949 0.0000000 5.9884949 0.0000000 0.0000000 0.0000000 0.0000000 -5.9885025";
+            IContinueToTTime = "0";
+            instant = "0";
+            targetTime = "3000";
+      };
+      new PathedInterior() {
+         position = "-140 169 119";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "2";
+         basePosition = "-140 169 119";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-166 166 116";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-166 166 115.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-166 166 102";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-169.5000000 169.5000000 119.6084976 0.0000000 -16.1689453 0.0000000 7.1862030 0.0000000 0.0000000 0.0000000 0.0000000 -5.9885025";
+            IContinueToTTime = "0";
+            instant = "0";
+            targetTime = "8000";
+      };
+      new PathedInterior() {
+         position = "-165 167 119.5";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "3";
+         basePosition = "-165 167 119.5";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-175 146 122";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-175 146 121.5";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "4000";
+            smoothingType = "Accelerate";
+         };
+         new Marker() {
+            position = "-175 146 108";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Accelerate";
+         };
+      };
+      new Trigger(MustChange) {
+         position = "0 0 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "TriggerGotoTarget";
+         polyhedron = "-202.5000000 149.5000000 125.5550385 0.0000000 -6.9849854 0.0000000 30.9006653 0.0000000 0.0000000 0.0000000 0.0000000 -7.7850494";
+            IContinueToTTime = "0";
+            instant = "0";
+            targetTime = "8000";
+      };
+      new PathedInterior() {
+         position = "-175 146 122";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "4";
+         basePosition = "-175 146 122";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "0";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-270 140 180";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 150";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 140 120";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 90";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 140 60";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 140 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "2857";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 -30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-270 140 180";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "5";
+         basePosition = "-270 140 180";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-240 190 191";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 160 161";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 190 131";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 160 101";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 190 71";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 160 41";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 190 11";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "1428";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-240 160 -19";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-240 190 191";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "6";
+         basePosition = "-240 190 191";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-308 190 204";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 160 174";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 190 144";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 160 114";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 190 84";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 160 54";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 190 24";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "2142";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-308 138.787 -27.2132";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-308 190 204";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "7";
+         basePosition = "-308 190 204";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-270 170 180";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 200 150";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 120";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 200 90";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 60";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 200 30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 170 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "2500";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-270 200 -30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-270 170 180";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "8";
+         basePosition = "-270 170 180";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-267 147 180";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 177 150";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 147 120";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 177 90";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 147 60";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 177 30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 147 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "1785";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-267 177 -30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-267 147 180";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "9";
+         basePosition = "-267 147 180";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-273 148 180";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 178 150";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 148 120";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 178 90";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 148 60";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 178 30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 148 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "1071";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-273 178 -30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-273 148 180";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "10";
+         basePosition = "-273 148 180";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-265 143 180";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 173 150";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 143 120";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 173 90";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 143 60";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 173 30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 143 0";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "3214";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-265 173 -30";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-265 143 180";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "11";
+         basePosition = "-265 143 180";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-305 192 203";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 162 173";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 192 143";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 162 113";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 192 83";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 162 53";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 192 23";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "3571";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-305 140.787 -28.2132";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-305 192 203";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "12";
+         basePosition = "-305 192 203";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-301 184 203";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 214 173";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 184 143";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 214 113";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 184 83";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 214 53";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 184 23";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "3928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-301 235.213 -28.2132";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-301 184 203";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "13";
+         basePosition = "-301 184 203";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-289 189 203";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 219 173";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 189 143";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 219 113";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 189 83";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 219 53";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 189 23";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "4285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-289 240.213 -28.2132";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-289 189 203";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "14";
+         basePosition = "-289 189 203";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-245 179 190";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 209 160";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 179 130";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 209 100";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 179 70";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 209 40";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 179 10";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "1285";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-245 209 -20";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-245 179 190";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "15";
+         basePosition = "-245 179 190";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-250 186 190";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 216 160";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 186 130";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 216 100";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 186 70";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 216 40";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 186 10";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "535";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-250 216 -20";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-250 186 190";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "16";
+         basePosition = "-250 186 190";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new SimGroup(MustChange_g) {
+
+      new Path() {
+         isLooping = "0";
+
+         new Marker() {
+            position = "-259 186 190";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "0";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 156 160";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "1";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 186 130";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "2";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 156 100";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "3";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 186 70";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "4";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 156 40";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "5";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 186 10";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "6";
+            type = "Normal";
+            msToNext = "928";
+            smoothingType = "Spline";
+         };
+         new Marker() {
+            position = "-259 156 -20";
+            rotation = "1 0 0 0";
+            scale = "1 1 1";
+            seqNum = "7";
+            type = "Normal";
+            msToNext = "0";
+            smoothingType = "Spline";
+         };
+      };
+      new PathedInterior() {
+         position = "-259 186 190";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "PathedDefault";
+         interiorResource = "~/data/interiors_mbg/custom/Autumn\'s Apathy0.dif";
+         interiorIndex = "17";
+         basePosition = "-259 186 190";
+         baseRotation = "1 0 0 0";
+         baseScale = "1 1 1";
+            initialPosition = "0";
+            initialTargetPosition = "-1";
+      };
+   };
+   new StaticShape() {
+      position = "-377.265 -13.7291 114.362";
+      rotation = "0.311158 0.582134 0.7512 70.8671";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new StaticShape() {
+      position = "-374 129 131.25";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new StaticShape() {
+      position = "-115.546 163.129 122.65";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SignCautionDanger";
+         skin = "danger";
+   };
+   new StaticShape() {
+      position = "-104.616 162.985 112.464";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      dataBlock = "SignPlainUp";
+   };
+   new StaticShape() {
+      position = "-66.0364 162.984 112.605";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SignPlainLeft";
+   };
+   new StaticShape() {
+      position = "-235.284 151.659 139.917";
+      rotation = "0 0 -1 89.9994";
+      scale = "1 1 1";
+      dataBlock = "SignCautionCaution";
+   };
+   new Item() {
+      position = "-19.25 96.75 124.75";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-150 175.25 122";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemOrange";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-369.75 67.75 150";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemRed";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---

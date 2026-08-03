@@ -1,0 +1,883 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         
+         type = "Beginner";
+	     level = "2";
+	     name = "The Need for Speed Pro Challenge";
+         artist = "Aayrl";
+         desc = "You\'ll need to be an excellent driver to pass this course!";
+         startHelpText = "Be careful while racing!";
+		 time = "50000";
+         goldTime = "30000";
+	     xpbonus = "0";
+         xpmult = "0";
+         music = "City of the Sand Garden.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.349971";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.900000 0.900000 0.900000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/Generic/Day/day_sky.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222768174765569860000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 0.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -170698929442160050000000000000000000000.000000";
+         locked = "true";
+   };
+   new Sun() {
+      direction = "0.442343 0.475025 -0.760713";
+      color = "1.400000 1.200000 0.500000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new Trigger(Bounds) {
+      position = "-139.471 305.741 89";
+      rotation = "1 0 0 0";
+      scale = "150 320 100";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape(EndPoint) {
+      position = "-8.4091 198.659 91.4";
+      rotation = "0 0 1 89.9544";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 -10 102";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new ScriptObject() {
+         time = "0";
+         Pad = "1845";
+         PowerUp = "0";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-11.1712 198.787 98.935";
+      rotation = "0 0 1 64.7442";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "-0.126282 -9.12971 101.687";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/roadway.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-51.0396 288.68 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-46.5889 199.06 91.7049";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-116.043 258.826 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-61.6899 187.337 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-85.0917 157.996 102.18";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         Pad = "1775";
+         PowerUp = "0";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-109.039 217.922 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-45.8338 206.625 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "2.06551 51.1459 104.738";
+      rotation = "0.747716 -0.45396 0.484604 116.97";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.7936 31.8119 107.924";
+      rotation = "0.611938 -0.562395 0.556097 125.377";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "18.6926 42.2807 99.5023";
+      rotation = "-0.45318 -0.365231 0.813163 234.098";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "8.87142 61.6375 102.463";
+      rotation = "-0.19615 -0.470847 0.860133 221.612";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-49.3273 199.139 91.5002";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-94.6809 119.45 102.331";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-76.2273 198.913 102.091";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-76.9167 168.535 102.181";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new InteriorInstance() {
+      position = "-58.9142 242.127 114.435";
+      rotation = "-0.163217 0.983435 0.078843 52.3198";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-69.1558 251.357 117.868";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-47.6332 252.345 105.254";
+      rotation = "-0.287705 0.954656 0.0765358 31.1417";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-63.3749 265.264 111.484";
+      rotation = "0.152788 0.391267 -0.907505 79.164";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-69.1122 237.143 102.729";
+      rotation = "0.537766 -0.0429058 -0.842002 90.0596";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-77.8577 245.296 106.394";
+      rotation = "0.249807 -0.846312 -0.470481 42.061";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-82.5903 260.726 106.82";
+      rotation = "0.137232 -0.379986 0.914756 224.546";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-57.5713 115.826 104.36";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-49.1397 104.503 102.505";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.8972 104.588 102.086";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-99.8453 85.007 98.3069";
+      rotation = "0.789099 0.546912 -0.27966 148.156";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-103.284 66.1211 98.4919";
+      rotation = "0.566849 0.805841 0.171182 237.46";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-90.4773 69.8836 97.227";
+      rotation = "0.666496 0.562199 -0.489608 143.972";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-21.8986 10.8544 98.0078";
+      rotation = "0.766762 -0.293455 0.570929 71.0087";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-26.5568 40.4586 103.469";
+      rotation = "0.551442 0.636356 -0.53941 122.564";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-32.833 29.6049 95.0471";
+      rotation = "0.498642 -0.583021 0.641438 85.0152";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-15.7167 21.7254 100.283";
+      rotation = "0.401326 0.706751 -0.582615 133.133";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-16.3336 293.88 98.3014";
+      rotation = "-0.19615 -0.470847 0.860133 221.612";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-13.4114 264.055 103.762";
+      rotation = "0.611938 -0.562395 0.556097 125.377";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.51245 274.523 95.3407";
+      rotation = "-0.45318 -0.365231 0.813163 234.098";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-23.1395 283.389 100.576";
+      rotation = "0.747716 -0.45396 0.484604 116.97";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-108.106 185.023 101.351";
+      rotation = "0.892684 -0.20011 0.403821 62.8247";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-121.035 212.059 106.812";
+      rotation = "0.435633 0.681098 -0.588498 131.954";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-123.945 199.864 98.3904";
+      rotation = "0.639414 -0.558831 0.528069 75.24";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-105.29 197.207 103.626";
+      rotation = "0.285308 0.732458 -0.618146 143.125";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-115.864 301.542 99.6196";
+      rotation = "0.931665 0.311617 -0.186805 236.852";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-111.745 135.057 102.412";
+      rotation = "0.854749 0.347077 -0.38593 128.011";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-110.405 152.796 103.492";
+      rotation = "0.941972 0.282193 -0.181813 139.74";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-124.31 139.561 103.677";
+      rotation = "-0.800415 -0.599404 0.0071771 119.531";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "33.6729 176.053 93.905";
+      rotation = "0.160933 0.814473 -0.557436 185.677";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "16.8649 170.225 94.9849";
+      rotation = "0.26405 0.885728 -0.381789 174.714";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "34.5392 162.733 95.1699";
+      rotation = "-0.0557674 0.898624 0.435161 212.696";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0.523186 232.567 96.305";
+      rotation = "0.740964 -0.618898 0.260648 118.384";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.5788 237.035 97.5523";
+      rotation = "-0.683714 0.690759 -0.235343 216.409";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "1.47039 253.243 97.5699";
+      rotation = "0.803866 -0.377284 -0.459843 206.73";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-108.476 290.425 98.3547";
+      rotation = "0.972274 0.0639879 -0.22492 116.643";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-96.8069 303.853 99.4346";
+      rotation = "0.99789 -0.028878 -0.0581547 135.286";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-140.997 255.623 97.9903";
+      rotation = "0.284404 -0.584955 0.759567 105.683";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-78.2502 305.335 96.9547";
+      rotation = "0.924955 -0.37404 0.0674675 112.423";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.4782 304.541 98.0346";
+      rotation = "0.880444 -0.457173 0.125742 137.074";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-74.1344 318.032 98.2196";
+      rotation = "0.91749 -0.117361 -0.380051 221.854";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-30.5575 301.132 99.5161";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-38.9891 312.455 101.371";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-42.315 301.217 99.0971";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-50.5689 130.06 101.866";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-59.0005 141.383 103.721";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-62.3264 130.145 101.447";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-52.3906 35.695 100.066";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-60.8222 47.0179 101.921";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-64.148 35.7799 99.6474";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "26.5805 -15.6374 99.6664";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "18.1489 -4.31436 101.521";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.823 -15.5524 99.2474";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-130.221 262.032 106.412";
+      rotation = "0.750107 0.515123 -0.414714 108.495";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-129.905 240.39 103.226";
+      rotation = "0.608507 0.625733 -0.488034 117.38";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-140.607 233.921 100.951";
+      rotation = "0.546294 -0.390434 0.741029 90.4848";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock2.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-34.7032 171.538 90.5337";
+      rotation = "0.786355 -0.0133457 -0.61763 166.819";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-31.3773 182.776 92.8077";
+      rotation = "0.261295 0.926091 -0.272178 92.0608";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-22.9457 171.453 90.9527";
+      rotation = "0 1 0 45.2637";
+      scale = "3 3 3";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-0.60249 123.382 108.089";
+      rotation = "0.152788 0.391267 -0.907505 79.164";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-19.8179 118.844 103.425";
+      rotation = "0.137232 -0.379986 0.914756 224.546";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.38339 109.475 114.473";
+      rotation = "1 0 0 0";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "3.85821 100.245 111.04";
+      rotation = "-0.163217 0.983435 0.078843 52.3198";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-15.0853 103.414 102.999";
+      rotation = "0.249807 -0.846312 -0.470481 42.061";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-6.23229 94.8818 99.3338";
+      rotation = "0.537766 -0.0429058 -0.842002 90.0596";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "15.1392 110.463 101.859";
+      rotation = "-0.287705 0.954656 0.0765358 31.1417";
+      scale = "4 4 4";
+      interiorFile = "~/data/interiors/fubargame/desertrock3.dif";
+      showTerrainInside = "0";
+   };
+   new Item() {
+      position = "-90.3451 149.324 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "0.0877736 11.3042 102.331";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-0.18406 0.164254 102.331";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-94.9707 112.751 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-6.50124 40.1584 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-25.5466 59.5924 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-33.8811 63.619 102.18";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         Pad = "1768";
+         PowerUp = "0";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-49.9504 66.1105 101.931";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38.7458 220.646 101.044";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new ScriptObject() {
+         time = "0";
+         Pad = "1745";
+         PowerUp = "0";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "-90.7625 289.578 102.221";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-79.9681 78.6949 101.931";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-26.6347 257.196 102.131";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItemYellow";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-34.2664 220.879 102.331";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---

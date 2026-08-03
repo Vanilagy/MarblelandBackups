@@ -1,0 +1,1671 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         goldTime = "15000";
+         startHelpText = "Roll around the Moon to grab the gems. The finish is on the South Pole of the Moon!";
+         type = "custom";
+         time = "0";
+         desc = "You are on the moon. Far away from our native blue planet earth. Grab these jewels on the surface of the moon and flee to the goal!";
+         artist = "abhishek839";
+         name = "Around The Moon (Beyond The Earth)";
+         level = "4523";
+         music = "Groove Police.ogg";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -2.19536e+038 -2.19536e+038";
+      fogVolume2 = "-1 -2.2087e+038 -2.19536e+038";
+      fogVolume3 = "-1 -2.18196e+038 -2.16867e+038";
+      materialList = "~/data/skies/Space/sky_space.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -222204871403647640000000000000000000000.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -219535990253541530000000000000000000000.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -214193076221289990000000000000000000000.000000";
+   };
+   new Sun() {
+      direction = "0.481726 0.481726 -0.732038";
+      color = "1.400000 1.200000 0.400000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new StaticShape(StartPoint) {
+      position = "27.2339 1.74302 93";
+      rotation = "0 0 -1 90.5273";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new StaticShape(EndPoint) {
+      position = "27.2339 1.74302 79";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new Trigger(Bounds) {
+      position = "-52.5444 38.0152 57.871";
+      rotation = "1 0 0 0";
+      scale = "107.509 73.1917 86.7494";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "27.2339 1.74302 70.25";
+      rotation = "0 1 0 180";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new ScriptObject() {
+         pad = "1493";
+         bonusTime = "0";
+         gemCount = "0";
+         time = "0";
+         powerUp = "0";
+         penaltyTime = "0";
+   };
+   new InteriorInstance() {
+      position = "27.3054 1.64246 77.9492";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/moon_01.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "27.3054 1.64257 77.9492";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/others/1x1_Platforms/moon_02.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         pad = "2143";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.5032 3.52601 94.1405";
+         rotation = "0.808013 -0.561879 0.177223 183.858";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "23.3167 5.48566 92.448";
+         rotation = "0.773878 -0.503388 0.384334 191.905";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.6242 7.36098 88.5115";
+         rotation = "0.679066 -0.346687 0.647053 200.326";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.8456 6.60178 80.6831";
+         rotation = "0.414427 -0.266987 0.870039 213.313";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.0653 7.59 84.3372";
+         rotation = "0.544569 -0.308461 0.779933 207.859";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.2819 4.25156 78.255";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2323";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "24.3894 2.29889 93.673";
+         rotation = "0.919697 -0.348933 0.180008 178.819";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.1223 3.16234 92.448";
+         rotation = "0.868189 -0.299035 0.396012 180.904";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.7464 4.02046 88.5115";
+         rotation = "0.731324 -0.168953 0.660772 181.913";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.1814 3.92542 80.6831";
+         rotation = "0.448517 -0.152281 0.880706 188.705";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "20.0278 4.43013 84.3372";
+         rotation = "0.586122 -0.162448 0.793771 185.723";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.4371 2.99833 78.255";
+         rotation = "0 0 -1 28.0749";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.038 0.817408 94.1405";
+         rotation = "0.980529 -0.0960268 0.171294 173.454";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.1516 0.24251 92.448";
+         rotation = "0.920435 -0.061492 0.386029 168.97";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.6678 -0.218202 88.5115";
+         rotation = "0.759349 0.0288389 0.650044 161.943";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "20.954 0.425222 80.6831";
+         rotation = "0.477282 -0.0297779 0.878246 161.963";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.7035 0.277525 84.3372";
+         rotation = "0.615322 -0.00330497 0.788269 161.65";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.2317 1.27119 78.255";
+         rotation = "0 0 -1 58.4417";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "26.7408 4.24211 94.1405";
+         rotation = "-0.599979 0.784056 -0.159002 170.123";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.084 7.12552 92.448";
+         rotation = "-0.594228 0.728715 -0.340393 155.125";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.3562 9.53752 88.3624";
+         rotation = "0.571268 -0.567444 0.59301 222.487";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.4059 8.18327 80.6831";
+         rotation = "-0.353159 0.429219 -0.831294 116.361";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.4549 9.41389 84.3372";
+         rotation = "0.464089 -0.502757 0.729285 234.798";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.6397 5.19422 78.255";
+         rotation = "0 0 1 35.5234";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2298";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "28.1358 4.24616 94.1405";
+         rotation = "-0.420265 0.896945 -0.137356 166.458";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.7477 7.11785 92.448";
+         rotation = "-0.432573 0.853504 -0.290537 147.321";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.5323 9.51907 88.5115";
+         rotation = "-0.462038 0.714918 -0.524798 123.683";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.4815 8.08185 80.6831";
+         rotation = "-0.288644 0.563362 -0.77415 96.5113";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.9504 9.2504 84.3372";
+         rotation = "-0.379839 0.647651 -0.660508 108.009";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.6551 4.79913 78.255";
+         rotation = "0 0 1 60.1606";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2551";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "29.5357 3.48781 94.1405";
+         rotation = "-0.181176 0.978001 -0.103393 162.921";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.3373 5.57273 92.2764";
+         rotation = "-0.207645 0.955038 -0.211628 139.934";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.9972 7.03887 88.4483";
+         rotation = "-0.287061 0.869857 -0.401178 110.03";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.4205 6.04787 80.8216";
+         rotation = "-0.166964 0.751986 -0.637683 75.6332";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.5623 6.96938 84.3372";
+         rotation = "-0.232456 0.822542 -0.519027 90.5807";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.2589 3.7169 78.255";
+         rotation = "0 0 1 89.3814";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "30.1797 2.42766 94.1405";
+         rotation = "0.0417181 0.996847 -0.0674939 160.708";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.5302 3.60399 92.448";
+         rotation = "0.010823 0.991868 -0.126809 135.545";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9472 4.3384 88.5115";
+         rotation = "-0.0906843 0.964394 -0.248436 101.568";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.7407 3.55574 80.6831";
+         rotation = "0.00597575 0.917381 -0.397966 61.9711";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9669 3.84181 84.3372";
+         rotation = "-0.0478135 0.947421 -0.316396 79.6369";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.5776 2.35002 78.255";
+         rotation = "0 0 1 115.165";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2360";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "30.0094 0.976795 94.1405";
+         rotation = "0.349278 0.936948 -0.011541 159.269";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.6017 0.542518 92.448";
+         rotation = "0.320166 0.947342 0.00608674 133.338";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9874 -0.288025 88.5115";
+         rotation = "0.219411 0.975482 0.0171471 97.2827";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.5514 -0.209629 80.6831";
+         rotation = "0.312511 0.938273 0.148257 57.0543";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "35.1685 -0.853441 84.2062";
+         rotation = "0.260776 0.962528 0.0744084 75.0559";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.2852 0.679637 78.255";
+         rotation = "0 0 1 151.261";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2354";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "29.2952 -0.199892 94.1405";
+         rotation = "0.578077 0.815195 0.0358493 159.633";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.329 -1.86483 92.448";
+         rotation = "0.549227 0.827586 0.115977 135.172";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.9867 -3.771 88.5115";
+         rotation = "0.449801 0.861368 0.236059 101.123";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.7795 -2.98945 80.6831";
+         rotation = "0.466193 0.709217 0.528844 67.6258";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.8629 -4.35166 84.2062";
+         rotation = "0.463778 0.801475 0.377556 81.9931";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.3869 -0.594812 78.255";
+         rotation = "0 0 1 181.055";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "27.8495 -1.09303 94.1405";
+         rotation = "0.763063 0.64138 0.0797976 161.333";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.8117 -3.53895 92.448";
+         rotation = "0.72819 0.651519 0.212751 140.012";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.328 -6.0118 88.5115";
+         rotation = "0.612689 0.676087 0.40929 110.678";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.6559 -4.74038 80.6831";
+         rotation = "0.512782 0.462868 0.723054 86.2678";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.9364 -6.45813 84.2062";
+         rotation = "0.57375 0.580469 0.577812 96.1948";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "27.7368 -1.48246 78.255";
+         rotation = "0 0 1 210.276";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "26.4375 -0.98275 94.1405";
+         rotation = "0.912458 0.390063 0.123579 164.797";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.8762 -3.5505 92.448";
+         rotation = "0.864621 0.401658 0.30183 148.788";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.9294 -5.89254 88.5115";
+         rotation = "0.719488 0.430843 0.544712 126.99";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.0783 -4.46213 80.6831";
+         rotation = "0.513658 0.241371 0.823344 112.647";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.3557 -6.04554 84.2062";
+         rotation = "0.622748 0.337157 0.706053 118.141";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.1272 -1.24364 78.255";
+         rotation = "0 0 -1 115.919";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.497 -0.277538 94.1405";
+         rotation = "0.976665 0.151582 0.152143 168.768";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "23.7733 -2.26185 92.448";
+         rotation = "0.919085 0.171889 0.354595 158.242";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.8196 -3.86327 88.5115";
+         rotation = "0.756977 0.225521 0.613291 143.664";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.636 -2.67935 80.6831";
+         rotation = "0.498818 0.0955622 0.861422 136.846";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.2428 -3.72249 84.2062";
+         rotation = "0.628459 0.157942 0.761639 139.25";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.0996 -0.357727 78.255";
+         rotation = "0 0 -1 87.2711";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new Item() {
+      position = "27.128 7.70049 80.7817";
+      rotation = "1 0 0 112.3";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "25.4675 -5.79422 84.5869";
+      rotation = "-1 0 0 93.9651";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.5032 3.52601 94.1405";
+         rotation = "0.808013 -0.561879 0.177223 183.858";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "23.3167 5.48566 92.448";
+         rotation = "0.773878 -0.503388 0.384334 191.905";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.6242 7.36098 88.5115";
+         rotation = "0.679066 -0.346687 0.647053 200.326";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.8456 6.60178 80.6831";
+         rotation = "0.414427 -0.266987 0.870039 213.313";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.0653 7.59 84.3372";
+         rotation = "0.544569 -0.308461 0.779933 207.859";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.2819 4.25156 78.255";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2323";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "24.3894 2.29889 93.673";
+         rotation = "0.919697 -0.348933 0.180008 178.819";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.1223 3.16234 92.448";
+         rotation = "0.868189 -0.299035 0.396012 180.904";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.7464 4.02046 88.5115";
+         rotation = "0.731324 -0.168953 0.660772 181.913";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.1814 3.92542 80.6831";
+         rotation = "0.448517 -0.152281 0.880706 188.705";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "20.0278 4.43013 84.3372";
+         rotation = "0.586122 -0.162448 0.793771 185.723";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.4371 2.99833 78.255";
+         rotation = "0 0 -1 28.0749";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.038 0.817408 94.1405";
+         rotation = "0.980529 -0.0960268 0.171294 173.454";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.1516 0.24251 92.448";
+         rotation = "0.920435 -0.061492 0.386029 168.97";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.6678 -0.218202 88.5115";
+         rotation = "0.759349 0.0288389 0.650044 161.943";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "20.954 0.425222 80.6831";
+         rotation = "0.477282 -0.0297779 0.878246 161.963";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "19.7035 0.277525 84.3372";
+         rotation = "0.615322 -0.00330497 0.788269 161.65";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.2317 1.27119 78.255";
+         rotation = "0 0 -1 58.4417";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "26.7408 4.24211 94.1405";
+         rotation = "-0.599979 0.784056 -0.159002 170.123";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.084 7.12552 92.448";
+         rotation = "-0.594228 0.728715 -0.340393 155.125";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.3562 9.53752 88.3624";
+         rotation = "0.571268 -0.567444 0.59301 222.487";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.4059 8.18327 80.6831";
+         rotation = "-0.353159 0.429219 -0.831294 116.361";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.4549 9.41389 84.3372";
+         rotation = "0.464089 -0.502757 0.729285 234.798";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.6397 5.19422 78.255";
+         rotation = "0 0 1 35.5234";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2298";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "28.1358 4.24616 94.1405";
+         rotation = "-0.420265 0.896945 -0.137356 166.458";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.7477 7.11785 92.448";
+         rotation = "-0.432573 0.853504 -0.290537 147.321";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.5323 9.51907 88.5115";
+         rotation = "-0.462038 0.714918 -0.524798 123.683";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.4815 8.08185 80.6831";
+         rotation = "-0.288644 0.563362 -0.77415 96.5113";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.9504 9.2504 84.3372";
+         rotation = "-0.379839 0.647651 -0.660508 108.009";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.6551 4.79913 78.255";
+         rotation = "0 0 1 60.1606";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2551";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "29.5357 3.48781 94.1405";
+         rotation = "-0.181176 0.978001 -0.103393 162.921";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.3373 5.57273 92.2764";
+         rotation = "-0.207645 0.955038 -0.211628 139.934";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.9972 7.03887 88.4483";
+         rotation = "-0.287061 0.869857 -0.401178 110.03";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.4205 6.04787 80.8216";
+         rotation = "-0.166964 0.751986 -0.637683 75.6332";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.5623 6.96938 84.3372";
+         rotation = "-0.232456 0.822542 -0.519027 90.5807";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.2589 3.7169 78.255";
+         rotation = "0 0 1 89.3814";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "30.1797 2.42766 94.1405";
+         rotation = "0.0417181 0.996847 -0.0674939 160.708";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.5302 3.60399 92.448";
+         rotation = "0.010823 0.991868 -0.126809 135.545";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9472 4.3384 88.5115";
+         rotation = "-0.0906843 0.964394 -0.248436 101.568";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.7407 3.55574 80.6831";
+         rotation = "0.00597575 0.917381 -0.397966 61.9711";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9669 3.84181 84.3372";
+         rotation = "-0.0478135 0.947421 -0.316396 79.6369";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.5776 2.35002 78.255";
+         rotation = "0 0 1 115.165";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2360";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "30.0094 0.976795 94.1405";
+         rotation = "0.349278 0.936948 -0.011541 159.269";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.6017 0.542518 92.448";
+         rotation = "0.320166 0.947342 0.00608674 133.338";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "34.9874 -0.288025 88.5115";
+         rotation = "0.219411 0.975482 0.0171471 97.2827";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "33.5514 -0.209629 80.6831";
+         rotation = "0.312511 0.938273 0.148257 57.0543";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "35.1685 -0.853441 84.2062";
+         rotation = "0.260776 0.962528 0.0744084 75.0559";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "30.2852 0.679637 78.255";
+         rotation = "0 0 1 151.261";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2354";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "29.2952 -0.199892 94.1405";
+         rotation = "0.578077 0.815195 0.0358493 159.633";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.329 -1.86483 92.448";
+         rotation = "0.549227 0.827586 0.115977 135.172";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.9867 -3.771 88.5115";
+         rotation = "0.449801 0.861368 0.236059 101.123";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "31.7795 -2.98945 80.6831";
+         rotation = "0.466193 0.709217 0.528844 67.6258";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "32.8629 -4.35166 84.2062";
+         rotation = "0.463778 0.801475 0.377556 81.9931";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.3869 -0.594812 78.255";
+         rotation = "0 0 1 181.055";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "27.8495 -1.09303 94.1405";
+         rotation = "0.763063 0.64138 0.0797976 161.333";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.8117 -3.53895 92.448";
+         rotation = "0.72819 0.651519 0.212751 140.012";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "29.328 -6.0118 88.5115";
+         rotation = "0.612689 0.676087 0.40929 110.678";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.6559 -4.74038 80.6831";
+         rotation = "0.512782 0.462868 0.723054 86.2678";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "28.9364 -6.45813 84.2062";
+         rotation = "0.57375 0.580469 0.577812 96.1948";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "27.7368 -1.48246 78.255";
+         rotation = "0 0 1 210.276";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "26.4375 -0.98275 94.1405";
+         rotation = "0.912458 0.390063 0.123579 164.797";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.8762 -3.5505 92.448";
+         rotation = "0.864621 0.401658 0.30183 148.788";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.9294 -5.89254 88.5115";
+         rotation = "0.719488 0.430843 0.544712 126.99";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.0783 -4.46213 80.6831";
+         rotation = "0.513658 0.241371 0.823344 112.647";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "24.3557 -6.04554 84.2062";
+         rotation = "0.622748 0.337157 0.706053 118.141";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "26.1272 -1.24364 78.255";
+         rotation = "0 0 -1 115.919";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+   new ScriptObject() {
+         pad = "2095";
+         bonusTime = "0";
+         time = "0";
+         gemCount = "0";
+         penaltyTime = "0";
+         powerUp = "0";
+   };
+   new SimGroup(Gravity_Alter) {
+
+      new Item() {
+         position = "25.497 -0.277538 94.1405";
+         rotation = "0.976665 0.151582 0.152143 168.768";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "23.7733 -2.26185 92.448";
+         rotation = "0.919085 0.171889 0.354595 158.242";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.8196 -3.86327 88.5115";
+         rotation = "0.756977 0.225521 0.613291 143.664";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "22.636 -2.67935 80.6831";
+         rotation = "0.498818 0.0955622 0.861422 136.846";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "21.2428 -3.72249 84.2062";
+         rotation = "0.628459 0.157942 0.761639 139.25";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+      new Item() {
+         position = "25.0996 -0.357727 78.255";
+         rotation = "0 0 -1 87.2711";
+         scale = "1 1 1";
+         dataBlock = "AntiGravityItem";
+         collideable = "0";
+         static = "1";
+         rotate = "1";
+      };
+   };
+};
+//--- OBJECT WRITE END ---

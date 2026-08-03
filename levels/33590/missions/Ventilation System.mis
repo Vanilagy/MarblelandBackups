@@ -1,0 +1,795 @@
+new MaterialProperty(MBFMaterialIce)
+{
+	friction = 0.15;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialMetal)
+{
+	friction = 5;
+	restitution = 1;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialSnow)
+{
+	friction = 15;
+	restitution = 0;
+	force = 0;
+};
+new MaterialProperty(MBFMaterialGrass)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+new MaterialProperty(MBFMaterialGranite)
+{
+	friction = 0.2;
+	restitution = 1;
+};
+new MaterialProperty(MBFMaterialHockey)
+{
+	friction = 0.01;
+	restitution = 1;
+	force = 2;
+};
+new MaterialProperty(HighFrictionMaterial)
+{
+	friction = 1.5;
+	restitution = 0.5;
+};
+addMaterialMapping("friction_ice", MBFMaterialIce);
+addMaterialMapping("ventalation", MBFMaterialMetal);
+addMaterialMapping("grid_snow", MBFMaterialSnow);
+addMaterialMapping("grass", MBFMaterialGrass);
+addMaterialMapping("marble_clear", MBFMaterialGranite);
+addMaterialMapping("marble_spotted", MBFMaterialGranite);
+addMaterialMapping("airhockey_plain", MBFMaterialHockey);
+addMaterialMapping("airhockey_redline", MBFMaterialHockey);
+addMaterialMapping("airhockey_circle", MBFMaterialHockey);
+addMaterialMapping("grass_brown", MBFMaterialGrass);
+addMaterialMapping("whitesand", HighFrictionMaterial);
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         type = "Beginner";
+         artist = "Aayrl";
+         startHelpText = "Watch out for the ventilation fans!";
+         goldTime = "12250";
+         desc = "So, what happens when you put the marble in a ventilation system? Based on a true story.";
+         music = "Jungle Jam 2.ogg";
+         level = "5";
+         xpmult = "0";
+         
+         xpbonus = "0";
+         name = "Ventilation System";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.600000 0.600000 0.600000 1.000000";
+      fogDistance = "300";
+      fogColor = "0.600000 0.600000 0.600000 1.000000";
+      fogVolume1 = "-1 -1.73483e+09 -1.73483e+09";
+      fogVolume2 = "-1 -1.73483e+09 -1.73483e+09";
+      fogVolume3 = "-1 -1.73483e+09 -1.73483e+09";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      noRenderBans = "1";
+      fogVolumeColor1 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor2 = "128.000000 128.000000 128.000000 -1734829824.000000";
+      fogVolumeColor3 = "128.000000 128.000000 128.000000 -1734829824.000000";
+   };
+   new Sun() {
+      direction = "0.4423429 0.4750249 -0.7607129";
+      color = "1.400000 1.200000 0.500000 1.000000";
+      ambient = "0.300000 0.300000 0.400000 1.000000";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1775";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "23.3429 27.2812 -3.8";
+      rotation = "0 0 1 180.664";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape(StartPoint) {
+      position = "-0.881596 -12.6193 -3.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Trigger(Bounds) {
+      position = "-85.0059 179.06 -16.9";
+      rotation = "1 0 0 0";
+      scale = "157 237.5 39.5";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new StaticShape() {
+      position = "22.9128 26.9699 2.387";
+      rotation = "0 0 1 180.664";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "-0.773001 -10.5596 -4.11025";
+      rotation = "0 0 1 180.091";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/ventalation.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1775";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new Item() {
+      position = "9.94322 109.542 -3.42393";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-8.49675 13.1156 -3.48199";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-8.39455 37.1901 -3.50362";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-24.3038 37.2528 -3.48218";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-40.4097 58.9464 -3.48834";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-64.4122 59.0986 -3.52342";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "39.2832 35.0733 -3.45153";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-0.372032 92.1806 -3.48173";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperSpeedItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "7.85056 9.29089 -1.7319";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "7.85056 9.29089 -1.7319";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "7.85056 9.29089 -1.7319";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "1775";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new StaticShape() {
+      position = "-28.7516 33.4232 -1.85285";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-28.7516 33.4232 -1.85285";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-28.7516 33.4232 -1.85285";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-68.7143 36.6371 -1.71564";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-65.7183 33.529 -1.63296";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-65.7183 33.529 -1.63296";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-65.7183 33.529 -1.63296";
+      rotation = "1 0 0 89.95439";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-68.7143 36.6371 -1.71564";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-68.7143 36.6371 -1.71564";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-44.7212 13.5814 -1.72275";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-44.7212 13.5814 -1.72275";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-44.7212 13.5814 -1.72275";
+      rotation = "0.5775039 -0.5770439 0.5775029 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-20.603 41.4327 -2.2148";
+      rotation = "0.2795891 -0.6786373 0.6791772 148.735";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-64.3385 89.5142 -1.75496";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-64.3385 89.5142 -1.75496";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-64.3385 89.5142 -1.75496";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-15.8683 89.4163 -1.91144";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-15.8683 89.4163 -1.91144";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-15.8683 89.4163 -1.91144";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-20.603 41.4327 -2.2148";
+      rotation = "0.2795891 -0.6786373 0.6791772 148.735";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-20.603 41.4327 -2.2148";
+      rotation = "0.2795891 -0.6786373 0.6791772 148.735";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-36.633 41.4455 -1.94561";
+      rotation = "-0.296749 -0.674985 0.675526 213.081";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-36.633 41.4455 -1.94561";
+      rotation = "-0.296749 -0.674985 0.675526 213.081";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-36.633 41.4455 -1.94561";
+      rotation = "-0.296749 -0.674985 0.675526 213.081";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.5332 109.234 -1.92502";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "11.4038 37.1589 -1.89403";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "11.4038 37.1589 -1.89403";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "11.4038 37.1589 -1.89403";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "43.3426 12.6502 -1.89763";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "43.3426 12.6502 -1.89763";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "43.3426 12.6502 -1.89763";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "35.4222 73.2984 -1.85305";
+      rotation = "0.8486338 -0.373899 0.374193 99.31664";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "35.4222 73.2984 -1.85305";
+      rotation = "0.8486338 -0.373899 0.374193 99.31664";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "35.4222 73.2984 -1.85305";
+      rotation = "0.8486338 -0.373899 0.374193 99.31664";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.4469 73.4145 -1.97732";
+      rotation = "0.8571821 0.3640221 -0.3643171 98.7498";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.4469 73.4145 -1.97732";
+      rotation = "0.8571821 0.3640221 -0.3643171 98.7498";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.4469 73.4145 -1.97732";
+      rotation = "0.8571821 0.3640221 -0.3643171 98.7498";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "19.474 73.3324 -1.85514";
+      rotation = "0.8581907 -0.3628378 0.3631218 98.68304";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "19.474 73.3324 -1.85514";
+      rotation = "0.8581907 -0.3628378 0.3631218 98.68304";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "19.474 73.3324 -1.85514";
+      rotation = "0.8581907 -0.3628378 0.3631218 98.68304";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-0.743346 73.3737 -1.94683";
+      rotation = "1 -1.38683e-07 -5.5747e-06 89.95429";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-0.743346 73.3737 -1.94683";
+      rotation = "1 -1.38683e-07 -5.5747e-06 89.95429";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-0.743346 73.3737 -1.94683";
+      rotation = "1 -1.38683e-07 -5.5747e-06 89.95429";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "3.53153 105.391 -1.87132";
+      rotation = "0.9017968 0.3054589 -0.305708 95.86652";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "3.53153 105.391 -1.87132";
+      rotation = "0.9017968 0.3054589 -0.305708 95.86652";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "3.53153 105.391 -1.87132";
+      rotation = "0.9017968 0.3054589 -0.305708 95.86652";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "0.33651 113.39 -1.88695";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "0.33651 113.39 -1.88695";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "0.33651 113.39 -1.88695";
+      rotation = "0.0005627761 -0.7068241 0.7073892 179.935";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-4.56806 108.986 -1.98315";
+      rotation = "0.5775039 -0.5770448 0.5775019 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-4.56806 108.986 -1.98315";
+      rotation = "0.5775039 -0.5770448 0.5775019 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "-4.56806 108.986 -1.98315";
+      rotation = "0.5775039 -0.5770448 0.5775019 119.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.5332 109.234 -1.92502";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new StaticShape() {
+      position = "27.5332 109.234 -1.92502";
+      rotation = "-0.5762761 -0.5776541 0.578119 239.947";
+      scale = "2 2 2";
+      dataBlock = "DuctFan";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "3165";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-13.0688 -26.6568 6.02162";
+      rotation = "0.8454041 -0.377535 -0.3778351 99.53229";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         time = "0";
+         PowerUp = "0";
+         Pad = "7400";
+         penaltyTime = "0";
+         bonusTime = "0";
+         gemCount = "0";
+   };
+   new InteriorInstance() {
+      position = "-17.3542 -26.6518 -0.251319";
+      rotation = "1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-11.9541 -26.6518 -0.251319";
+      rotation = "1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-9.29208 -26.6436 -10.4761";
+      rotation = "0.8454044 -0.3775342 -0.3778352 99.53224";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-18.3011 -26.6409 -13.9263";
+      rotation = "0.5775039 -0.5770439 -0.5775029 119.947";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-27.2019 -26.6435 -10.6488";
+      rotation = "-0.29792 0.6747292 0.6752662 213.205";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-23.8182 -26.6568 6.03494";
+      rotation = "-0.297921 0.6747289 0.675266 213.205";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "15.8737 140.164 10.7007";
+      rotation = "0.3533648 -0.6612247 0.6617517 218.952";
+      scale = "1 0.7 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "13.6409 140.156 0.289925";
+      rotation = "-1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.1835 140.156 0.27808";
+      rotation = "-1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "17.4663 140.155 -0.775681";
+      rotation = "-0.9666919 -0.180907 0.181051 91.89491";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "14.7526 140.157 1.71807";
+      rotation = "-0.971754 0.166808 -0.166941 91.59582";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.4208 140.156 0.442482";
+      rotation = "-0.5775029 0.5770439 -0.5775039 119.947";
+      scale = "1 0.7 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "19.7125 140.162 7.86535";
+      rotation = "-0.5775029 0.5770439 -0.5775039 119.947";
+      scale = "1 0.7 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "18.8779 140.159 4.08272";
+      rotation = "-0.5775029 0.5770439 -0.5775039 119.947";
+      scale = "1 0.5 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.7467 140.156 0.275356";
+      rotation = "-1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "11.7795 140.154 -2.31386";
+      rotation = "-0.8581895 0.3628368 -0.3631258 98.68328";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "10.1104 140.157 1.33633";
+      rotation = "-1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "15.103 140.151 -5.57105";
+      rotation = "-0.8550261 0.366549 -0.366841 98.8923";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "20.4853 140.147 -11.5465";
+      rotation = "-0.8222492 -0.4022741 0.4025941 101.098";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "25.1633 140.15 -7.90734";
+      rotation = "-0.8256134 -0.3988162 0.3991342 100.8679";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "29.5636 140.157 1.1425";
+      rotation = "-1 0 0 89.95439";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "4.37349 140.163 8.79496";
+      rotation = "0.2214019 -0.6892838 0.6898327 204.987";
+      scale = "1 0.5 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "27.6544 140.163 8.59321";
+      rotation = "-0.8942629 0.3163339 -0.316586 96.34451";
+      scale = "1 0.5 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "23.1611 140.165 11.8754";
+      rotation = "-0.718545 0.491583 -0.4919749 108.559";
+      scale = "1 0.5 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "9.2643 140.166 12.244";
+      rotation = "0.4663149 -0.625271 0.625769 230.036";
+      scale = "1 0.5 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "16.4877 140.164 10.7731";
+      rotation = "-0.7912201 0.432246 -0.43259 103.252";
+      scale = "1 0.7 1";
+      interiorFile = "~/data/interiors/fubargame/Repairjob.dif";
+      showTerrainInside = "0";
+   };
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/music/MainTitle.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+   new Item() {
+      position = "-36.8 42 -3.8";
+      rotation = "0 0 1 89.99998";
+      scale = "1 1 1";
+      datablock = "easterEgg";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+   };
+};
+//--- OBJECT WRITE END ---
