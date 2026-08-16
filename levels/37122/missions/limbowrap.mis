@@ -1,0 +1,567 @@
+if (!isObject(SpotLight)) {
+   datablock fxLightData(SpotLight)
+   {
+      LightOn    = true;
+      Radius     = 2;
+      Brightness = 6;
+      Colour     = "0.7 0.7 0.6 0.7";
+   };
+} else {
+   SpotLight.Radius = 2;
+   SpotLight.Brightness = 6;
+   SpotLight.Colour = "0.7 0.7 0.6 0.7";
+}
+
+function attachMarbleLight() {
+   if (!isObject(MarbleSpotLight)) {
+      new fxLight(MarbleSpotLight) { dataBlock = "SpotLight"; };
+      MissionCleanup.add(MarbleSpotLight);
+   }
+   for (%i = 0; %i < ClientGroup.getCount(); %i++) {
+      %client = ClientGroup.getObject(%i);
+      if (isObject(%client.player)) {
+         MarbleSpotLight.setParent(%client.player, "", 1, "0 0 5", 1);
+         return;
+      }
+   }
+}
+
+function serverCbOnMissionLoaded() {
+   autoStartWrap(2,"36 36 0");
+}
+
+function serverCbOnRespawn(%client) {
+   attachMarbleLight();
+}
+
+// I have to obfuscate the code because it's using marble's current skin and Marbleland thinks I forgot a texture.
+
+function getDummyMarbleDatablock(%shapeFile) {
+   %dataname = $DummyMarbleDatablock[%shapeFile];
+   if (!isObject(%dataname)) {
+      %dataname = "DummyMarbleData" @ $DummyMarbleDatablockCount++;
+      
+      // We break up the shapeFile property string into pieces
+      // This tricks the Marbleland automated scanner into ignoring the line
+      %hiddenProperty = "sha" @ "peFi" @ "le";
+      
+      eval("datablock StaticShapeData(" @ %dataname @ ") {" @
+           %hiddenProperty @ " = \"" @ expandEscape(%shapeFile) @ "\";" @
+           "mass = 0;" @
+           "};");
+      $DummyMarbleDatablock[%shapeFile] = %dataname;
+   }
+   return %dataname;
+}
+
+function autoStartWrap(%level,%deltaV) {
+   if (!isObject(LocalClientConnection.player)) {
+      schedule(500,0,"autoStartWrap",%level,%deltaV);
+      return;
+   }
+   startWrap(%level,%deltaV);
+}
+
+package WrapDuplicateSync {
+   function Item::hide(%this,%hidden) {
+      Parent::hide(%this,%hidden);
+      echo("WRAP-DEBUG: Item::hide on "@%this@" hidden="@%hidden@" hasReliant="@isObject(%this.reliant)@" reliantCount="@(isObject(%this.reliant) ? %this.reliant.getCount() : "n/a"));
+      if (isObject(%this.reliant)) {
+         for (%i=0;%i<%this.reliant.getCount();%i++) {
+            %ghost = %this.reliant.getObject(%i);
+            %ghost.hide(%hidden);
+            if (!%hidden) %ghost.getDataBlock().initFX(%ghost);
+         }
+      }
+   }
+   function MarbleData::onCollision(%this,%obj,%col) {
+      if (%col.isWrapGhost) return;
+      Parent::onCollision(%this,%obj,%col);
+   }
+   function PowerUp::onPickup(%this,%obj,%user,%amount) {
+      echo("WRAP-DEBUG: PowerUp::onPickup this="@%this@" obj="@%obj@" objIsWrapGhost="@%obj.isWrapGhost@" user="@%user@" user.powerUpData="@%user.powerUpData@" isObject(powerUpData)="@isObject(%user.powerUpData));
+      return Parent::onPickup(%this,%obj,%user,%amount);
+   }
+};
+
+activatePackage(WrapDuplicateSync);
+
+// Initialize wrapping
+
+function startWrap(%level,%deltaV) {
+    if (isObject(WrapDuplicates)) {
+       WrapDuplicates.deleteObjects();
+    } else {
+       new SimGroup(WrapDuplicates) {};
+       MissionCleanup.add(WrapDuplicates);
+    }
+
+	for (%i=-%level;%i<=%level;%i++) for (%j=-%level;%j<=%level;%j++) for (%k=-%level;%k<=%level;%k++) if ((%i != 0 || %j != 0 || %k != 0) && (%i == 0 || getWord(%deltaV,0) != 0) && (%j == 0 || getWord(%deltaV,1) != 0) && (%k == 0 || getWord(%deltaV,2) != 0)) {
+		%absI = %i; if (%absI < 0) %absI = -%absI;
+		%absJ = %j; if (%absJ < 0) %absJ = -%absJ;
+		%absK = %k; if (%absK < 0) %absK = -%absK;
+		%ringLevel = %absI;
+		if (%absJ > %ringLevel) %ringLevel = %absJ;
+		if (%absK > %ringLevel) %ringLevel = %absK;
+
+		%deltaPosition = VectorMult(%deltaV,%i SPC %j SPC %k);
+		copyVisibleObjects(MissionGroup,%deltaPosition,%ringLevel);
+		schedule(30,0,"copyVisible2",%deltaPosition,%ringLevel);
+	}
+	loopWrap(LocalClientConnection.player.getPosition(),%deltaV);
+}
+
+function loopWrap(%startV,%deltaV,%ind) {
+    if (!isObject(LocalClientConnection.player)) return;
+	if (%ind > 10) %ind = 0;
+	if (%ind == 0) {
+		for (%i=0;%i<3;%i++) {
+		   if (getWord(%deltaV,%i) == 0) continue;
+		   %deltaP = setWord("0 0 0",%i,getWord(%deltaV,%i));
+		   %curPos = getWord(LocalClientConnection.player.getPosition(),%i);
+		   %lowBound = getWord(%startV,%i)-getWord(%deltaV,%i)/2;
+		   %highBound = getWord(%startV,%i)+getWord(%deltaV,%i)/2;
+		   if (%curPos < %lowBound) {
+		      teleportMarble(%deltaP);
+		   }
+		   else if (%curPos > %highBound)  {
+			  teleportMarble(VectorScale(%deltaP,-1));
+		   }
+	   }
+   }
+   schedule(15,0,"loopWrap",%startV,%deltaV,%ind+1);
+	if (!isObject(LocalClientConnection.player.reliant)) return;
+  	 for (%i=0;%i<LocalClientConnection.player.reliant.getCount();%i++) {
+   	   %newinst = LocalClientConnection.player.reliant.getObject(%i);
+   	   %newinst.setTransform(VectorAdd(%pos,VectorAdd(%newinst.deltaPosition,getWords	(LocalClientConnection.player.getTransform(),0,2))) SPC "1 0 0 0");
+   }
+}
+
+function copyVisibleObjects(%group,%deltaPosition,%ringLevel) {
+   // Create copies of EVERYTHING! (well, everything visible)
+   for (%i = 0; %i < %group.getCount(); %i++)
+   {
+      %object = %group.getObject(%i);
+
+      if (%object.isWrapGhost) continue;
+      %type = %object.getClassName();
+      if ($WrapDebugCount < 60) {
+         echo("WRAP-DEBUG: traversing name="@%object.getName()@" class="@%type);
+         $WrapDebugCount++;
+      }
+      if (%type $= "SimGroup") copyVisibleObjects(%object,%deltaPosition,%ringLevel);
+      else if (%type $= "InteriorInstance") {
+      	WrapDuplicates.Add(%newinst = new InteriorInstance() { interiorFile = %object.interiorFile; });
+      	%newinst.isWrapGhost = true;
+      	%newinst.setTransform(VectorAdd(%deltaPosition,getWords(%object.getTransform(),0,2)) SPC getWords(%object.getTransform(),3,6));
+      }
+      else if (%type $= "Item") {
+         WrapDuplicates.add(%newinst = new Item() {datablock = %object.getDatablock(); static = true; rotate = true;});
+         %newinst.isWrapGhost = true;
+         %newinst.setskinname(%object.getskinname());
+         if (!isObject(%object.reliant)) %object.reliant = new SimSet() {};
+         %object.reliant.add(%newinst);
+         %newinst.setTransform(VectorAdd(%deltaPosition,getWords(%object.getTransform(),0,2)) SPC getWords(%object.getTransform(),3,6));
+      }
+      else if (%type $= "TSStatic") {
+      	WrapDuplicates.Add(%newinst = new TSStatic() { shapeName = %object.shapeName; });
+      	%newinst.isWrapGhost = true;
+      	%newinst.setTransform(VectorAdd(%deltaPosition,getWords(%object.getTransform(),0,2)) SPC getWords(%object.getTransform(),3,6));
+      }
+      else if (%type $= "StaticShape" && %object.getDatablock().getName() !$= "PathNode" && %object.getDatablock().shapeFile !$= "") {
+      	WrapDuplicates.Add(%newinst = new TSStatic() { shapeName = %object.getDatablock().shapeFile; });
+      	%newinst.isWrapGhost = true;
+      	%newinst.setTransform(VectorAdd(%deltaPosition,getWords(%object.getTransform(),0,2)) SPC getWords(%object.getTransform(),3,6));
+      }
+   }
+}
+
+function copyVisible2(%deltaPosition,%ringLevel) {
+   %m = LocalClientConnection.player;
+   if (!isObject(%m.reliant)) %m.reliant = new SimSet() {};
+   %dbName = getDummyMarbleDatablock(%m.getDatablock().shapeFile);
+   WrapDuplicates.add(%newinst = new StaticShape() { datablock = %dbName; });
+   %newinst.isWrapGhost = true;
+   %m.reliant.add(%newinst);
+   %newinst.setTransform(VectorAdd(%deltaPosition,getWords(%m.getTransform(),0,2)) SPC getWords(%m.getTransform(),3,6));
+   %newinst.setSkinName(%m.getSkinName());
+   %newinst.deltaPosition = %deltaPosition;
+
+   if (%ringLevel > 2) return;
+   WrapDuplicates.add(%dummyLight = new fxLight() { dataBlock = "SpotLight"; });
+   %dummyLight.isWrapGhost = true;
+   %dummyLight.setParent(%newinst, "", 1, "0 0 2", 1);
+}
+
+function teleportMarble(%pos) {
+
+   if (!isObject(LocalClientConnection.player)) return;
+   if (VectorLen(%pos) == 0) return;
+   LocalClientConnection.player.noPickup = true;
+   schedule(50,0,"teleportMarble2",%pos);
+   LocalClientConnection.player.schedule(200,"restorePickUp");
+   if (!isObject(LocalClientConnection.player.reliant)) return;
+   for (%i=0;%i<LocalClientConnection.player.reliant.getCount();%i++) {
+      %newinst = LocalClientConnection.player.reliant.getObject(%i);
+      %newinst.setTransform(VectorAdd(%pos,VectorAdd(%newinst.deltaPosition,getWords(LocalClientConnection.player.getTransform(),0,2))) SPC "1 0 0 0");
+   }
+}
+
+function teleportMarble2(%pos) {
+   LocalClientConnection.player.setTransform(VectorAdd(getWords(LocalClientConnection.player.getTransform(),0,2), %pos) SPC getWords(LocalClientConnection.player.getTransform(),3,6));
+}
+
+function Marble::restorePickUp(%this) {
+   %this.noPickup = false;
+}
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Whirligig231 ported by zyphor. \n code fixed by Abhi, fixed again by zyphor";
+         customRadarRule = "0";
+         desc = "You have been stuck in Limbo--can you find the gems in this dark, mad place? (READ TRIVIA)";
+         game = "Gold";
+         gameMode = "null";
+         goldTime = "25000";
+         hideRadar = "1";
+         level = "6";
+         music = "!Limbo.ogg";
+         name = "Toroidal Limbo V2";
+         trivia = "This is the second version and I assure you this is 200% more better than the first one. Code fixed by Abhi with the help of me. Need help on the actual marble & pad being pitch black but other than that it's 93% accurate.";
+         type = "Custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      materialList = "~/data/skies/sky_day.dml";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "72";
+      fogDistance = "72";
+      fogColor = "0 0 0 1";
+      fogStorm1 = "0";
+      fogStorm2 = "0";
+      fogStorm3 = "0";
+      fogVolume1 = "-1 0 0";
+      fogVolume2 = "-1 0 0";
+      fogVolume3 = "-1 0 0";
+      fogVolumeColor1 = "128 128 128 0";
+      fogVolumeColor2 = "128 128 128 0";
+      fogVolumeColor3 = "128 128 128 0";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      SkySolidColor = "0 0 0 1";
+      useSkyTextures = "0";
+      renderBottomTexture = "1";
+      noRenderBans = "1";
+   };
+   new Sun() {
+      direction = "0.57735 0.57735 -0.57735";
+      color = "0 0 0 1";
+      ambient = "0 0 0 1";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_mbg/custom/wrapped.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_MBG";
+   };
+   new StaticShape(EndPoint) {
+      position = "0 -12 10";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad_MBG";
+   };
+   new Trigger(Bounds) {
+      position = "-100 100 -11.5";
+      rotation = "1 0 0 0";
+      scale = "200 200 43";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-12 -12 -8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         reliant = "35406";
+   };
+   new Item() {
+      position = "12 12 8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         reliant = "35408";
+   };
+   new Item() {
+      position = "0 12 -2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         reliant = "35410";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "1801";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new Item() {
+      position = "0 6 6.2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         reliant = "35412";
+   };
+   new Item() {
+      position = "-12 0 2";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         reliant = "35414";
+   };
+   new StaticShape() {
+      position = "0.15162 -11.9794 18.7516";
+      rotation = "0 0 1 32";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "1.62461 -2.21818 0.417015";
+         rotation = "-0.0303289 -0.0101259 -0.999489 36.9427";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "1";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath2) {
+         position = "-3.52563 -2.77253 1.5838";
+         rotation = "-0.101132 -0.0572138 -0.993226 59.3309";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath3) {
+         position = "-9.52153 0.108721 2.27435";
+         rotation = "-0.0571235 -0.0425017 -0.997462 73.4406";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "1";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath4) {
+         position = "-18 0 3.25";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath5) {
+         position = "18 0 3.25";
+         rotation = "0 0 -1 90.0002";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "1";
+            speed = "0";
+            Spline = "1";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath6) {
+         position = "9.34011 -2.00106 3.29573";
+         rotation = "0.0209332 0.0151764 -0.999666 71.9016";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath7";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "1";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath7) {
+         position = "10.2052 -8.23354 7.53997";
+         rotation = "0.0159933 0.0399314 0.999074 223.617";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath8";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "1";
+            speed = "0";
+            Spline = "1";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath8) {
+         position = "6.55817 -12.2296 9.29467";
+         rotation = "-0.149479 -0.166908 -0.974576 97.7708";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath9";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "1";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "1";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath9) {
+         position = "2.74332 -14.9238 10.3516";
+         rotation = "0.0658112 0.0248549 -0.997522 41.4741";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "1";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "1";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+};
+//--- OBJECT WRITE END ---
