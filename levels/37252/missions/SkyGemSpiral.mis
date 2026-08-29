@@ -1,0 +1,196 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+   new ScriptObject(MissionInfo) {
+      type = "Custom";
+      name = "Sky Gem Spiral";
+      desc = "Climb a spiral of floating platforms, collect five gems, and reach the summit.";
+      startHelpText = "Follow the floating platforms and collect all 5 gems!";
+      artist = "d 2025 2026";
+      level = "1";
+      goldTime = "45000";
+   };
+
+   new MissionArea(MissionArea) {
+      area = "-100 -100 200 200";
+      flightCeiling = "100";
+      flightCeilingRange = "20";
+      locked = "true";
+   };
+
+   new Sky(Sky) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      cloudHeightPer[0] = "0.35";
+      cloudHeightPer[1] = "0.3";
+      cloudHeightPer[2] = "0.2";
+      cloudSpeed1 = "0.0005";
+      cloudSpeed2 = "0.001";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      SkySolidColor = "0.9 0.9 0.9 1";
+      fogDistance = "300";
+      fogColor = "0.6 0.6 0.6 1";
+      fogVolume1 = "0 0 0";
+      fogVolume2 = "0 0 0";
+      fogVolume3 = "0 0 0";
+      materialList = "~/data/skies/sky_day.dml";
+      windVelocity = "1 1 0";
+      windEffectPrecipitation = "1";
+      noRenderBans = "1";
+      locked = "true";
+   };
+
+   new Sun() {
+      direction = "0.55 0.44 -0.71";
+      color = "1.4 1.2 0.4 1";
+      ambient = "0.3 0.3 0.4 1";
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      locked = "true";
+   };
+
+   new SimGroup(CheckPoints) {
+      new StaticShape(StartPoint) {
+         position = "0 0 0.38";
+         rotation = "0 0 1 40";
+         scale = "1 1 1";
+         dataBlock = "StartPad";
+      };
+      new StaticShape(EndPoint) {
+         position = "7 3 9.38";
+         rotation = "0 0 1 180";
+         scale = "1 1 1";
+         dataBlock = "EndPad";
+      };
+   };
+
+   new InteriorInstance(Platform01) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform02) {
+      position = "7 6 1";
+      rotation = "0 0 1 15";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform03) {
+      position = "15 9 2";
+      rotation = "0 0 1 30";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform04) {
+      position = "23 5 3";
+      rotation = "0 0 1 55";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform05) {
+      position = "28 -3 4";
+      rotation = "0 0 1 80";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform06) {
+      position = "23 -11 5";
+      rotation = "0 0 1 105";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform07) {
+      position = "15 -15 6";
+      rotation = "0 0 1 125";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform08) {
+      position = "7 -12 7";
+      rotation = "0 0 1 145";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform09) {
+      position = "2 -5 8";
+      rotation = "0 0 1 165";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance(Platform10) {
+      position = "7 3 9";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/addon/smallplatform.dif";
+      showTerrainInside = "0";
+   };
+
+   new Trigger(Bounds) {
+      position = "14 0 -16";
+      rotation = "1 0 0 0";
+      scale = "60 60 50";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+   };
+
+   new Item(Gem1) { position = "7 6 1.9"; rotation = "1 0 0 0"; scale = "1 1 1"; dataBlock = "GemItem"; collideable = "0"; static = "1"; rotate = "1"; };
+   new Item(Gem2) { position = "23 5 3.9"; rotation = "1 0 0 0"; scale = "1 1 1"; dataBlock = "GemItem"; collideable = "0"; static = "1"; rotate = "1"; };
+   new Item(Gem3) { position = "23 -11 5.9"; rotation = "1 0 0 0"; scale = "1 1 1"; dataBlock = "GemItem"; collideable = "0"; static = "1"; rotate = "1"; };
+   new Item(Gem4) { position = "7 -12 7.9"; rotation = "1 0 0 0"; scale = "1 1 1"; dataBlock = "GemItem"; collideable = "0"; static = "1"; rotate = "1"; };
+   new Item(Gem5) { position = "2 -5 8.9"; rotation = "1 0 0 0"; scale = "1 1 1"; dataBlock = "GemItem"; collideable = "0"; static = "1"; rotate = "1"; };
+
+   new Item(HelpfulJump) {
+      position = "28 -3 4.9";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collideable = "0";
+      static = "1";
+      rotate = "1";
+      showHelpOnPickup = "1";
+   };
+
+   new Trigger(TutorialMessage1) {
+      position = "0 0 0"; rotation = "1 0 0 0"; scale = "5 5 2";
+      dataBlock = "HelpTrigger"; polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+      text = "Jump carefully: each floating platform is slightly higher than the last.";
+   };
+   new Trigger(TutorialMessage2) {
+      position = "28 -3 4"; rotation = "1 0 0 0"; scale = "5 5 2";
+      dataBlock = "HelpTrigger"; polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+      text = "Pick up the Super Jump and press <func:bind use> when you need extra height.";
+   };
+   new Trigger(TutorialMessage3) {
+      position = "2 -5 8"; rotation = "1 0 0 0"; scale = "5 5 2";
+      dataBlock = "HelpTrigger"; polyhedron = "0 0 0 1 0 0 0 -1 0 0 0 1";
+      text = "The summit is close. Make sure you collected all five gems!";
+   };
+
+   new StaticShape(EndSign) {
+      position = "7 3 15";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+
+   new AudioProfile(MusicProfile) {
+      fileName = "~/data/sound/Shell.ogg";
+      description = "AudioMusic";
+      preload = "0";
+   };
+};
+//--- OBJECT WRITE END ---
