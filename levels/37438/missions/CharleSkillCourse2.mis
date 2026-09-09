@@ -1,0 +1,902 @@
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "charlemaniac";
+         awesomeHint = "You may need to grab a few gems out of order or from different walls to make a better path here.";
+         awesomeTime = "85000";
+         customRadarRule = "61";
+         desc = "This time you have to navigate in gravity.";
+         game = "Platinum";
+         gameMode = "null";
+         generalHint = "Follow help text instruction very carefully. Analyze where you are going, and keep track of gems you\'ve grabbed.";
+         level = "1000";
+         music = "Seaside Revisited.ogg";
+         name = "Charlemaniac\'s Put-Together Skill Course 2 (Original)";
+         noBlast = "1";
+         platinumTime = "152000";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         trivia = "Level created on February 28, 2023\nUpdates:\nMarch 8, 2026 - Added bounds.\nApril 15, 2026 - Corrected bounds size to make the level possible to finish on the normal route.\nAugust 21, 2026 - Added camera path, icon picture, challenge times, hints, and trivia.\nTrivia:\nA sequel to CPTSC1 from back in 2021. This time two battlecubes have collided and formed a confusing course to follow. An interesting level indeed. Two notable updates from before I started recording them (so I don\'t know the date):\n- Replaced stack of 5-7 time travels with a 15 second time travel.\n- Added a checkpoint.";
+         type = "Custom";
+         ultimateHint = "There aren\'t a whole lot of time travels, but figure out the most efficient way to get each of them and all the gems.";
+         ultimateTime = "110000";
+   };
+   new SimGroup(HelpBubbleGroup) {
+
+      new StaticShape() {
+         position = "-8.57539 -10.1863 104.117";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = "Get the three gems on this layer and go onto the spring green side.";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "4.97539 -36.5716 105.068";
+         rotation = "-0.707106 8.96324e-07 0.707108 180";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Collect two gems before heading carefully onto the yellow surface.";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "4.78666 2.47637 114.994";
+         rotation = "-1.2676e-06 1 -2.79771e-06 180";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Only one gem here before going to the pink side!";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "-21.8321 -26.6636 113.221";
+         rotation = "-1.26759e-06 0.70711 0.707104 180";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " There are 6 gems to collect here before turning onto the bright green platform.";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "22.1304 -25.4095 92.1484";
+         rotation = "-0.577352 -0.577346 0.577353 240";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Get 5 gems on this side before performing a wall-hit onto the pillar in front of you.";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "16.329 -14.6823 99.5455";
+         rotation = "-0.577352 -0.577346 0.577353 240";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Get the two gems on either side of this pillar, then super jump onto the next pillar up.";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "9.11179 5.43353 107.498";
+         rotation = "-0.577352 -0.577346 0.577353 240";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " There are two gems on this pillar. Then get the gravity modifier to be on the outside of the cubes. ";
+            triggerRadius = "3";
+      };
+      new StaticShape() {
+         position = "-1.20136 23.9127 110.2";
+         rotation = "-1.26759e-06 0.707111 0.707103 180";
+         scale = "1 1 1";
+         dataBlock = "HelpBubble";
+            disable = "0";
+            displayonce = "0";
+            extended = "0";
+            persistTime = "2000";
+            text = " Get the four last gems right here, then fall to the gravity modifier where the sign indicates. You\'ll see the finish.";
+            triggerRadius = "3";
+      };
+   };
+   new Item() {
+      position = "-10.2466 -27.4974 107.231";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new SimGroup(MissionData) {
+
+      new MissionArea(MissionArea) {
+         area = "-360 -648 720 1296";
+         flightCeiling = "300";
+         flightCeilingRange = "20";
+            locked = "true";
+      };
+      new Sky(Sky) {
+         position = "336 136 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         materialList = "~/data/skies_pq/Blender3/blender3.dml";
+         cloudHeightPer[0] = "0";
+         cloudHeightPer[1] = "0";
+         cloudHeightPer[2] = "0";
+         cloudSpeed1 = "0.0001";
+         cloudSpeed2 = "0.0002";
+         cloudSpeed3 = "0.0003";
+         visibleDistance = "500";
+         fogDistance = "300";
+         fogColor = "0.6 0.6 0.6 1";
+         fogStorm1 = "0";
+         fogStorm2 = "0";
+         fogStorm3 = "0";
+         fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+         fogVolume2 = "-1 1.07208e-14 8.756e-14";
+         fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+         fogVolumeColor1 = "128 128 128 0";
+         fogVolumeColor2 = "128 128 128 4e-06";
+         fogVolumeColor3 = "128 128 128 1.44355e+07";
+         windVelocity = "1 0 0";
+         windEffectPrecipitation = "0";
+         SkySolidColor = "0.6 0.6 0.6 1";
+         useSkyTextures = "1";
+         renderBottomTexture = "1";
+         noRenderBans = "1";
+      };
+   };
+   new Item() {
+      position = "-7.74776 -10.4066 88.387";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "HelicopterItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Sun() {
+      direction = "0.638261 0.459006 -0.61801";
+      color = "1 1 0.4 1";
+      ambient = "0.3 0.3 0.4 1";
+   };
+   new InteriorInstance() {
+      position = "-6.96439 -9.18052 102.956";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_MBP/Battlecube.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "10.2597 18.1409 93.9358";
+         rotation = "0.0787442 -0.333141 0.939583 154.957";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath2) {
+         position = "-20.9235 -9.14686 92.9773";
+         rotation = "0.201124 -0.17001 0.9647 82.4515";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath3";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath3) {
+         position = "-13.059 -18.8849 110.729";
+         rotation = "-0.100277 0.0248494 0.994649 27.9798";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath4";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath4) {
+         position = "-12.369 -5.18325 100.928";
+         rotation = "-0.000526445 0.0105962 0.999944 174.312";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath5";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath5) {
+         position = "-0.91187 -12.95 89.8013";
+         rotation = "-0.328858 0.260943 0.907613 82.3232";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath6";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath6) {
+         position = "-18.2855 41.3639 94.1103";
+         rotation = "-0.0184987 0.0887424 0.995883 156.545";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath7";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath7) {
+         position = "-32.6976 11.3109 108.866";
+         rotation = "0.0225582 -0.126755 0.991677 159.982";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath8";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath8) {
+         position = "-12.4503 -43.9966 104.202";
+         rotation = "0.0275132 -0.143783 0.989227 158.563";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "0";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new InteriorInstance() {
+      position = "5.07873 -27.3874 85.7628";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape(StartPoint) {
+      position = "19.7327 18.1702 86.0028";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad";
+   };
+   new Item() {
+      position = "2.08096 5.58034 85.9028";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.5124 -24.1715 85.9028";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-22.4377 -24.5913 85.9028";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-23.7785 19.1958 85.9028";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21.7513 19.798 86.5841";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         skin = "base";
+         timeBonus = "5000";
+   };
+   new Item() {
+      position = "22.3992 19.8159 86.5392";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         skin = "base";
+         timeBonus = "5000";
+   };
+   new Item() {
+      position = "-7.84025 -10.2019 86.3527";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-22.0684 -27.4974 107.198";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-38.4026 -8.64855 103.109";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-24.1907 -28.057 103.814";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         skin = "base";
+         timeBonus = "5000";
+   };
+   new Item() {
+      position = "-11.626 -38.5869 103.096";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-3.28155 -13.6346 103.096";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "4.72513 -36.8445 104.113";
+      rotation = "0 -1 0 90.0002";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.33311 -11.6987 115.064";
+      rotation = "-0.707106 8.96324e-07 0.707108 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "6.33311 -3.23895 127.234";
+      rotation = "-0.707106 8.96324e-07 0.707108 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "5.66567 -24.0775 117.025";
+      rotation = "-0.707106 8.96324e-07 0.707108 180";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         skin = "base";
+         timeBonus = "5000";
+   };
+   new Item() {
+      position = "5.60445 1.69262 114.461";
+      rotation = "3.26335e-06 1.53012e-06 1 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-1.89059 11.952 115.546";
+      rotation = "-1.2676e-06 1 -2.79771e-06 180";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "15000";
+   };
+   new Item() {
+      position = "-3.50074 -27.4974 94.8067";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "7.92989 -27.4974 95.1317";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "13.9019 -27.4974 107.464";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "2.02368 -27.4974 106.901";
+      rotation = "-1.26759e-06 0.70711 0.707104 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-17.8225 -5.65349 116.123";
+      rotation = "-1.2676e-06 1 -2.79771e-06 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-21.4664 -25.8835 115.063";
+      rotation = "1.26759e-06 -0.707105 0.707109 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.7624 -26.6938 92.6503";
+      rotation = "-0.577348 -0.577354 -0.577348 120";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23.3434 -24.6726 113.14";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23.1887 17.7103 112.95";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23.1887 11.5677 101.092";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "23.1887 -3.77946 93.139";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "21.8451 -20.2216 95.1065";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17.5831 -14.8519 121.872";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "17.5831 -14.7572 35.9103";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "16.8366 -14.5885 84.4284";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "SuperJumpItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "10.1769 -9.99181 107.31";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "10.1769 23.1789 107.375";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "9.28948 57.9684 107.417";
+      rotation = "1.93876e-06 -0.707104 0.70711 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-10.3245 20.7526 101.279";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "-23.5524 20.7526 89.6588";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "16.7826 20.7526 92.0925";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new Item() {
+      position = "20.8017 20.8275 112.39";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape() {
+      position = "-24.8023 20.4788 104.878";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "SignDown";
+   };
+   new Item() {
+      position = "-27.6663 -57.559 106.087";
+      rotation = "-1.26759e-06 0.707111 0.707103 180";
+      scale = "1 1 1";
+      dataBlock = "AntiGravityItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+   };
+   new StaticShape(EndPoint) {
+      position = "-5.61968 -49.5032 99.8052";
+      rotation = "1.26759e-06 -0.707102 0.707112 180";
+      scale = "1 1 1";
+      dataBlock = "EndPad";
+   };
+   new StaticShape() {
+      position = "-5.88193 -54.9227 99.6572";
+      rotation = "1.26759e-06 -0.707102 0.707112 180";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new Item() {
+      position = "-5.95958 -65.65 99.4613";
+      rotation = "1.26759e-06 -0.707102 0.707112 180";
+      scale = "30 30 30";
+      dataBlock = "GemItem";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+   };
+   new StaticShape() {
+      position = "23.0678 -24.6899 97.0411";
+      rotation = "-0.577352 -0.577346 0.577353 240";
+      scale = "1 1 1";
+      dataBlock = "checkpoint";
+         chkcollide = "1";
+   };
+   new ScriptObject() {
+         artist = "David the Bavid";
+         customRadarRule = "61";
+         desc = "Obstacles...";
+         easterEgg = "0";
+         file = "platinum/data/missions/custom/DDDDDDDDDDDDDDD2222222222.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_mbp/Battlecube.dif";
+         interior1 = "~/data/interiors_mbp/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "David\'s Put-Together Skill Course 2";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+   new Trigger(Bounds) {
+      position = "-49.8923 70.9236 16.964";
+      rotation = "1 0 0 0";
+      scale = "100 250 150";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new ScriptObject() {
+         artist = "David the Bavid";
+         customRadarRule = "61";
+         desc = "Obstacles...";
+         easterEgg = "1";
+         file = "platinum/data/missions/custom/DDDDDDDDDDDDDDD2222222222.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_MBP/Battlecube.dif";
+         interior1 = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "David\'s Put-Together Skill Course 2";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+   new FileObject(RecordFO) {
+   };
+   new ScriptObject() {
+         artist = "David the Bavid";
+         customRadarRule = "61";
+         desc = "Obstacles...";
+         easterEgg = "1";
+         file = "platinum/data/missions/custom/DDDDDDDDDDDDDDD2222222222.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_MBP/Battlecube.dif";
+         interior1 = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "David\'s Put-Together Skill Course 2";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+   new ScriptObject() {
+         artist = "charlemaniac";
+         customRadarRule = "61";
+         desc = "This time you have to navigate in gravity.";
+         easterEgg = "1";
+         file = "platinum/data/missions/custom/CharleSkillCourse2.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_MBP/Battlecube.dif";
+         interior1 = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "Charlemaniac\'s Put-Together Skill Course 2 (Original)";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+   new ScriptObject() {
+         artist = "charlemaniac";
+         customRadarRule = "61";
+         desc = "This time you have to navigate in gravity.";
+         easterEgg = "1";
+         file = "platinum/data/missions/custom/CharleSkillCourse2.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_MBP/Battlecube.dif";
+         interior1 = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "Charlemaniac\'s Put-Together Skill Course 2 (Original)";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+   new ScriptObject() {
+         artist = "charlemaniac";
+         customRadarRule = "61";
+         desc = "This time you have to navigate in gravity.";
+         easterEgg = "1";
+         file = "platinum/data/missions/custom/CharleSkillCourse2.mis";
+         game = "Platinum";
+         gameMode = "null";
+         gems = "30";
+         interior0 = "~/data/interiors_MBP/Battlecube.dif";
+         interior1 = "~/data/interiors_MBP/BattlecubeRevisited.dif";
+         interiors = "2";
+         level = "1000";
+         modification = "Platinum";
+         music = "Seaside Revisited.ogg";
+         name = "Charlemaniac\'s Put-Together Skill Course 2 (Original)";
+         noBlast = "1";
+         partial = "0";
+         radar = "1";
+         startHelpText = "Find all 4 gems on this surface, then use the PowerUps through to normal Battlecube.";
+         type = "Custom";
+   };
+};
+//--- OBJECT WRITE END ---
