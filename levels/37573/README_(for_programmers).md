@@ -1,0 +1,1 @@
+I, zyphor need help on the cameraSyncSchedule(); because they don't sync on Gravity Triggers (rotating the right way--stays normally.)
