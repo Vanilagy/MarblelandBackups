@@ -1,0 +1,910 @@
+// @include "~/data/interiors_pq/bouncy.jpg"
+new MaterialProperty(PQUPBouncyMaterial) {
+	friction = 1;
+	restitution = 2;
+	force = 15;
+};
+
+addMaterialMapping("bouncy" , PQUPBouncyMaterial);
+
+// thanks claude
+
+datablock StaticShapeData(Cloud24PQUP : Cloud24) {
+	className = "Scenery";
+	superCategory = "Scenery";
+	category = "Clouds";
+	shapeFile = "~/data/shapes_pqup/clouds/Cloud24.dts";
+	skin[0] = "base";
+	skin[1] = "b03";
+	skin[2] = "b04";
+	skin[3] = "b05";
+	skin[4] = "b06";
+	skin[5] = "b07";
+	skin[6] = "b08";
+	skin[7] = "b09";
+	skin[8] = "b10";
+	skin[9] = "b11";
+
+	customField[0, "field"  ] = "skin";
+	customField[0, "type"   ] = "string";
+	customField[0, "name"   ] = "Skin Name";
+	customField[0, "desc"   ] = "Which skin to use (see skin selector).";
+	customField[0, "default"] = "";
+};
+function syncObjectRotationWithCamera(%shapeId)
+{
+    if (!isObject(%shapeId))
+        return;
+
+    %client = LocalClientConnection;
+    if (isObject(%client))
+    {
+        %controlObj = %client.getControlObject();
+        
+        if (isObject(%controlObj))
+        {
+            %shapePos = %shapeId.getPosition();
+            %targetPos = "";
+
+            if (%controlObj.getClassName() $= "Marble")
+            {
+                %targetPos = %controlObj.getPosition();
+            }
+            else
+            {
+                %targetPos = getWords(%controlObj.getTransform(), 0, 2);
+            }
+
+            if (%targetPos !$= "")
+            {
+                %dirX = getWord(%targetPos, 0) - getWord(%shapePos, 0);
+                %dirY = getWord(%targetPos, 1) - getWord(%shapePos, 1);
+                %dirZ = getWord(%targetPos, 2) - getWord(%shapePos, 2);
+
+                if (%dirX == 0 && %dirY == 0)
+                    %dirY = 0.1;
+
+                %yaw = mAtan(%dirX, %dirY);
+
+                %dist2D = mSqrt((%dirX * %dirX) + (%dirY * %dirY));
+                %pitch = mAtan(%dirZ, %dist2D);
+
+                if (%controlObj.getClassName() $= "Marble")
+                {
+                    %yaw = (-%yaw) + 3.14159265; 
+                    
+                    %pitch = -%pitch; 
+                }
+                else
+                {
+                    %yaw = -%yaw;
+                    %pitch = %pitch;
+                }
+
+                %eulerRot = %pitch SPC "0" SPC %yaw;
+                %matrix = MatrixCreateFromEuler(%eulerRot);
+                %finalRot = getWords(%matrix, 3, 6);
+
+                %shapeId.setTransform(%shapePos SPC %finalRot);
+            }
+        }
+    }
+
+    %shapeId.cameraSyncSchedule = schedule(32, %shapeId, "syncObjectRotationWithCamera", %shapeId);
+}
+
+function Cloud24PQUP::onAdd(%this, %obj)
+{
+    syncObjectRotationWithCamera(%obj);
+	%obj.playThread(0, "M");
+}
+
+function Cloud24PQUP::onRemove(%this, %obj)
+{
+    cancel(%obj.cameraSyncSchedule);
+}
+
+datablock ItemData(GemItemPQUP : GemItem) {
+	superCategory = "gems";
+	category = "PQUP";
+
+	shapeFile = "~/data/shapes_pqup/gems/customGem.dts";
+	skin[0] = "base";
+	skin[1] = "purple";
+	skin[2] = "red";
+	skin[3] = "orange";
+	skin[4] = "black";
+	skin[5] = "pink";
+	skin[6] = "green";
+	skin[7] = "platinum";
+	skin[8] = "blue";
+   skin[9] = "yellow";
+	
+	pickupName = "a gem!";
+
+	fxEmitter[0] = "GemEmitter";
+
+	customField[0, "field"  ] = "skin";
+	customField[0, "type"   ] = "string";
+	customField[0, "name"   ] = "Skin Name";
+	customField[0, "desc"   ] = "Which skin color to use (see skin selector.)";
+	customField[0, "default"] = "";
+};
+
+datablock ItemData(GemItemGatePQUP : GemItemPQUP) {
+	superCategory = "gems";
+	category = "PQUP";
+
+ 	skin = "purple";
+	shapeFile = "~/data/shapes_pqup/gems/gemGate.dts";
+};
+
+datablock ItemData(GemItemPQUP : GemItem) {
+	superCategory = "gems";
+	category = "PQUP";
+
+ 	skin = "purple";
+	shapeFile = "~/data/shapes_pqup/gems/customGem.dts";
+};
+// stolen from PQ's scripts
+datablock ItemData(TimeTravelItemPQUP : TimeTravelItem) {
+	// Mission editor category
+	superCategory = "PowerUps";
+	category = "PQUP";
+
+	// Basic Item properties
+	pickupAudio = nothing;
+	shapeFile = "~/data/shapes_pqup/powerups/timetravel.dts";
+	mass = 1;
+	friction = 1;
+	elasticity = 0.3;
+	emap = false;
+
+	// Dynamic properties defined by the scripts
+	noRespawn = true;
+	maxInventory = 1;
+	noPickupMessage = true;
+
+	//For ::timeCheck() to replace if the time is negative
+	replacement = "TimePenaltyItem";
+
+	//For the time message
+	messageColor = "99ff99";
+	grayMessageColor = "cccccc";
+
+	customField[0, "field"  ] = "timeBonus";
+	customField[0, "type"   ] = "time";
+	customField[0, "name"   ] = "Time Bonus";
+	customField[0, "desc"   ] = "Bonus time to add.";
+	customField[0, "default"] = $Game::TimeTravelBonus;
+};
+
+datablock ItemData(TimeTravelItem_PQ : TimeTravelItem) {
+	shapeFile = "~/data/shapes_pq/Gameplay/Powerups/timetravel.dts";
+
+	//For ::timeCheck() to replace if the time is negative
+	replacement = "TimePenaltyItem_PQ";
+};
+
+datablock ItemData(TimeTravelItemGatePQUP : TimeTravelItem) {
+	superCategory = "PowerUps";
+	category = "PQUP";
+
+ 	skin = "purple";
+	shapeFile = "~/data/shapes_pqup/powerups/powerupGate.dts";
+};
+
+datablock ItemData(gateCorner : gateCorner) {
+	superCategory = "scenery";
+	category = "PQUP";
+
+	shapeFile = "~/data/shapes_pqup/gems/gateCorner.dts";
+};
+
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "zyphor";
+         awesomeHint = "Don\'t trust all Time Travels. Collecting them could waste your time when you didn\'t.";
+         awesomeTime = "10500";
+         customRadarRule = "0";
+         desc = "PQ Marble it Up! Mashup Beginner Mission 5";
+         eggHint = "On top of the mountain.";
+         game = "PlatinumQuest";
+         gameMode = "null";
+         generalHint = "The mountain sucks.. really bad.";
+         level = "5";
+         music = "A Question of Balance.ogg";
+         name = "PQ UP! B05: Mount Marblius";
+         platinumTime = "17750";
+         radar = "1";
+         trivia = "Song used: A Question of Balance by Solovox\n\nFunny thing: When I booted up Constructor, the texture atlas and undo history is gone. I rebooted thinking that would fix it, but no.. The brush history is gone. I did another reboot for experimental purposes, and the entire scene is gone. I reinstalled Constructor because this is mildly annoying.";
+         type = "Platinum Quest";
+         ultimateHint = "Collect all Time Travels.";
+         ultimateTime = "12500";
+   };
+   new SimGroup(MissionData) {
+
+      new Sky(Sky) {
+         position = "336 136 0";
+         rotation = "1 0 0 0";
+         scale = "1 1 1";
+         materialList = "~/data/skies/Frozen Galaxy/sky_day.dml";
+         cloudHeightPer[0] = "0";
+         cloudHeightPer[1] = "0";
+         cloudHeightPer[2] = "0";
+         cloudSpeed1 = "0.0001";
+         cloudSpeed2 = "0.0002";
+         cloudSpeed3 = "0.0003";
+         visibleDistance = "2000";
+         fogDistance = "300";
+         fogColor = "0.6 0.6 0.6 1";
+         fogStorm1 = "0";
+         fogStorm2 = "0";
+         fogStorm3 = "0";
+         fogVolume1 = "-1 7.45949e-31 1.3684e-38";
+         fogVolume2 = "-1 1.07208e-14 8.756e-14";
+         fogVolume3 = "-1 5.1012e-10 2.05098e-08";
+         fogVolumeColor1 = "128 128 128 0";
+         fogVolumeColor2 = "128 128 128 4e-06";
+         fogVolumeColor3 = "128 128 128 1.44355e+07";
+         windVelocity = "1 0 0";
+         windEffectPrecipitation = "0";
+         SkySolidColor = "0.6 0.6 0.6 1";
+         useSkyTextures = "1";
+         renderBottomTexture = "1";
+         noRenderBans = "1";
+      };
+      new MissionArea(MissionArea) {
+         area = "-360 -648 720 1296";
+         flightCeiling = "300";
+         flightCeilingRange = "20";
+            locked = "true";
+      };
+   };
+   new Sun() {
+      direction = "0.792851 -0.424175 -0.437564";
+      color = "1 1 0.4 1";
+      ambient = "0.7 0.7 0.7 1";
+   };
+   new SimGroup(SceneryGroup) {
+
+      new StaticShape() {
+         position = "-26 -38.25 0";
+         rotation = "1 0 0 0";
+         scale = "15 15 15";
+         dataBlock = "OrbitingClouds";
+            locked = "1";
+            reverse = "0";
+      };
+      new StaticShape() {
+         position = "-26 -38.25 0";
+         rotation = "1 0 0 0";
+         scale = "10 10 10";
+         dataBlock = "OrbitingClouds";
+            locked = "1";
+            reverse = "1";
+      };
+   };
+   new SimGroup(HelpBubbleGroup) {
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(zigg1P1) {
+         position = "14.25 11.5 124.25";
+         rotation = "1 0 0 0";
+         scale = "8 8 8";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "zigg1P2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "5000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(zigg1P2) {
+         position = "14.25 11.5 124.25";
+         rotation = "0 0 1 180";
+         scale = "8 8 8";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "zigg1P1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "5000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(zigg2P2) {
+         position = "-38.75 -62 277";
+         rotation = "0 0 1 180";
+         scale = "12 12 12";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "zigg2P1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "10000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(zigg2P1) {
+         position = "-38.75 -62 277";
+         rotation = "1 0 0 0";
+         scale = "12 12 12";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "zigg2P2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "10000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+      new StaticShape(float1p1) {
+         position = "0 -75.25 7.32";
+         rotation = "0 0 1 180";
+         scale = "2 2 2";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "float1p2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "1";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "0";
+            useScale = "0";
+      };
+      new StaticShape(float1p2) {
+         position = "0 -75.25 7.18";
+         rotation = "0 0 1 180";
+         scale = "2 2 2";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "1 0 0 0";
+            nextNode = "float1p1";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "1";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "0";
+            useScale = "0";
+      };
+      new StaticShape(CameraPath1) {
+         position = "-7.82691 -79.756 13.2055";
+         rotation = "0.12516 0.0321772 -0.991615 29.0692";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            nextNode = "CameraPath1";
+            placed = "1";
+            reverseRotation = "0";
+            timeToNext = "3000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "0";
+      };
+   };
+   new StaticShape(StartPoint) {
+      position = "0 2 0";
+      rotation = "0 0 1 180";
+      scale = "1 1 1";
+      dataBlock = "StartPad_PQ";
+         locked = "1";
+         skin = "purple";
+   };
+   new InteriorInstance() {
+      position = "14.25 11.5 124.25";
+      rotation = "1 0 0 0";
+      scale = "8 8 8";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUPZiggurat.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+         locked = "1";
+         Path = "zigg1P1";
+   };
+   new InteriorInstance() {
+      position = "-38.75 -62 277";
+      rotation = "1 0 0 0";
+      scale = "12 12 12";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUPZiggurat.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+         locked = "1";
+         Path = "zigg2P1";
+   };
+   new StaticShape() {
+      position = "0 0 -250";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "Astrolabe";
+         locked = "1";
+   };
+   new Item() {
+      position = "4 -18 0.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem_PQ";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "1000";
+   };
+   new StaticShape() {
+      position = "15.5 -18 -4.25";
+      rotation = "1 0 0 0";
+      scale = "6 6 6";
+      dataBlock = "Rock01";
+   };
+   new StaticShape() {
+      position = "12.5 -18.5 5.27036";
+      rotation = "0 -1 0 22.5001";
+      scale = "6 6 6";
+      dataBlock = "Rock01";
+   };
+   new StaticShape() {
+      position = "13.3853 -24.6464 -5.90142";
+      rotation = "0.887295 -0.426095 -0.176495 50.049";
+      scale = "6 6 6";
+      dataBlock = "Rock01";
+   };
+   new StaticShape() {
+      position = "12 -9.25 -5.57533";
+      rotation = "-0.442014 -0.892689 0.0879224 25.1234";
+      scale = "6 6 6";
+      dataBlock = "Rock01";
+   };
+   new TSStatic() {
+      position = "5 -26.3411 -3";
+      rotation = "1 0 0 0";
+      scale = "1 0.341082 1";
+      shapeName = "~/data/shapes/colmesh.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "7 -26.3411 -3";
+      rotation = "1 0 0 0";
+      scale = "1 0.341082 1";
+      shapeName = "~/data/shapes/colmesh.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "3.06237 -27 -3";
+      rotation = "1 0 0 0";
+      scale = "2.26725 0.341082 1";
+      shapeName = "~/data/shapes/colmesh.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "2.00966 -26.3411 -3";
+      rotation = "1 0 0 0";
+      scale = "1.99034 0.341082 1";
+      shapeName = "~/data/shapes/colmesh.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "2.5 -27.75 -3";
+      rotation = "1 0 0 0";
+      scale = "1 0.341082 1";
+      shapeName = "~/data/shapes/colmesh.dts";
+      computeConvexHulls = "0";
+   };
+   new Item() {
+      position = "-1 -37 5.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem_PQ";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "2500";
+   };
+   new StaticShape() {
+      position = "-3.5 -17.75 1.76819";
+      rotation = "-0.998528 0.0106999 0.0531689 22.7895";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461332";
+   };
+   new StaticShape() {
+      position = "-5.0094 -25.75 3.52818";
+      rotation = "-0.996881 0.0145739 0.0775662 21.3475";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461333";
+   };
+   new StaticShape() {
+      position = "-178 -25.5 3.99879";
+      rotation = "-0.29349 0.125016 0.947752 48.4027";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461334";
+   };
+   new StaticShape() {
+      position = "-151.217 90.8222 8.61457";
+      rotation = "-0.251144 0.176218 0.951774 72.7966";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461335";
+   };
+   new StaticShape() {
+      position = "-81.6093 188.382 17.9426";
+      rotation = "-0.152502 0.252333 0.955548 119.987";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461336";
+   };
+   new StaticShape() {
+      position = "12.917 180.413 14.0015";
+      rotation = "0.0845562 0.471872 0.877603 197.874";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461337";
+   };
+   new StaticShape() {
+      position = "111.289 140.845 12.896";
+      rotation = "-0.238622 -0.228794 -0.943776 90.9055";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461338";
+   };
+   new StaticShape() {
+      position = "159.047 48.4776 10.0484";
+      rotation = "-0.267283 -0.15002 -0.951868 61.0521";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461339";
+   };
+   new StaticShape() {
+      position = "183.579 -20.1732 10.0484";
+      rotation = "-0.258929 -0.115094 -0.959015 49.7352";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461340";
+   };
+   new StaticShape() {
+      position = "147.131 -111.887 10.2923";
+      rotation = "-0.351217 -0.0932913 -0.931635 31.8272";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461341";
+   };
+   new StaticShape() {
+      position = "70.9339 -183.341 11.6206";
+      rotation = "-0.628688 -0.0670309 -0.774763 15.6713";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461342";
+   };
+   new StaticShape() {
+      position = "-30.9117 -238.256 14.5352";
+      rotation = "-0.872578 0.0350835 0.487213 9.43517";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461343";
+   };
+   new StaticShape() {
+      position = "-126.474 -216.266 15.699";
+      rotation = "-0.384311 0.0652373 0.920896 20.8885";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461344";
+   };
+   new StaticShape() {
+      position = "-176.138 -138.875 14.5279";
+      rotation = "-0.278335 0.0792099 0.957212 33.115";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461345";
+   };
+   new StaticShape() {
+      position = "-170.76 -63.0165 10.9746";
+      rotation = "-0.289593 0.103437 0.951544 41.1492";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461346";
+   };
+   new StaticShape() {
+      position = "-123.779 148.773 17.9099";
+      rotation = "-0.190046 0.195094 0.962196 93.7078";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461347";
+   };
+   new StaticShape() {
+      position = "-175.296 37.607 18.1018";
+      rotation = "-0.216335 0.12086 0.968809 59.9406";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461348";
+   };
+   new StaticShape() {
+      position = "-205.654 -109.477 8.57228";
+      rotation = "-0.254638 0.0898852 0.96285 40.2671";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461349";
+   };
+   new StaticShape() {
+      position = "-170.401 -218.502 16.1411";
+      rotation = "-0.287932 0.0640548 0.955506 26.2127";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461350";
+   };
+   new StaticShape() {
+      position = "20.5678 -226.993 15.0494";
+      rotation = "-0.936092 -0.0258229 -0.350807 8.99246";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461351";
+   };
+   new StaticShape() {
+      position = "123.016 -142.195 13.9083";
+      rotation = "-0.398519 -0.08162 -0.913521 25.2732";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461352";
+   };
+   new StaticShape() {
+      position = "170.941 -59.9106 11.0638";
+      rotation = "-0.288098 -0.104185 -0.951917 41.6035";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461353";
+   };
+   new StaticShape() {
+      position = "133.906 94.1067 10.8601";
+      rotation = "-0.2731 -0.187673 -0.943502 72.1349";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461354";
+   };
+   new StaticShape() {
+      position = "62.5854 173.323 12.9034";
+      rotation = "-0.216814 -0.333526 -0.917471 118.375";
+      scale = "3 3 3";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461355";
+   };
+   new StaticShape() {
+      position = "0 -75.25 7.32";
+      rotation = "0 0 1 180";
+      scale = "2 2 2";
+      dataBlock = "RoadsignYellow";
+         Path = "float1p1";
+         skin = "Right";
+   };
+   new StaticShape(No) {
+      position = "23.7441 -14.9369 0.487656";
+      rotation = "-0.29963 -0.365102 -0.881432 108.239";
+      scale = "1 1 1";
+      dataBlock = "RoadsignRed";
+         skin = "NoFunAllowed";
+   };
+   new Trigger(StayHere) {
+      position = "-105.873 18.3685 -9.07467";
+      rotation = "1 0 0 0";
+      scale = "142.29 113.194 109.161";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new Item() {
+      position = "-38.25 -53.75 16.3231";
+      rotation = "1 0 0 0";
+      scale = "0.75 0.75 0.75";
+      dataBlock = "NestEgg_PQ";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "brown";
+   };
+   new Item() {
+      position = "-9 -69.5 10.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem_PQ";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "1500";
+   };
+   new StaticShape() {
+      position = "-14.5456 -83.749 13.1105";
+      rotation = "-0.9677 0.0306645 0.250233 14.4344";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461356";
+   };
+   new StaticShape() {
+      position = "-0.508348 -80.2871 12.0406";
+      rotation = "-0.99996 0.00112474 0.00886553 14.4611";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461357";
+   };
+   new StaticShape() {
+      position = "-5 -88.5 13";
+      rotation = "-0.996042 0.0106383 0.0882398 13.803";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461358";
+   };
+   new Item() {
+      position = "-38 -69.5 16.85";
+      rotation = "0 0 -1 90.0002";
+      scale = "5 5 3";
+      dataBlock = "GemItemGatePQUP";
+      collidable = "0";
+      static = "1";
+      rotate = "0";
+         noParticles = "0";
+         noRespawn = "0";
+         skin = "base";
+   };
+   new TSStatic() {
+      position = "-38 -65.5 18.85";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pqup/gems/gateCorner.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "-38 -65.5 14.85";
+      rotation = "0.577352 0.57735 0.57735 120";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pqup/gems/gateCorner.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "-38 -73.5 14.85";
+      rotation = "0.577352 -0.577347 0.577352 240";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pqup/gems/gateCorner.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "-38 -73.5 18.85";
+      rotation = "1.81049e-06 -4.33623e-06 -1 90.0002";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pqup/gems/gateCorner.dts";
+      computeConvexHulls = "0";
+   };
+   new TSStatic() {
+      position = "-38 -69.5 16.85";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      shapeName = "~/data/shapes_pqup/gems/gemGateIcon.dts";
+      computeConvexHulls = "0";
+   };
+   new StaticShape() {
+      position = "-59.5 -44.25 20";
+      rotation = "-0.627822 0.0961119 0.7724 22.4212";
+      scale = "0.5 0.5 0.5";
+      dataBlock = "Cloud24PQUP";
+         cameraSyncSchedule = "461359";
+   };
+   new Item() {
+      position = "-53 -29 19.25";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "TimeTravelItem_PQ";
+      collidable = "0";
+      static = "1";
+      rotate = "1";
+         noRespawn = "0";
+         skin = "base";
+         timeBonus = "2000";
+   };
+   new StaticShape(EndPoint) {
+      position = "-14 -29 22.7119";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "EndPad_PQ";
+         skin = "green";
+   };
+   new StaticShape() {
+      position = "-14 -29 27.2881";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "RegularFinishlinesign";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUP 12.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0.25 -48 5.75012";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUP Arch.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-43.25 -64 14.5001";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUP Arch.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "-48 -25.5 18.7501";
+      rotation = "0 0 -1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors_pq/custom/zyphor\'s/PQUP/PQUP Arch.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+};
+//--- OBJECT WRITE END ---
