@@ -1,0 +1,1524 @@
+datablock StaticShapeData(PowerUpRing)
+{
+   category = "Rings";
+   classname = "Ring";
+   shapeFile = "~/data/shapes/rings/sj_ring.dts";
+   scopeAlways = true;
+   color = "base";
+   ringItem = "SuperJumpItem_PQ";
+   ringSound = "";
+   ringPickupSound = "";
+   ringActiveSound = "";
+};
+
+datablock StaticShapeData(SuperJumpRing : PowerUpRing)
+{
+   shapeFile = "~/data/shapes/rings/sj_ring.dts";
+   color = "base";
+   ringItem = "SuperJumpItem_PQ";
+   ringSound = "RV_SuperJump";
+   ringPickupSound = "RV_SuperJump";
+   ringActiveSound = "DoSuperJumpSfx";
+};
+
+datablock StaticShapeData(SuperSpeedRing : PowerUpRing)
+{
+   shapeFile = "~/data/shapes/rings/ss_ring.dts";
+   color = "base";
+   ringItem = "";
+   ringBoost = true;
+   ringSound = "RV_SuperSpeed";
+   ringPickupSound = "RV_SuperSpeed";
+   ringActiveSound = "DoSuperSpeedSfx";
+};
+
+datablock StaticShapeData(SuperBounceRing : PowerUpRing)
+{
+   shapeFile = "~/data/shapes/rings/sb_ring.dts";
+   color = "base";
+   ringItem = "SuperBounceItem_PQ";
+   ringSound = "RV_SuperBounce";
+   ringPickupSound = "RV_SuperBounce";
+   ringActiveSound = "";
+};
+
+datablock StaticShapeData(ShockAbsorberRing : PowerUpRing)
+{
+   shapeFile = "~/data/shapes/rings/sa_ring.dts";
+   color = "base";
+   ringItem = "ShockAbsorberItem_PQ";
+   ringSound = "RV_ShockAbsorber";
+   ringPickupSound = "RV_ShockAbsorber";
+   ringActiveSound = "";
+};
+
+datablock StaticShapeData(GyrocopterRing : PowerUpRing)
+{
+   shapeFile = "~/data/shapes/rings/h_ring.dts";
+   color = "base";
+   ringItem = "HelicopterItem";
+   ringSound = "RV_Gyrocopter";
+   ringPickupSound = "RV_Gyrocopter";
+   ringActiveSound = "DoHelicopterSfx";
+};
+
+datablock StaticShapeData(GemRing)
+{
+   category = "Rings";
+   classname = "RingGem";
+   shapeFile = "~/data/shapes/rings/gemring.dts";
+   scopeAlways = true;
+};
+
+new AudioProfile(RV_SuperJump) {
+   filename    = "~/data/sound/rv_superjump.wav";
+   description = "ClientAudio2D";
+   preload = true;
+};
+ClientAudioGroup.add(RV_SuperJump);
+new AudioProfile(RV_SuperBounce) {
+   filename    = "~/data/sound/rv_superbounce.wav";
+   description = "ClientAudio2D";
+   preload = true;
+};
+ClientAudioGroup.add(RV_SuperBounce);
+new AudioProfile(RV_SuperSpeed) {
+   filename    = "~/data/sound/rv_superspeed.wav";
+   description = "ClientAudio2D";
+   preload = true;
+};
+ClientAudioGroup.add(RV_SuperSpeed);
+new AudioProfile(RV_ShockAbsorber) {
+   filename    = "~/data/sound/rv_shockabsorber.wav";
+   description = "ClientAudio2D";
+   preload = true;
+};
+ClientAudioGroup.add(RV_ShockAbsorber);
+new AudioProfile(RV_Gyrocopter) {
+   filename    = "~/data/sound/rv_gyrocopter.wav";
+   description = "ClientAudio2D";
+   preload = true;
+};
+ClientAudioGroup.add(RV_Gyrocopter);
+
+
+$ringBoostPower     = 30;
+$ringNearRadius     = 0.8;
+$ringPowerupRadius  = 1.75;
+$ringGemRadius      = 2.2;
+$ringDebug          = true;
+$ringSkipPQ         = false;
+$ringForceActiveSfx = false;  // no blurps
+$ringAngleSign      = -1;
+$ringVoiceDelay     = 0;     // no hiccups
+
+function MRPlayOnce(%name)
+{
+   if (!isObject(nameToID(%name)))
+   {
+      return;
+   }
+   %now = getRealTime();
+   if (%now - $MRLastPlay[%name] < 400)
+      return;
+   $MRLastPlay[%name] = %now;
+   %h = alxPlay(%name);
+}
+
+function MRPlayProfile(%id, %pos)
+{
+   if (%pos $= "")
+      alxPlay(%id);
+   else
+      alxPlay(%id, getWord(%pos, 0), getWord(%pos, 1), getWord(%pos, 2));
+}
+
+function clientCmdMRRingSound(%names, %pos)
+{
+   %n = getWordCount(%names);
+   for (%i = 0; %i < %n; %i++)
+   {
+      %name = getWord(%names, %i);
+      %id = nameToID(%name);
+      if (isObject(%id))
+      {
+         if ($ringDebug)
+         if (getSubStr(%name, 0, 3) $= "RV_")
+         {
+            if ($ringVoiceDelay > 0)
+               schedule($ringVoiceDelay, 0, MRPlayOnce, %name);
+            else
+               MRPlayOnce(%name);
+         }
+         else
+            MRPlayProfile(%id, %pos);
+         return;
+      }
+   }
+}
+
+function MRScanSounds(%group)
+{
+   for (%i = 0; %i < %group.getCount(); %i++)
+   {
+      %o = %group.getObject(%i);
+      if (%o.getClassName() $= "SimGroup" || %o.getClassName() $= "SimSet")
+         MRScanSounds(%o);
+      else if (%o.getClassName() $= "AudioProfile")
+      {
+         %n = strlwr(%o.getName());
+         if (strstr(%n, "voice") >= 0 || strstr(%n, "super") >= 0 || strstr(%n, "heli") >= 0 || strstr(%n, "gyro") >= 0 || strstr(%n, "bounce") >= 0 || strstr(%n, "shock") >= 0 || strstr(%n, "speed") >= 0)
+            echo("MR sound profile:" SPC %o.getName() SPC "file=" @ %o.filename);
+      }
+   }
+}
+
+function MRListSounds()
+{
+   if (isObject(ClientAudioGroup))
+      MRScanSounds(ClientAudioGroup);
+   if (isObject(DataBlockGroup))
+      MRScanSounds(DataBlockGroup);
+   if (isObject(RootGroup))
+      MRScanSounds(RootGroup);
+}
+
+// HELPERS
+
+function ringPos(%t)
+{
+   return getWords(%t, 0, 2);
+}
+
+function ringUp(%t)
+{
+   %k = VectorNormalize(getWords(%t, 3, 5));
+   %a = getWord(%t, 6) * $ringAngleSign;
+   %kx = getWord(%k, 0);
+   %ky = getWord(%k, 1);
+   %kz = getWord(%k, 2);
+   %s = mSin(%a);
+   %c = mCos(%a);
+   %q = 1 - %c;
+   return (%ky * %s + %kx * %kz * %q) SPC (-%kx * %s + %ky * %kz * %q) SPC (%c + %kz * %kz * %q);
+}
+
+function ringCollect(%group)
+{
+   for (%i = 0; %i < %group.getCount(); %i++)
+   {
+      %o = %group.getObject(%i);
+      if (%o.getClassName() $= "SimGroup")
+         ringCollect(%o);
+      else if (%o.getClassName() $= "StaticShape")
+      {
+         %cls = %o.getDataBlock().classname;
+         if (%cls $= "Ring" || %cls $= "RingGem")
+         {
+            $ringList[$ringCount] = %o;
+            $ringCount++;
+         }
+      }
+   }
+}
+
+function ringCrossed(%ring, %pos1, %pos2, %radius)
+{
+   if (%pos1 $= "")
+      return false;
+
+   %orig = ringPos(%ring.getTransform());
+   %nor  = ringUp(%ring.getTransform());
+
+   %d1 = VectorDot(%pos1, %nor) - VectorDot(%orig, %nor);
+   %d2 = VectorDot(%pos2, %nor) - VectorDot(%orig, %nor);
+   %den = %d1 - %d2;
+   if (%den == 0)
+      return false;
+
+   %k = %d1 / %den;
+   if (%k < 0 || %k > 1)
+      return false;
+
+   %pos3 = VectorAdd(%pos1, VectorScale(VectorSub(%pos2, %pos1), %k));
+   return VectorDist(%pos3, %orig) < %radius * getWord(%ring.getScale(), 0);
+}
+
+function ringNear(%ring, %pos, %radius)
+{
+   %orig = ringPos(%ring.getTransform());
+   return VectorDist(%pos, %orig) < %radius * getWord(%ring.getScale(), 0);
+}
+
+function ringPlaySound(%client, %snd, %pos)
+{
+   if (%snd $= "")
+      return;
+   if (getSubStr(%snd, 0, 3) $= "RV_")
+   {
+      if ($ringDebug)
+      if ($ringVoiceDelay > 0)
+         schedule($ringVoiceDelay, 0, MRPlayOnce, %snd);
+      else
+         MRPlayOnce(%snd);
+   }
+   if (isObject(%client))
+      commandToClient(%client, 'MRRingSound', %snd, %pos);
+}
+
+function ringPass(%ring, %player)
+{
+   %db = %ring.getDataBlock();
+   %client = %player.client;
+   %pos = ringPos(%player.getTransform());
+
+   if ($ringDebug)
+
+   if (%db.ringBoost)
+   {
+      ringPlaySound(%client, %db.ringActiveSound, %pos);
+      ringPlaySound(%client, %db.ringSound, %pos);
+      %vel = VectorAdd(%player.getVelocity(), VectorScale(ringUp(%ring.getTransform()), $ringBoostPower));
+      %player.setVelocity(%vel);
+      return;
+   }
+
+   %item = %db.ringItem;
+   if (!isObject(%item))
+   {
+      ringPlaySound(%client, %db.ringSound, %pos);
+      return;
+   }
+
+   ringPlaySound(%client, %db.ringSound, %pos);
+
+   if ($ringSkipPQ)
+   {
+      ringPlaySound(%client, %db.ringActiveSound, %pos);
+      return;
+   }
+
+   commandToClient(%client, 'doPowerUp', %item.powerUpId);
+   %item.onUse(%ring, %player);
+
+   if ($ringForceActiveSfx)
+      ringPlaySound(%client, %db.ringActiveSound, %pos);
+}
+
+function ringResetPlayer(%player)
+{
+   for (%i = 0; %i < $ringCount; %i++)
+   {
+      %player.ringPrev[%i] = "";
+      %player.ringTimer[%i] = 200;
+   }
+}
+
+function ringFrame(%delta)
+{
+   for (%c = 0; %c < ClientGroup.getCount(); %c++)
+   {
+      %player = ClientGroup.getObject(%c).player;
+      if (!isObject(%player))
+         continue;
+
+      %pos2 = ringPos(%player.getTransform());
+
+      for (%i = 0; %i < $ringCount; %i++)
+      {
+         %ring = $ringList[%i];
+         if (!isObject(%ring))
+            continue;
+
+         %player.ringTimer[%i] -= %delta;
+         %cls = %ring.getDataBlock().classname;
+
+         if (%cls $= "Ring")
+         {
+            if (%player.ringTimer[%i] <= 0 && (ringCrossed(%ring, %player.ringPrev[%i], %pos2, $ringPowerupRadius) || ringNear(%ring, %pos2, $ringNearRadius)))
+            {
+               ringPass(%ring, %player);
+               %player.ringTimer[%i] = 200;
+            }
+         }
+         else
+         {
+            %gem = %ring.myGem;
+            if (isObject(%gem))
+            {
+               if (!%ring.collected && %gem.isHidden())
+                  %ring.collected = true;
+
+               if (!%ring.collected)
+               {
+                  if (%player.ringTimer[%i] <= 0 && ringCrossed(%ring, %player.ringPrev[%i], %pos2, $ringGemRadius))
+                  {
+                     %ring.collected = true;
+                     %player.ringTimer[%i] = 200;
+
+                     %gem.getDataBlock().onPickup(%gem, %player, 1);
+
+                     if (!%gem.isHidden())
+                        %gem.hide(true);
+                  }
+               }
+               else if (%c == 0)
+               {
+                  %scl = getWord(%ring.getScale(), 0) - %delta / 500;
+                  if (%scl < 0)
+                     %scl = 0;
+                  %ring.setScale(%scl SPC %scl SPC %scl);
+               }
+            }
+         }
+         %player.ringPrev[%i] = %pos2;
+      }
+   }
+}
+
+function ringApplySkin(%ring)
+{
+   if (!isObject(%ring))
+      return;
+   %db = %ring.getDataBlock();
+   if (%db.classname !$= "Ring")
+      return;
+
+   %skin = %db.color;
+   if (%skin $= "")
+      %skin = "base";
+
+   %ring.setSkinName(%skin);
+   if ($ringDebug)
+      echo("[ring] " @ %db.getName() @ " wants skin=" @ %skin @ ", now=" @ %ring.getSkinName());
+}
+
+// runs for every ring whose datablock has classname = "Ring"
+function Ring::onAdd(%this, %obj)
+{
+   ringApplySkin(%obj);
+   schedule(500, 0, "ringApplySkin", %obj);
+}
+
+function serverCbOnMissionLoaded()
+{
+   $ringCount = 0;
+   ringCollect(MissionGroup);
+   if ($ringDebug)
+   {
+      MRListSounds();
+   }
+
+   for (%i = 0; %i < $ringCount; %i++)
+   {
+      %ring = $ringList[%i];
+      %db = %ring.getDataBlock();
+      %ring.setScale("2 2 2");
+      %ring.playThread(0, "spin");
+
+      if (%db.classname $= "Ring")
+      {
+         ringApplySkin(%ring);
+         %ring.powerUpSound = getWord(%db.ringSound, 0);
+      }
+      else
+      {
+         %ring.collected = "";
+
+         %old = %ring.myGem;
+         if (isObject(%old) && %old.getClassName() $= "Item" && %old._ringGem)
+         {
+            %old.hide(false);
+            continue;
+         }
+
+         %gem = new Item()
+         {
+            position = ringPos(%ring.getTransform());
+            rotation = "1 0 0 0";
+            scale = "2 2 2";
+            dataBlock = "GemItemYellow";
+            collideable = "0";
+            static = "1";
+            rotate = "1";
+         };
+         MissionGroup.add(%gem);
+         %gem._ringGem = true;
+         %ring.myGem = %gem;
+      }
+   }
+}
+
+function serverCbOnMissionReset()
+{
+   for (%i = 0; %i < $ringCount; %i++)
+   {
+      %r = $ringList[%i];
+      if (isObject(%r))
+      {
+         %r.setScale("2 2 2");
+         ringApplySkin(%r);
+         %r.collected = "";
+         if (isObject(%r.myGem))
+            %r.myGem.hide(false);
+      }
+   }
+   for (%c = 0; %c < ClientGroup.getCount(); %c++)
+   {
+      %p = ClientGroup.getObject(%c).player;
+      if (isObject(%p))
+         ringResetPlayer(%p);
+   }
+}
+
+function serverCbOnRespawn()
+{
+   for (%c = 0; %c < ClientGroup.getCount(); %c++)
+   {
+      %p = ClientGroup.getObject(%c).player;
+      if (isObject(%p))
+         ringResetPlayer(%p);
+   }
+}
+
+function serverCbOnFrameAdvance(%delta)
+{
+   ringFrame(%delta);
+}
+//--- OBJECT WRITE BEGIN ---
+new SimGroup(MissionGroup) {
+
+   new ScriptObject(MissionInfo) {
+         artist = "Whirligig231, ported to PQ by abhi.";
+         desc = "Fly through the rings to complete this level in the dark.";
+         goldTime = "90000";
+         level = "178342";
+         music = "Eric Paradise.ogg";
+         name = "Midnight Rings";
+         startHelpText = "Use the rings to power up your marble!";
+         type = "custom";
+   };
+   new MissionArea(MissionArea) {
+      area = "-360 -648 720 1296";
+      flightCeiling = "300";
+      flightCeilingRange = "20";
+         locked = "true";
+   };
+   new Sky(Sky) {
+      position = "336 136 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      materialList = "~/data/skies/Dark/sky_dark.dml";
+      cloudHeightPer[0] = "0";
+      cloudHeightPer[1] = "0";
+      cloudHeightPer[2] = "0";
+      cloudSpeed1 = "0.0001";
+      cloudSpeed2 = "0.0002";
+      cloudSpeed3 = "0.0003";
+      visibleDistance = "500";
+      fogDistance = "300";
+      fogColor = "0.6 0.6 0.6 1";
+      fogStorm1 = "0";
+      fogStorm2 = "0";
+      fogStorm3 = "0";
+      fogVolume1 = "-1 0 -1";
+      fogVolume2 = "-1 0 0";
+      fogVolume3 = "-1 -1 0";
+      fogVolumeColor1 = "128 128 128 0";
+      fogVolumeColor2 = "128 128 128 0";
+      fogVolumeColor3 = "128 128 128 -1";
+      windVelocity = "1 0 0";
+      windEffectPrecipitation = "0";
+      SkySolidColor = "0.6 0.6 0.6 1";
+      useSkyTextures = "1";
+      renderBottomTexture = "1";
+      noRenderBans = "1";
+   };
+   new Sun() {
+      direction = "0.57735 0.57735 -0.57735";
+      color = "0.2 0.2 0.3 1";
+      ambient = "0.05 0.05 0.1 1";
+   };
+   new StaticShape(StartPoint) {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      dataBlock = "StartPad_MBG";
+   };
+   new AudioEmitter() {
+      position = "0 0 -500";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      fileName = "~/data/sound/rv_superjump.wav";
+      useProfileDescription = "0";
+      outsideAmbient = "1";
+      volume = "0";
+      isLooping = "0";
+      is3D = "0";
+      minDistance = "1";
+      maxDistance = "2";
+   };
+   new AudioEmitter() {
+      position = "0 0 -500";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      fileName = "~/data/sound/rv_superbounce.wav";
+      useProfileDescription = "0";
+      outsideAmbient = "1";
+      volume = "0";
+      isLooping = "0";
+      is3D = "0";
+      minDistance = "1";
+      maxDistance = "2";
+   };
+   new AudioEmitter() {
+      position = "0 0 -500";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      fileName = "~/data/sound/rv_superspeed.wav";
+      useProfileDescription = "0";
+      outsideAmbient = "1";
+      volume = "0";
+      isLooping = "0";
+      is3D = "0";
+      minDistance = "1";
+      maxDistance = "2";
+   };
+   new AudioEmitter() {
+      position = "0 0 -500";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      fileName = "~/data/sound/rv_shockabsorber.wav";
+      useProfileDescription = "0";
+      outsideAmbient = "1";
+      volume = "0";
+      isLooping = "0";
+      is3D = "0";
+      minDistance = "1";
+      maxDistance = "2";
+   };
+   new AudioEmitter() {
+      position = "0 0 -500";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      fileName = "~/data/sound/rv_gyrocopter.wav";
+      useProfileDescription = "0";
+      outsideAmbient = "1";
+      volume = "0";
+      isLooping = "0";
+      is3D = "0";
+      minDistance = "1";
+      maxDistance = "2";
+   };
+   new InteriorInstance() {
+      position = "0 0 0";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "0 28 9";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "0 12.5 1.5";
+      rotation = "1 0 0 44.9984";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "3.32352 37.9458 10.3536";
+      rotation = "0 -1 0 75.0002";
+      scale = "2 2 2";
+      dataBlock = "SuperSpeedRing";
+         powerUpId = "0";
+         powerUpSound = "RV_SuperSpeed";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new InteriorInstance() {
+      position = "49.5 37.9998 3.5";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "67.5 37.9997 -0.5";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "0 20.9834 12.9834";
+      rotation = "1 0 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10380";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "63.46 37.9834 6.44319";
+      rotation = "0 -1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10381";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "31.46 37.9834 11.9433";
+      rotation = "0 -1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10382";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "81 38 1.5";
+      rotation = "0 -1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "98 38 -0.5";
+      rotation = "0 1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10383";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new InteriorInstance() {
+      position = "121 37.9995 -9";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "2505";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new InteriorInstance() {
+      position = "147.5 38 -27.5";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings2.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "137.616 38 -10.1651";
+      rotation = "0 1 0 30.0001";
+      scale = "2 2 2";
+      dataBlock = "SuperBounceRing";
+         powerUpId = "8";
+         powerUpSound = "RV_SuperBounce";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new InteriorInstance() {
+      position = "162.5 37.9994 -16";
+      rotation = "0 0 1 90.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "146 38 -24";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10384";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "175.129 38 -14.483";
+      rotation = "0 -1 0 75.0002";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "169.5 38 -16.3";
+      rotation = "0 1 0 90.0002";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new Marker() {
+      position = "278.4 -12.6756 14.1639";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new Marker() {
+      position = "204.991 38.1132 9.879";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new Marker() {
+      position = "227.1 30.5433 16.0401";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new Marker() {
+      position = "250.46 14.3133 17.4758";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new StaticShape() {
+      position = "250.099 14.5246 19.3795";
+      rotation = "0.678598 -0.281083 0.6786 211.399";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10385";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "205.052 38.1745 10.0904";
+      rotation = "0 -1 0 75.0002";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10386";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "226.83 30.6036 18.1718";
+      rotation = "0.377963 -0.654653 0.654655 138.591";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10387";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "254.141 10.7798 19.2721";
+      rotation = "0.357406 0.862856 0.357408 98.4213";
+      scale = "2 2 2";
+      dataBlock = "SuperBounceRing";
+         powerUpId = "8";
+         powerUpSound = "RV_SuperBounce";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "2091";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new Marker() {
+      position = "162.345 35.6104 -14.4685";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new Marker() {
+      position = "162.345 35.6104 -15.8";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new Marker() {
+      position = "275.29 -7.83474 -4.79721";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new InteriorInstance() {
+      position = "275.239 -8.08475 -4.78743";
+      rotation = "0 0 -1 45.0001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings2.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "282.664 -15.5094 -4.78743";
+      rotation = "0 0 -1 45.0001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings2.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "267.814 -0.660142 -4.78743";
+      rotation = "0 0 -1 45.0001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings2.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new Marker() {
+      position = "293.127 -25.6033 7.29064";
+      rotation = "1 0 0 0";
+      scale = "1 1 1";
+      seqNum = "0";
+      type = "Normal";
+      msToNext = "1000";
+      smoothingType = "Linear";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "4088";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new StaticShape() {
+      position = "292.843 -25.4844 7.54064";
+      rotation = "0.922709 0.382199 0.050318 193.852";
+      scale = "2 2 2";
+      dataBlock = "ShockAbsorberRing";
+         powerUpId = "9";
+         powerUpSound = "RV_ShockAbsorber";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new InteriorInstance() {
+      position = "301.674 -34.5137 -23.0312";
+      rotation = "0 0 1 45.0001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "304.673 -37.5299 -18.5876";
+      rotation = "0 0 -1 45.0001";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings3.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "406.814 46.5834 -3.7036";
+      rotation = "-0.862856 0.357408 0.357406 98.4213";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "311.074 -25.4231 -21.4396";
+      rotation = "0.770076 -0.318977 0.552482 73.7202";
+      scale = "2 2 2";
+      dataBlock = "SuperSpeedRing";
+         powerUpId = "0";
+         powerUpSound = "RV_SuperSpeed";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "331.8 -3.63956 -15.9396";
+      rotation = "0.545937 -0.418914 0.725578 93.2038";
+      scale = "2 2 2";
+      dataBlock = "SuperSpeedRing";
+         powerUpId = "0";
+         powerUpSound = "RV_SuperSpeed";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "359.384 14.8169 -13.46";
+      rotation = "0.774596 -0.447215 0.447213 104.478";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "2033";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new StaticShape() {
+      position = "408.745 48.6004 -3.7728";
+      rotation = "0.862856 -0.357408 0.357406 98.4213";
+      scale = "2 2 2";
+      dataBlock = "ShockAbsorberRing";
+         powerUpId = "9";
+         powerUpSound = "RV_ShockAbsorber";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "572.91 149.7 184.925";
+      rotation = "0 0 1 104.999";
+      scale = "1 1 1";
+      dataBlock = "SignFinish";
+   };
+   new InteriorInstance() {
+      position = "511.472 114.268 -21.0409";
+      rotation = "0 0 1 240";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings3.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new InteriorInstance() {
+      position = "511.716 114.584 -26.4975";
+      rotation = "0 0 1 60.0002";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape() {
+      position = "542.933 116.96 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.641 137.639 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.697 125.45 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.603 130.224 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.849 143.805 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "552.77 137.253 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "554.181 124.541 -34.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "542.933 116.96 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "554.181 124.541 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "552.77 137.253 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.849 143.805 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.603 130.224 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.697 125.45 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.641 137.639 -32.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GyrocopterRing";
+         powerUpId = "10";
+         powerUpSound = "RV_Gyrocopter";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "542.933 116.96 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "554.181 124.541 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "552.77 137.253 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.849 143.805 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.603 130.224 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.697 125.45 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.641 137.639 -38.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "542.933 116.96 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.641 137.639 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.697 125.45 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.603 130.224 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.849 143.805 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "552.77 137.253 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "554.181 124.541 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "542.933 116.96 -40.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "554.181 124.541 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "552.77 137.253 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.849 143.805 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.603 130.224 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.697 125.45 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "530.641 137.639 -36.8248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "SuperJumpRing";
+         powerUpId = "6";
+         powerUpSound = "RV_SuperJump";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new InteriorInstance() {
+      position = "572.77 149.834 175.503";
+      rotation = "0 0 1 240";
+      scale = "1 1 1";
+      interiorFile = "~/data/interiors/rings/rings1.dif";
+      useGLLighting = "0";
+      showTerrainInside = "0";
+   };
+   new StaticShape(EndPoint) {
+      position = "572.761 149.884 175.503";
+      rotation = "0 0 1 60.0001";
+      scale = "1 1 1";
+      dataBlock = "EndPad_MBG";
+   };
+   new StaticShape() {
+      position = "317.819 -17.9281 -17.6314";
+      rotation = "-0.935113 0.250563 0.250562 93.8412";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10388";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "382.948 29.6727 -5.93388";
+      rotation = "-0.774596 0.447215 0.447213 104.478";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10389";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "343.622 5.97524 -15.3976";
+      rotation = "0.250563 -0.935113 -0.250562 93.8412";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10390";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "550.518 122.9 37.9334";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10391";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "446.641 73.1706 -8.79602";
+      rotation = "-0.774596 0.447215 0.447213 104.478";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10392";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "541.26 130.6 -31.9248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10393";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "543.673 140.734 -14.9248";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10394";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new ScriptObject() {
+         bonusTime = "0";
+         gemCount = "0";
+         pad = "3384";
+         penaltyTime = "0";
+         powerup = "0";
+         Time = "0";
+   };
+   new StaticShape() {
+      position = "529.455 119.728 96.0752";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10395";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new StaticShape() {
+      position = "564.436 145.26 187.503";
+      rotation = "1 0 0 0";
+      scale = "2 2 2";
+      dataBlock = "GemRing";
+         myGem = "10396";
+         prevPos = "415.631 18.0799 119.264";
+         timer = "-137050";
+   };
+   new Trigger(Bounds) {
+      position = "-53.5 199.5 -62";
+      rotation = "1 0 0 0";
+      scale = "676.647 282.036 559.662";
+      dataBlock = "InBoundsTrigger";
+      polyhedron = "0.0000000 0.0000000 0.0000000 1.0000000 0.0000000 0.0000000 0.0000000 -1.0000000 0.0000000 0.0000000 0.0000000 1.0000000";
+   };
+   new SimGroup(PathNodeGroup) {
+
+      new StaticShape(CameraPath1) {
+         position = "890.625 57.5462 163.465";
+         rotation = "0.0795054 0.0795057 -0.993659 90.3646";
+         scale = "1 1 1";
+         dataBlock = "PathNode";
+            bezier = "0";
+            branchNodes = " ";
+            delay = "0";
+            FinalRotOffset = "0 0 0";
+            nextNode = "CameraPath2";
+            placed = "1";
+            reverseRotation = "0";
+            RotationMultiplier = "1";
+            smooth = "0";
+            SmoothEnd = "0";
+            SmoothStart = "0";
+            speed = "0";
+            Spline = "0";
+            timeToNext = "4000";
+            usePosition = "1";
+            useRotation = "1";
+            useScale = "1";
+      };
+   };   
+};
+//--- OBJECT WRITE END ---
